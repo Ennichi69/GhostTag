@@ -28,9 +28,11 @@ void Main() {
 		.add<Client_Connecting>(State::Client_Connecting)
 		.add<Client_Title>(State::Client_Title)
 		.add<Client_Tutorial>(State::Client_Tutorial)
+		.add<Client_Game>(State::Client_Game)
 		.add<Server_Connecting>(State::Server_Connecting)
 		.add<Server_Title>(State::Server_Title)
-		.add<Server_Tutorial>(State::Server_Tutorial);
+		.add<Server_Tutorial>(State::Server_Tutorial)
+		.add<Server_Game>(State::Server_Game);
 	while (System::Update()) {
 		if (!Manager.update()) {
 			break;
