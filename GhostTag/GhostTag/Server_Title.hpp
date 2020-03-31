@@ -7,5 +7,6 @@ public:
 	void update() override;
 	void draw() const override;
 private:
-	bool IsReady = false;
+	bool Player0_IsReady = false;
+	bool Player1_IsReady = false;
 };

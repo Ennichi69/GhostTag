@@ -110,7 +110,10 @@
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Client_Error.cpp" />
+    <ClCompile Include="Client_Game.cpp" />
     <ClCompile Include="Client_Setting.cpp" />
+    <ClCompile Include="Client_Tutorial.cpp" />
+    <ClCompile Include="Common.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -118,8 +121,10 @@
     <ClCompile Include="Client_Connecting.cpp" />
     <ClCompile Include="Server_Connecting.cpp" />
     <ClCompile Include="Server_Error.cpp" />
+    <ClCompile Include="Server_Game.cpp" />
     <ClCompile Include="Server_Title.cpp" />
     <ClCompile Include="Client_Title.cpp" />
+    <ClCompile Include="Server_Tutorial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\engine\texture\box-shadow\128.png" />
@@ -248,14 +253,18 @@
     <ClInclude Include="Client_Error.hpp" />
     <ClInclude Include="Client_Setting.hpp" />
     <ClInclude Include="Client_Title.hpp" />
+    <ClInclude Include="Client_Tutorial.hpp" />
     <ClInclude Include="Common.hpp" />
     <ClInclude Include="Client_Connecting.hpp" />
+    <ClInclude Include="Client_Game.hpp" />
     <ClInclude Include="Server_Connecting.hpp" />
     <ClInclude Include="Init.hpp" />
     <ClInclude Include="Item.hpp" />
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="Server_Error.hpp" />
+    <ClInclude Include="Server_Game.hpp" />
     <ClInclude Include="Server_Title.hpp" />
+    <ClInclude Include="Server_Tutorial.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
