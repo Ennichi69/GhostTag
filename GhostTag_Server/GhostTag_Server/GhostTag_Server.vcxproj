@@ -234,8 +234,8 @@
     <ClInclude Include="..\..\Source\BackGround.hpp" />
     <ClInclude Include="..\..\Source\Common.hpp" />
     <ClInclude Include="..\..\Source\Communicaton.hpp" />
+    <ClInclude Include="..\..\Source\Game_Common.hpp" />
     <ClInclude Include="..\..\Source\Item.hpp" />
-    <ClInclude Include="..\..\Source\Map.hpp" />
     <ClInclude Include="..\..\Source\Server_Common.hpp" />
     <ClInclude Include="..\..\Source\Server_Connecting.hpp" />
     <ClInclude Include="..\..\Source\Server_Error.hpp" />
@@ -248,8 +248,8 @@
     <ClCompile Include="..\..\Source\BackGround.cpp" />
     <ClCompile Include="..\..\Source\Common.cpp" />
     <ClCompile Include="..\..\Source\Communication.cpp" />
+    <ClCompile Include="..\..\Source\Game_Common.cpp" />
     <ClCompile Include="..\..\Source\Item.cpp" />
-    <ClCompile Include="..\..\Source\Map.cpp" />
     <ClCompile Include="..\..\Source\Server_Common.cpp" />
     <ClCompile Include="..\..\Source\Server_Connecting.cpp" />
     <ClCompile Include="..\..\Source\Server_Error.cpp" />
