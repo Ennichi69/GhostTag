@@ -9,11 +9,11 @@ void Init();
 
 enum class Communication_ID {
 	Timer,
-	Player0_Pos_X, Player0_Pos_Y,
+	Player0_PosX, Player0_PosY,
 	Player0_Direction,
 	Player0_Next_Direction,	//Neutral:0 Left:1 Up:2 Right:3 Down:4
 	Player0_Status,			//Title:0 Tutorial:1 Game:2
-	Player1_Pos_X, Player1_Pos_Y,
+	Player1_PosX, Player1_PosY,
 	Player1_Direction,
 	Player1_Next_Direction,
 	Player1_Status,

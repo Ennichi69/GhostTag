@@ -37,10 +37,6 @@ void Player::Update() {
 	Pos.moveBy(Delta_Point[Direction] * Frame_Per_Move);
 }
 
-void Player::SetPos(Point pos) {
-	Pos = pos;
-}
-
 void Player::Update_Direction(uint16 dir) {
 	if (dir) {
 		Next_Direction = dir;

@@ -365,9 +365,6 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\Map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\BackGround.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -407,6 +404,9 @@
     <ClCompile Include="..\..\Source\Client_GameOver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Game_Common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\Client_Connecting.hpp">
@@ -436,9 +436,6 @@
     <ClInclude Include="..\..\Source\Item.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Map.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\BackGround.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -446,6 +443,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Client_GameOver.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Game_Common.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

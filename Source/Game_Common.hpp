@@ -6,14 +6,13 @@ public:
 	Player(Point pos, Color col);
 	void Draw() const;
 	void Update();
-	void SetPos(Point pos);
 	void Update_Direction(uint16 dir);
-private:
 	Point Pos;
 	uint16 Type;
-	Color Col;
 	uint16 Direction;
 	uint16 Next_Direction;
+private:
+	Color Col;
 };
 
 void DrawMaze();
@@ -55,3 +54,4 @@ constexpr uint16 Maze_BrockSize = 40;
 constexpr uint16 Maze_CenterW = 10;
 constexpr uint16 Maze_CenterH = 10;
 constexpr uint16 Frame_Per_Move = 4;//Map_BrockSizeÇÃñÒêîÇ∂Ç·Ç»Ç¢Ç∆è„éËÇ≠Ç¢Ç©Ç»Ç≠Ç»ÇÈÉSÉ~édól ÇªÇÃÇ§ÇøíºÇ∑
+constexpr uint16 Init_Time = 7500;
