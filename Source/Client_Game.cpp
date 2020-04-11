@@ -22,11 +22,23 @@ void Client_Game::update() {
 	getData().SendData[(int)Communication_ID::Player1_Direction] = Tagger1.Direction;
 	getData().SendData[(int)Communication_ID::Player1_Next_Direction] = Tagger1.Next_Direction;
 	getData().TCP_Client.send(getData().SendData);
-	while (getData().TCP_Client.read(getData().RecieveData));
+	while (getData().TCP_Client.read(getData().RecieveData)) {
+		Timer = getData().RecieveData[(int)Communication_ID::Timer];
+		Ghost_Score = getData().RecieveData[(int)Communication_ID::Ghost_Score];
+		Tagger_Score = getData().RecieveData[(int)Communication_ID::Tagger_Score];
+	}
 }
 
 void Client_Game::draw() const {
-	DrawMaze();
+	Draw_Maze();
 	Tagger0.Draw();
 	Tagger1.Draw();
+	TimerBox.drawFrame(5, 0);
+	Player0_SpecialMeterBox.drawFrame(0, 5);
+	Player1_SpecialMeterBox.drawFrame(0, 5);
+	Ghost_ScoreBox.drawFrame(5, 0);
+	Tagger_ScoreBox.drawFrame(5, 0);
+	FontAsset(U"PixelM+80")(U"{}:{:0>2}"_fmt(Timer / 60, Timer % 60)).drawAt(TimerBox.center());
+	FontAsset(U"PixelM+80")(U"{:0>5}"_fmt(Ghost_Score)).drawAt(Ghost_ScoreBox.center());
+	FontAsset(U"PixelM+80")(U"{:0>5}"_fmt(Tagger_Score)).drawAt(Tagger_ScoreBox.center());
 }

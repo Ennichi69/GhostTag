@@ -17,6 +17,8 @@ enum class Communication_ID {
 	Player1_Direction,
 	Player1_Next_Direction,
 	Player1_Status,
+	Ghost_Score,
+	Tagger_Score,
 	Item_Status
 };
 

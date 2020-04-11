@@ -4,17 +4,17 @@ Server_Error::Server_Error(const InitData& init) : IScene(init) {
 }
 
 void Server_Error::update() {
-	Transition_ReturnButton.update(Rect_ReturnButton.mouseOver());
-	if (Rect_ReturnButton.mouseOver()) {
+	Transition_ExitButton.update(Rect_ExitButton.mouseOver());
+	if (Rect_ExitButton.mouseOver()) {
 		Cursor::RequestStyle(CursorStyle::Hand);
 	}
-	if (Rect_ReturnButton.leftClicked()) {
-		changeScene(State::Server_Connecting);
+	if (Rect_ExitButton.leftClicked()) {
+		System::Exit();
 	}
 }
 
 void Server_Error::draw() const {
-	Rect_ReturnButton.draw(ColorF(1.0, Transition_ReturnButton.value())).drawFrame(5);
-	FontAsset(U"PixelM+80")(U"もどる").drawAt(Rect_ReturnButton.center());
-	FontAsset(U"PixelM+200")(U"通信エラーが発生しました").drawAt(Scene::Center());
+	Rect_ExitButton.draw(ColorF(1.0, Transition_ExitButton.value())).drawFrame(5);
+	FontAsset(U"PixelM+80")(U"おわる").drawAt(Rect_ExitButton.center());
+	FontAsset(U"PixelM+100")(U"通信エラーが発生しました").drawAt(Scene::Center());
 }
