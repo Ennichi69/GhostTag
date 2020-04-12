@@ -7,7 +7,10 @@ public:
 	Server_Game(const InitData& init);
 	void update() override;
 	void draw() const override;
+	Item NewItem();
+	bool Intersect(Player p, Item it);
 private:
+	Array<Item>Itemlist;
 	Player Ghost0 = Player(Ghost0_InitPos(), Palette::Red);
 	Player Ghost1 = Player(Ghost1_InitPos(), Palette::Orange);
 	Player Tagger0 = Player(Tagger0_InitPos(), Palette::Blue);

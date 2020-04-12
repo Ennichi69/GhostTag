@@ -15,7 +15,19 @@ private:
 	Color Col;
 };
 
+class Item {
+public:
+	Item();
+	Item(Point pos, uint16 type);
+	void Draw();
+	Point Pos;
+	uint16 Type;
+};
+
 void Draw_Maze();
+bool Intersect_Maze(Rect r);
+bool Intersect_Maze(Circle c);
+bool Intersect_Maze(Point p);
 Point Maze_BrockPos(uint16 h, uint16 w);
 Point Ghost0_InitPos();
 Point Ghost1_InitPos();
@@ -57,4 +69,6 @@ constexpr uint16 Maze_BrockSize = 44;
 constexpr uint16 Maze_CenterW = 10;
 constexpr uint16 Maze_CenterH = 10;
 constexpr uint16 Frame_Per_Move = 4;//この値がMap_BrockSizeの約数じゃないと上手くいかなくなるゴミ仕様 そのうち直す
-constexpr uint16 Init_Time = 7500;
+constexpr uint16 Init_Time = 7500;//Timerの初期値
+constexpr uint16 Item_Size = 15;
+constexpr uint16 Item_Score = 100;

@@ -19,7 +19,7 @@ enum class Communication_ID {
 	Player1_Status,
 	Ghost_Score,
 	Tagger_Score,
-	Item_Status
+	Item
 };
 
 constexpr uint16 Port = 50000;

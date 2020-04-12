@@ -26,6 +26,11 @@ void Client_Game::update() {
 		Timer = getData().RecieveData[(int)Communication_ID::Timer];
 		Ghost_Score = getData().RecieveData[(int)Communication_ID::Ghost_Score];
 		Tagger_Score = getData().RecieveData[(int)Communication_ID::Tagger_Score];
+		for (uint16 i : step(Item_Size)) {
+			Itemlist[i].Pos.x = getData().RecieveData[(int)Communication_ID::Item + i * 3];
+			Itemlist[i].Pos.y = getData().RecieveData[(int)Communication_ID::Item + i * 3 + 1];
+			Itemlist[i].Type = getData().RecieveData[(int)Communication_ID::Item + i * 3 + 2];
+		}
 	}
 }
 
@@ -33,6 +38,9 @@ void Client_Game::draw() const {
 	Draw_Maze();
 	Tagger0.Draw();
 	Tagger1.Draw();
+	for (Item it : Itemlist) {
+		it.Draw();
+	}
 	TimerBox.drawFrame(5, 0);
 	Player0_SpecialMeterBox.drawFrame(0, 5);
 	Player1_SpecialMeterBox.drawFrame(0, 5);
