@@ -6,6 +6,7 @@ void Init() {
 	Scene::Resize(sceneSize);
 	Window::Resize(sceneSize, WindowResizeOption::KeepSceneSize);
 	Window::SetFullscreen(true, unspecified, WindowResizeOption::KeepSceneSize);
+	FontAsset::Register(U"PixelM+40", 40, U"PixelMplus12-Regular.ttf");
 	FontAsset::Register(U"PixelM+80", 80, U"PixelMplus12-Regular.ttf");
 	FontAsset::Register(U"PixelM+100", 100, U"PixelMplus12-Regular.ttf");
 	FontAsset::Register(U"PixelM+200", 200, U"PixelMplus12-Regular.ttf");

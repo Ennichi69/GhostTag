@@ -8,6 +8,7 @@ public:
 	void update() override;
 	void draw() const override;
 private:
+	Effect Client_Effect;
 	Array<Item>Itemlist = Array<Item>(Item_Size);
 	Player Tagger0 = Player(Tagger0_InitPos(), Palette::Blue);
 	Player Tagger1 = Player(Tagger1_InitPos(), Palette::Aqua);

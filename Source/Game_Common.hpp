@@ -72,3 +72,4 @@ constexpr uint16 Frame_Per_Move = 4;//‚±‚Ì’l‚ªMap_BrockSize‚Ì–ñ”‚¶‚á‚È‚¢‚Æãè‚
 constexpr uint16 Init_Time = 7500;//Timer‚Ì‰Šú’l
 constexpr uint16 Item_Size = 15;
 constexpr uint16 Item_Score = 100;
+constexpr uint16 Tagging_Score = 1000;

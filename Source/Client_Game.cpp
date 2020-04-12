@@ -31,6 +31,18 @@ void Client_Game::update() {
 			Itemlist[i].Pos.y = getData().RecieveData[(int)Communication_ID::Item + i * 3 + 1];
 			Itemlist[i].Type = getData().RecieveData[(int)Communication_ID::Item + i * 3 + 2];
 		}
+		if (getData().RecieveData[(int)Communication_ID::Tagger0_Catching]) {
+			Client_Effect.add([pos = Tagger0.Pos](double t){
+				FontAsset(U"PixelM+40")(U"Tag!").drawAt(pos.movedBy(0, t * -80), Palette::Limegreen);
+				return t < 1.0;
+			});
+		}
+		if (getData().RecieveData[(int)Communication_ID::Tagger1_Catching]) {
+			Client_Effect.add([pos = Tagger1.Pos](double t){
+				FontAsset(U"PixelM+40")(U"Tag!").drawAt(pos.movedBy(0, t * -80), Palette::Limegreen);
+				return t < 1.0;
+			});
+		}
 	}
 }
 
@@ -49,4 +61,5 @@ void Client_Game::draw() const {
 	FontAsset(U"PixelM+80")(U"{}:{:0>2}"_fmt(Timer / 60, Timer % 60)).drawAt(TimerBox.center());
 	FontAsset(U"PixelM+80")(U"{:0>5}"_fmt(Ghost_Score)).drawAt(Ghost_ScoreBox.center());
 	FontAsset(U"PixelM+80")(U"{:0>5}"_fmt(Tagger_Score)).drawAt(Tagger_ScoreBox.center());
+	Client_Effect.update();
 }

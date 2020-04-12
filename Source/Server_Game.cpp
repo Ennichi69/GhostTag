@@ -16,6 +16,49 @@ void Server_Game::update() {
 	Ghost1.Update_Direction(Player1_JoyStick_Direction());
 	Ghost0.Update();
 	Ghost1.Update();
+	getData().SendData[(int)Communication_ID::Tagger0_Catching] = 0;
+	getData().SendData[(int)Communication_ID::Tagger1_Catching] = 0;
+	if (Intersect(Ghost0, Tagger0)) {
+		Ghost0.Pos = NewGhostPos();
+		Ghost0.Direction = 0;
+		Ghost0.Next_Direction = 0;
+		Tagger_Score += Tagging_Score;
+		getData().SendData[(int)Communication_ID::Tagger0_Catching] = 1;
+		Server_Effect.add([pos = Tagger0.Pos](double t){
+			FontAsset(U"PixelM+40")(U"Tag!").drawAt(pos.movedBy(0, t * -80), Palette::Limegreen);
+			return t < 1.0;
+		});
+	}
+	if (Intersect(Ghost0, Tagger1)) {
+		Ghost0.Pos = NewGhostPos();
+		Ghost0.Direction = 0;
+		Ghost0.Next_Direction = 0;
+		Tagger_Score += Tagging_Score;
+		getData().SendData[(int)Communication_ID::Tagger1_Catching] = 1; Server_Effect.add([pos = Tagger1.Pos](double t){
+			FontAsset(U"PixelM+40")(U"Tag!").drawAt(pos.movedBy(0, t * -80), Palette::Limegreen);
+			return t < 1.0;
+		});
+	}
+	if (Intersect(Ghost1, Tagger0)) {
+		Ghost1.Pos = NewGhostPos();
+		Ghost1.Direction = 0;
+		Ghost1.Next_Direction = 0;
+		Tagger_Score += Tagging_Score;
+		getData().SendData[(int)Communication_ID::Tagger0_Catching] = 1; Server_Effect.add([pos = Tagger0.Pos](double t){
+			FontAsset(U"PixelM+40")(U"Tag!").drawAt(pos.movedBy(0, t * -80), Palette::Limegreen);
+			return t < 1.0;
+		});
+	}
+	if (Intersect(Ghost1, Tagger1)) {
+		Ghost1.Pos = NewGhostPos();
+		Ghost1.Direction = 0;
+		Ghost1.Next_Direction = 0;
+		Tagger_Score += Tagging_Score;
+		getData().SendData[(int)Communication_ID::Tagger1_Catching] = 1; Server_Effect.add([pos = Tagger1.Pos](double t){
+			FontAsset(U"PixelM+40")(U"Tag!").drawAt(pos.movedBy(0, t * -80), Palette::Limegreen);
+			return t < 1.0;
+		});
+	}
 	getData().SendData[(int)Communication_ID::Timer] = Timer;
 	getData().SendData[(int)Communication_ID::Player0_PosX] = Ghost0.Pos.x;
 	getData().SendData[(int)Communication_ID::Player0_PosY] = Ghost0.Pos.y;
@@ -70,18 +113,44 @@ void Server_Game::draw() const {
 	FontAsset(U"PixelM+80")(U"{}:{:0>2}"_fmt(Timer / 60, Timer % 60)).drawAt(TimerBox.center());
 	FontAsset(U"PixelM+80")(U"{:0>5}"_fmt(Ghost_Score)).drawAt(Ghost_ScoreBox.center());
 	FontAsset(U"PixelM+80")(U"{:0>5}"_fmt(Tagger_Score)).drawAt(Tagger_ScoreBox.center());
-
+	Server_Effect.update();
 }
 
 Item Server_Game::NewItem() {
 	while (true) {
 		Point p = Maze_BrockPos(Random(0, Maze_Height - 1), Random(0, Maze_Width - 1));
-		if (!Intersect_Maze(p)) {
-			return Item(p, 0);
+		if (Intersect_Maze(p)) {
+			continue;
 		}
+		bool flag = false;
+		for (Item it : Itemlist) {
+			if (Circle(it.Pos, Maze_BrockSize * 3).intersects(p)) {
+				//3マス以内に他のアイテムがあるか
+				flag = true;
+			}
+		}
+		if (flag)continue;
+		return Item(p, 0);
+	}
+}
+
+Point Server_Game::NewGhostPos() {
+	while (true) {
+		Point p = Maze_BrockPos(Random(0, Maze_Height - 1), Random(0, Maze_Width - 1));
+		if (Intersect_Maze(p)) {
+			continue;
+		}
+		if (Circle(Tagger0.Pos, Maze_BrockSize * 5).intersects(p)|| Circle(Tagger1.Pos, Maze_BrockSize * 5).intersects(p)){
+				//5マス以内に敵がいるか
+			continue;
+		}
+		return p;
 	}
 }
 
 bool Server_Game::Intersect(Player p, Item it) {
 	return Circle(p.Pos, Maze_BrockSize).intersects(Circle(it.Pos, Item_Size));
+}
+bool Server_Game::Intersect(Player p,Player q) {
+	return Circle(p.Pos, Maze_BrockSize).intersects(Circle(q.Pos, Maze_BrockSize));
 }
