@@ -38,6 +38,25 @@ void Item::Draw() {
 	Circle(Pos, 10).draw(Palette::Yellow);
 }
 
+Item_Effect::Item_Effect(const Point& pos) {
+	Pos = pos;
+}
+
+bool Item_Effect::update(double t) {
+	const double e = EaseOutExpo(t);
+	Circle(Pos, e * 60).drawFrame(12.0 * (1.0 - e), Palette::Lime);
+	return t < 1.0;
+}
+
+Tag_Effect::Tag_Effect(const Point& pos) {
+	Pos = pos;
+}
+
+bool Tag_Effect::update(double t) {
+	FontAsset(U"PixelM+40")(U"Tag!").drawAt(Pos.movedBy(0, t * -80.0), Palette::Limegreen);
+	return t < 1.0;
+}
+
 void Draw_Maze() {
 	for (auto h : step(Maze_Height)) {
 		for (auto w : step(Maze_Width)) {

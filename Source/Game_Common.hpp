@@ -24,6 +24,18 @@ public:
 	uint16 Type;
 };
 
+struct Item_Effect : IEffect {
+	Point Pos;
+	Item_Effect(const Point& pos);
+	bool update(double t)override;
+};
+
+struct Tag_Effect :IEffect {
+	Point Pos;
+	Tag_Effect(const Point& pos);
+	bool update(double t)override;
+};
+
 void Draw_Maze();
 bool Intersect_Maze(Rect r);
 bool Intersect_Maze(Circle c);
@@ -70,6 +82,6 @@ constexpr uint16 Maze_CenterW = 10;
 constexpr uint16 Maze_CenterH = 10;
 constexpr uint16 Frame_Per_Move = 4;//この値がMap_BrockSizeの約数じゃないと上手くいかなくなるゴミ仕様 そのうち直す
 constexpr uint16 Init_Time = 7500;//Timerの初期値
-constexpr uint16 Item_Size = 15;
+constexpr uint16 Item_Size = 10;
 constexpr uint16 Item_Score = 100;
 constexpr uint16 Tagging_Score = 1000;

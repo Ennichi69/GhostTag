@@ -27,21 +27,18 @@ void Client_Game::update() {
 		Ghost_Score = getData().RecieveData[(int)Communication_ID::Ghost_Score];
 		Tagger_Score = getData().RecieveData[(int)Communication_ID::Tagger_Score];
 		for (uint16 i : step(Item_Size)) {
-			Itemlist[i].Pos.x = getData().RecieveData[(int)Communication_ID::Item + i * 3];
-			Itemlist[i].Pos.y = getData().RecieveData[(int)Communication_ID::Item + i * 3 + 1];
-			Itemlist[i].Type = getData().RecieveData[(int)Communication_ID::Item + i * 3 + 2];
+			if (Itemlist[i].Pos.x != getData().RecieveData[(int)Communication_ID::Item + i * 3] || Itemlist[i].Pos.y != getData().RecieveData[(int)Communication_ID::Item + i * 3 + 1] || Itemlist[i].Type != getData().RecieveData[(int)Communication_ID::Item + i * 3 + 2]) {
+				Client_Effect.add<Item_Effect>(Itemlist[i].Pos);
+				Itemlist[i].Pos.x = getData().RecieveData[(int)Communication_ID::Item + i * 3];
+				Itemlist[i].Pos.y = getData().RecieveData[(int)Communication_ID::Item + i * 3 + 1];
+				Itemlist[i].Type = getData().RecieveData[(int)Communication_ID::Item + i * 3 + 2];
+			}
 		}
 		if (getData().RecieveData[(int)Communication_ID::Tagger0_Catching]) {
-			Client_Effect.add([pos = Tagger0.Pos](double t){
-				FontAsset(U"PixelM+40")(U"Tag!").drawAt(pos.movedBy(0, t * -80), Palette::Limegreen);
-				return t < 1.0;
-			});
+			Client_Effect.add<Tag_Effect>(Tagger0.Pos);
 		}
 		if (getData().RecieveData[(int)Communication_ID::Tagger1_Catching]) {
-			Client_Effect.add([pos = Tagger1.Pos](double t){
-				FontAsset(U"PixelM+40")(U"Tag!").drawAt(pos.movedBy(0, t * -80), Palette::Limegreen);
-				return t < 1.0;
-			});
+			Client_Effect.add<Tag_Effect>(Tagger1.Pos);
 		}
 	}
 }
