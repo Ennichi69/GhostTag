@@ -52,6 +52,15 @@
     <Filter Include="Resource Files\engine\objdetect\haarcascade">
       <UniqueIdentifier>{e3d7a277-272a-4561-b375-8f74e98bcfeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\nlp">
+      <UniqueIdentifier>{f79e2386-3308-4bd4-a299-cff6f0a3371d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\nlp\japanese">
+      <UniqueIdentifier>{29db51bf-7ada-4ec7-bd32-8340162a8797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\nlp\japanese\jumanpp">
+      <UniqueIdentifier>{f6fe2a89-c647-48e2-bb2c-27b03b1aeced}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Resource Files\example\font">
       <UniqueIdentifier>{e011e289-148f-4f61-b178-75bd63133a24}</UniqueIdentifier>
     </Filter>
@@ -85,14 +94,8 @@
     <Filter Include="Resource Files\example\font\LogoTypeGothic">
       <UniqueIdentifier>{b3586a98-5569-49e1-b9d6-cd80cf76ce9d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\example\nlp">
-      <UniqueIdentifier>{f79e2386-3308-4bd4-a299-cff6f0a3371d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\example\nlp\japanese">
-      <UniqueIdentifier>{29db51bf-7ada-4ec7-bd32-8340162a8797}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\example\nlp\japanese\jumanpp">
-      <UniqueIdentifier>{f6fe2a89-c647-48e2-bb2c-27b03b1aeced}</UniqueIdentifier>
+    <Filter Include="Resource Files\example\zip">
+      <UniqueIdentifier>{81d8d80c-f0ce-492f-8fee-c5502c31bc0e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +132,9 @@
     <Image Include="App\example\bay.jpg">
       <Filter>Resource Files\example</Filter>
     </Image>
+    <Image Include="App\example\test.gif">
+      <Filter>Resource Files\example</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="App\Resource.rc">
@@ -140,10 +146,10 @@
       <Filter>Resource Files\engine\emoji</Filter>
     </None>
     <None Include="App\nlp\japanese\jumanpp\LICENSE">
-      <Filter>Resource Files\example\nlp\japanese\jumanpp</Filter>
+      <Filter>Resource Files\nlp\japanese\jumanpp</Filter>
     </None>
     <None Include="App\nlp\japanese\jumanpp\README.md">
-      <Filter>Resource Files\example\nlp\japanese\jumanpp</Filter>
+      <Filter>Resource Files\nlp\japanese\jumanpp</Filter>
     </None>
     <None Include="App\engine\font\fontawesome\fontawesome-brands.otf.zstdcmp">
       <Filter>Resource Files\engine\font\fontawesome</Filter>
@@ -301,6 +307,9 @@
     <None Include="App\example\font\LogoTypeGothic\LICENSE_E">
       <Filter>Resource Files\example\font\LogoTypeGothic</Filter>
     </None>
+    <None Include="App\example\zip\zip_test.zip">
+      <Filter>Resource Files\example\zip</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="App\engine\font\fontawesome\LICENSE.txt">
@@ -344,9 +353,6 @@
     <Font Include="App\example\font\LogoTypeGothic\LogoTypeGothic.otf">
       <Filter>Resource Files\example\font\LogoTypeGothic</Filter>
     </Font>
-    <Font Include="App\PixelMplus12-Regular.ttf">
-      <Filter>Resource Files</Filter>
-    </Font>
   </ItemGroup>
   <ItemGroup>
     <Media Include="App\example\shot.mp3">
@@ -365,81 +371,57 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\BackGround.hpp">
+    <ClInclude Include="..\..\Source_Files\Common.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Common.hpp">
+    <ClInclude Include="..\..\Source_Files\Server_Common.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Communicaton.hpp">
+    <ClInclude Include="..\..\Source_Files\Server_Connecting.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Item.hpp">
+    <ClInclude Include="..\..\Source_Files\Server_Error.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Server_Common.hpp">
+    <ClInclude Include="..\..\Source_Files\Server_Game.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Server_Connecting.hpp">
+    <ClInclude Include="..\..\Source_Files\Server_Result.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Server_Error.hpp">
+    <ClInclude Include="..\..\Source_Files\Server_Title.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Server_Game.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Server_Title.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Server_Tutorial.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Server_GameOver.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Game_Common.hpp">
+    <ClInclude Include="..\..\Source_Files\Common_Game.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\BackGround.cpp">
+    <ClCompile Include="..\..\Source_Files\Common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Communication.cpp">
+    <ClCompile Include="..\..\Source_Files\Server_Common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Item.cpp">
+    <ClCompile Include="..\..\Source_Files\Server_Connecting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Server_Common.cpp">
+    <ClCompile Include="..\..\Source_Files\Server_Error.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Server_Connecting.cpp">
+    <ClCompile Include="..\..\Source_Files\Server_Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Server_Error.cpp">
+    <ClCompile Include="..\..\Source_Files\Server_Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Server_Game.cpp">
+    <ClCompile Include="..\..\Source_Files\Server_Result.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Server_Main.cpp">
+    <ClCompile Include="..\..\Source_Files\Server_Title.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Server_Title.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Server_Tutorial.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Common.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Server_GameOver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Game_Common.cpp">
+    <ClCompile Include="..\..\Source_Files\Common_Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

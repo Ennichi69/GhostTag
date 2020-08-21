@@ -94,6 +94,9 @@
     <Filter Include="Resource Files\example\font\LogoTypeGothic">
       <UniqueIdentifier>{b3586a98-5569-49e1-b9d6-cd80cf76ce9d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\example\zip">
+      <UniqueIdentifier>{81d8d80c-f0ce-492f-8fee-c5502c31bc0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\icon.ico">
@@ -127,6 +130,9 @@
       <Filter>Resource Files\example</Filter>
     </Image>
     <Image Include="App\example\bay.jpg">
+      <Filter>Resource Files\example</Filter>
+    </Image>
+    <Image Include="App\example\test.gif">
       <Filter>Resource Files\example</Filter>
     </Image>
   </ItemGroup>
@@ -301,6 +307,9 @@
     <None Include="App\example\font\LogoTypeGothic\LICENSE_E">
       <Filter>Resource Files\example\font\LogoTypeGothic</Filter>
     </None>
+    <None Include="App\example\zip\zip_test.zip">
+      <Filter>Resource Files\example\zip</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="App\engine\font\fontawesome\LICENSE.txt">
@@ -344,9 +353,6 @@
     <Font Include="App\example\font\LogoTypeGothic\LogoTypeGothic.otf">
       <Filter>Resource Files\example\font\LogoTypeGothic</Filter>
     </Font>
-    <Font Include="App\PixelMplus12-Regular.ttf">
-      <Filter>Resource Files</Filter>
-    </Font>
   </ItemGroup>
   <ItemGroup>
     <Media Include="App\example\shot.mp3">
@@ -365,87 +371,63 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\BackGround.cpp">
+    <ClCompile Include="..\..\Source_Files\Client_Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Client_Common.cpp">
+    <ClCompile Include="..\..\Source_Files\Client_Common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Client_Connecting.cpp">
+    <ClCompile Include="..\..\Source_Files\Common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Client_Error.cpp">
+    <ClCompile Include="..\..\Source_Files\Client_Initial_Setting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Client_Game.cpp">
+    <ClCompile Include="..\..\Source_Files\Client_Connecting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Client_Main.cpp">
+    <ClCompile Include="..\..\Source_Files\Client_Title.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Client_Setting.cpp">
+    <ClCompile Include="..\..\Source_Files\Client_Error.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Client_Title.cpp">
+    <ClCompile Include="..\..\Source_Files\Client_Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Client_Tutorial.cpp">
+    <ClCompile Include="..\..\Source_Files\Client_Result.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Common.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Communication.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Item.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Client_GameOver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Game_Common.cpp">
+    <ClCompile Include="..\..\Source_Files\Common_Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\Client_Connecting.hpp">
+    <ClInclude Include="..\..\Source_Files\Client_Common.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Client_Error.hpp">
+    <ClInclude Include="..\..\Source_Files\Client_Connecting.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Client_Game.hpp">
+    <ClInclude Include="..\..\Source_Files\Client_Game.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Client_Setting.hpp">
+    <ClInclude Include="..\..\Source_Files\Client_Error.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Client_Title.hpp">
+    <ClInclude Include="..\..\Source_Files\Client_Initial_Setting.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Client_Tutorial.hpp">
+    <ClInclude Include="..\..\Source_Files\Client_Result.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Common.hpp">
+    <ClInclude Include="..\..\Source_Files\Client_Title.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Communicaton.hpp">
+    <ClInclude Include="..\..\Source_Files\Common.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Item.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\BackGround.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Client_Common.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Client_GameOver.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Game_Common.hpp">
+    <ClInclude Include="..\..\Source_Files\Common_Game.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
