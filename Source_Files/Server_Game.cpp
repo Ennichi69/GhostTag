@@ -109,8 +109,8 @@ void server_game::update() {
 	player3.set_pos(Point(getData().receive_data[e_communication::player3_x], getData().receive_data[e_communication::player3_y]));
 	player2.set_direction(e_direction(getData().receive_data[e_communication::player2_direction]));
 	player3.set_direction(e_direction(getData().receive_data[e_communication::player3_direction]));
-	player2.set_next_direction(e_direction(getData().send_data[e_communication::player2_next_direction]));
-	player3.set_next_direction(e_direction(getData().send_data[e_communication::player3_next_direction]));
+	player2.set_next_direction(e_direction(getData().receive_data[e_communication::player2_next_direction]));
+	player3.set_next_direction(e_direction(getData().receive_data[e_communication::player3_next_direction]));
 	if (timer == 0) {
 		changeScene(e_scene::result);
 	}

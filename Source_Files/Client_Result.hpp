@@ -7,6 +7,11 @@ public:
 	void update() override;
 	void draw()const override;
 private:
+	uint16 player0_score;
+	uint16 player1_score;
+	uint16 player2_score;
+	uint16 player3_score;
+
 };
 
 

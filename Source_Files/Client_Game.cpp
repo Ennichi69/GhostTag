@@ -15,7 +15,6 @@ client_game::client_game(const InitData& init) :IScene(init) {
 	player1.set_color(init_player1_color);
 	player2.set_color(init_player2_color);
 	player3.set_color(init_player3_color);
-
 	array_point_items.resize(array_point_items_size);
 }
 
@@ -79,8 +78,8 @@ void client_game::update() {
 	player1.set_pos(Point(getData().receive_data[e_communication::player1_x], getData().receive_data[e_communication::player1_y]));
 	player0.set_direction(e_direction(getData().receive_data[e_communication::player0_direction]));
 	player1.set_direction(e_direction(getData().receive_data[e_communication::player1_direction]));
-	player0.set_next_direction(e_direction(getData().send_data[e_communication::player0_next_direction]));
-	player1.set_next_direction(e_direction(getData().send_data[e_communication::player1_next_direction]));
+	player0.set_next_direction(e_direction(getData().receive_data[e_communication::player0_next_direction]));
+	player1.set_next_direction(e_direction(getData().receive_data[e_communication::player1_next_direction]));
 	for (auto i : step(array_point_items_size)) {
 		array_point_items[i].set_pos(Point(getData().receive_data[e_communication::point_item_status + i * 2], getData().receive_data[e_communication::point_item_status + i * 2 + 1]));
 	}
