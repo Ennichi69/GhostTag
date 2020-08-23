@@ -13,4 +13,10 @@ private:
 	player player2;
 	player player3;
 	uint16 timer;
+	Array<item>array_point_items;
+	item ghost_special_item;
+	item tagger_special_item;
+	bool exist_ghost_special_item;
+	bool exist_tagger_special_item;
+
 };

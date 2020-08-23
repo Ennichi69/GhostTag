@@ -7,6 +7,7 @@
 #include "Server_Result.hpp"
 void Main() {
 	init();
+	server_init();
 	app manager;
 	manager
 		.add<server_connecting>(e_scene::connecting)

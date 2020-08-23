@@ -13,4 +13,6 @@ private:
 	player player1;
 	player player2;
 	player player3;
+	Array<item>point_items;
+
 };

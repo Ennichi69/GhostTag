@@ -20,8 +20,22 @@ typedef enum {
 	player2_status,
 	player3_status,
 	scene_status,
-	ghost_score,
-	tagger_score,
+	player0_score,
+	player1_score,
+	player2_score,
+	player3_score,
+	point_item_status = 40,//[0]x座標,[0]y座標,[1]x座標,[1]y座標,[2]x座標...の順
+	ghost_special_item_x = 70,
+	ghost_special_item_y,
+	ghost_special_item_status,//0 マップ上にない 1マップ上にある
+	tagger_special_item_x,
+	tagger_special_item_y,
+	tagger_special_item_status,//0 マップ上にない 1マップ上にある
+	player0_has_item,//false:0 true:1
+	player1_has_item,//false:0 true:1
+	player2_has_item,//false:0 true:1
+	player3_has_item//false:0 true:1
+
 } e_communication;
 
 typedef enum {
