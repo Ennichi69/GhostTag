@@ -27,6 +27,7 @@ public:
 	e_direction get_next_direction();
 	bool get_has_item();
 	void set_color(Color c);//画像読み込ませたら消す
+private:
 	Point pos;
 	e_direction direction;//今向いている向き
 	e_direction next_direction;//次に向く向き
@@ -34,7 +35,6 @@ public:
 	bool has_item;//スペシャルアイテムを所持しているか
 	Color col;//イラストに置き換えるまでの仮に色を設定
 
-private:
 };
 
 typedef enum {

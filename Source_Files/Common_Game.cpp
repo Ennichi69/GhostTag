@@ -200,6 +200,5 @@ bool tag(player ghost, player tagger) {
 		}
 		if (ghost.get_pos().distanceFrom(p)<=maze_brock_size/2)return true;
 	}
-	Print << tagger.get_pos()-p<<tagger.get_direction()<<tagger.direction;
 	return false;
 }
