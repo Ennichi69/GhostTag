@@ -18,4 +18,5 @@ private:
 	item tagger_special_item;
 	bool exist_ghost_special_item;
 	bool exist_tagger_special_item;
+	Effect effect;
 };

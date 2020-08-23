@@ -40,27 +40,33 @@ void server_game::update() {
 		player3.update();
 	}
 	if (tag(player0,player2)) {
+		effect.add<tag_effect>(player0.get_pos());
 		player2.add_score(tag_score);
 		player0.set_pos(random_player_respawn_position(player2, player3));
 	}
 	if (tag(player0,player3)) {
+		effect.add<tag_effect>(player0.get_pos());
 		player3.add_score(tag_score);
 		player0.set_pos(random_player_respawn_position(player2, player3));
 	}
 	if (tag(player1,player2)) {
+		effect.add<tag_effect>(player1.get_pos());
 		player2.add_score(tag_score);
 		player1.set_pos(random_player_respawn_position(player2, player3));
 	}
 	if (tag(player1,player3)) {
+		effect.add<tag_effect>(player1.get_pos());
 		player3.add_score(tag_score);
 		player1.set_pos(random_player_respawn_position(player2, player3));
 	}
 	for (auto &it : array_point_items) {
 		if (player0.intersects(it)) {
+			effect.add<item_effect>(it.get_pos());
 			it.set_pos(random_point_item_position(array_point_items));
 			player0.add_score(point_item_score);
 		}
 		if (player1.intersects(it)) {
+			effect.add<item_effect>(it.get_pos());
 			it.set_pos(random_point_item_position(array_point_items));
 			player1.add_score(point_item_score);
 		}

@@ -109,6 +109,26 @@ uint16 item::get_radius() {
 	return radius;
 }
 
+item_effect::item_effect(const Point& p) {
+	pos = p;
+}
+bool item_effect::update(double t) {
+	const double e = EaseOutExpo(t);
+	Circle(pos, e * 60).drawFrame(12.0 * (1.0 - e), Palette::Lime);
+	return t < 1.0;
+}
+
+tag_effect::tag_effect(const Point& p) {
+	pos = p;
+}
+
+bool tag_effect::update(double t) {
+	FontAsset(U"font40")(U"Tag!").drawAt(pos.movedBy(0, t * -80.0), Palette::Limegreen);
+	return t < 1.0;
+}
+
+
+
 void draw_maze() {
 	for (auto i : step(maze_height)) {
 		for (auto j : step(maze_width)) {
@@ -193,12 +213,5 @@ void draw_small_point_box(uint16 t) {
 
 
 bool tag(player ghost, player tagger) {
-	auto p = tagger.get_pos();
-	for (auto i : step(light_range)) {
-		if (!intersect_maze(p + delta_point[tagger.get_direction()])) {
-			p += delta_point[tagger.get_direction()];
-		}
-		if (ghost.get_pos().distanceFrom(p)<=maze_brock_size/2)return true;
-	}
-	return false;
+	return Rect(Arg::center(ghost.get_pos()), maze_brock_size).intersects(tagger.light());
 }

@@ -56,7 +56,20 @@ private:
 	e_item_type type;
 };
 
+//アイテム取得時エフェクト
+struct item_effect :IEffect {
+	Point pos;
+	item_effect(const Point& p);
+	bool update(double t)override;
+};
 
+
+//捕獲時エフェクト
+struct tag_effect :IEffect {
+	Point pos;
+	tag_effect(const Point& p);
+	bool update(double t)override;
+};
 
 void draw_maze();
 bool intersect_maze(Rect r);
@@ -69,7 +82,7 @@ void draw_timer(uint16 t);//タイマーを書く
 void draw_big_point_box(uint16 t);
 void draw_small_point_box(uint16 t);
 
-bool tag(player ghost, player tagger);//捕獲判定 原因不明のバグが発生しています
+bool tag(player ghost, player tagger);//捕獲判定
 
 const Grid<bool>maze_data = {
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},

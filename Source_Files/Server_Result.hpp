@@ -20,4 +20,4 @@ const Rect player1_result_box = Rect(Arg::center(480, 540), 500, 200);
 const Rect player2_result_box = Rect(Arg::center(1440, 270), 500, 200);
 const Rect player3_result_box = Rect(Arg::center(1440, 540), 500, 200);
 const Rect ghost_result_box = Rect(Arg::center(480, 810), 500, 200);
-const Rect tagger_result_box = Rect(Arg::center(480, 810), 500, 200);
+const Rect tagger_result_box = Rect(Arg::center(1440, 810), 500, 200);

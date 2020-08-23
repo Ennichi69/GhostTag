@@ -73,15 +73,31 @@ void client_game::update() {
 	getData().send_data[e_communication::player2_has_item] = player2.get_has_item();
 	getData().send_data[e_communication::player3_has_item] = player3.get_has_item();
 	getData().tcp_client.send(getData().send_data);
-	while (getData().tcp_client.read(getData().receive_data));
-	player0.set_pos(Point(getData().receive_data[e_communication::player0_x], getData().receive_data[e_communication::player0_y]));
-	player1.set_pos(Point(getData().receive_data[e_communication::player1_x], getData().receive_data[e_communication::player1_y]));
-	player0.set_direction(e_direction(getData().receive_data[e_communication::player0_direction]));
-	player1.set_direction(e_direction(getData().receive_data[e_communication::player1_direction]));
-	player0.set_next_direction(e_direction(getData().receive_data[e_communication::player0_next_direction]));
-	player1.set_next_direction(e_direction(getData().receive_data[e_communication::player1_next_direction]));
-	for (auto i : step(array_point_items_size)) {
-		array_point_items[i].set_pos(Point(getData().receive_data[e_communication::point_item_status + i * 2], getData().receive_data[e_communication::point_item_status + i * 2 + 1]));
+	while (getData().tcp_client.read(getData().receive_data)) {
+		player0.set_pos(Point(getData().receive_data[e_communication::player0_x], getData().receive_data[e_communication::player0_y]));
+		player1.set_pos(Point(getData().receive_data[e_communication::player1_x], getData().receive_data[e_communication::player1_y]));
+		player0.set_direction(e_direction(getData().receive_data[e_communication::player0_direction]));
+		player1.set_direction(e_direction(getData().receive_data[e_communication::player1_direction]));
+		player0.set_next_direction(e_direction(getData().receive_data[e_communication::player0_next_direction]));
+		player1.set_next_direction(e_direction(getData().receive_data[e_communication::player1_next_direction]));
+		//ìæì_ä«óùÇÕëSÇƒserverë§Ç»ÇÃÇ≈
+		player0.set_score(getData().receive_data[e_communication::player0_score]);
+		player1.set_score(getData().receive_data[e_communication::player1_score]);
+		player2.set_score(getData().receive_data[e_communication::player2_score]);
+		player3.set_score(getData().receive_data[e_communication::player3_score]);
+		for (auto i : step(array_point_items_size)) {
+			if (array_point_items[i].get_pos() != Point(getData().receive_data[e_communication::point_item_status + i * 2], getData().receive_data[e_communication::point_item_status + i * 2 + 1])) {
+				effect.add<item_effect>(array_point_items[i].get_pos());
+			}
+			array_point_items[i].set_pos(Point(getData().receive_data[e_communication::point_item_status + i * 2], getData().receive_data[e_communication::point_item_status + i * 2 + 1]));
+		}
+		timer = getData().receive_data[e_communication::timer];
+		if (getData().receive_data[e_communication::player2_status]) {
+			effect.add<tag_effect>(player2.get_pos());
+		}
+		if (getData().receive_data[e_communication::player3_status]) {
+			effect.add<tag_effect>(player3.get_pos());
+		}
 	}
 	if (timer == 0) {
 		changeScene(e_scene::result);
@@ -102,4 +118,5 @@ void client_game::draw()const {
 	player3.draw();
 	player2.draw_light();
 	player3.draw_light();
+	effect.update();
 }

@@ -17,8 +17,8 @@ typedef enum {
 	player3_next_direction,
 	player0_status,
 	player1_status,
-	player2_status,
-	player3_status,
+	player2_status,//–¢•ßŠl 0 •ßŠl 1
+	player3_status,//–¢•ßŠl 0 •ßŠl 1
 	scene_status,
 	player0_score,
 	player1_score,
