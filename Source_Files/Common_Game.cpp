@@ -213,5 +213,12 @@ void draw_small_point_box(uint16 t) {
 
 
 bool tag(player ghost, player tagger) {
-	return Rect(Arg::center(ghost.get_pos()), maze_brock_size).intersects(tagger.light());
+	auto p = tagger.get_pos();
+	for (auto i : step(light_range)) {
+		if (!intersect_maze(p + delta_point[tagger.get_direction()])) {
+			p += delta_point[tagger.get_direction()];
+		}
+		if (Rect(Arg::center(ghost.get_pos()), maze_brock_size).intersects(p))return true;
+	}
+	return false;
 }

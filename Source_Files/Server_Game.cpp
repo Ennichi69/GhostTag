@@ -39,25 +39,31 @@ void server_game::update() {
 		player2.update();
 		player3.update();
 	}
+	getData().send_data[e_communication::player2_status] = 0;
+	getData().send_data[e_communication::player3_status] = 0;
 	if (tag(player0,player2)) {
 		effect.add<tag_effect>(player0.get_pos());
 		player2.add_score(tag_score);
 		player0.set_pos(random_player_respawn_position(player2, player3));
+		getData().send_data[e_communication::player2_status] = 1;
 	}
 	if (tag(player0,player3)) {
 		effect.add<tag_effect>(player0.get_pos());
 		player3.add_score(tag_score);
 		player0.set_pos(random_player_respawn_position(player2, player3));
+		getData().send_data[e_communication::player3_status] = 1;
 	}
 	if (tag(player1,player2)) {
 		effect.add<tag_effect>(player1.get_pos());
 		player2.add_score(tag_score);
 		player1.set_pos(random_player_respawn_position(player2, player3));
+		getData().send_data[e_communication::player2_status] = 1;
 	}
 	if (tag(player1,player3)) {
 		effect.add<tag_effect>(player1.get_pos());
 		player3.add_score(tag_score);
 		player1.set_pos(random_player_respawn_position(player2, player3));
+		getData().send_data[e_communication::player3_status] = 1;
 	}
 	for (auto &it : array_point_items) {
 		if (player0.intersects(it)) {
@@ -138,4 +144,5 @@ void server_game::draw()const {
 	player3.draw();
 	player2.draw_light();
 	player3.draw_light();
+	effect.update();
 }
