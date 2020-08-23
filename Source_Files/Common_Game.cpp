@@ -18,7 +18,7 @@ void player::draw() const{
 	Circle(pos, maze_brock_size / 2).draw(col);
 }
 void player::draw_light() const {
-	light().draw(5, Palette::Yellow);
+	light().draw(6, Palette::Yellow);
 }
 void player::update() {
 	if (!intersect_maze(Rect(Arg::center(pos), maze_brock_size).movedBy(delta_point[next_direction]))) {
@@ -40,12 +40,9 @@ Line player::light()const {
 			p += delta_point[direction];
 		}
 	}
-	return Line(pos, p);
+	return Line(p, pos);
 }
-bool player::intersects(Line l) {
-	return Rect(Arg::center(pos), maze_brock_size).intersects(l);
-}
-bool player::intersects(item it) {
+bool player::intersects(item &it) {
 	return Rect(Arg::center(pos), maze_brock_size).intersects(Circle(it.get_pos(), it.get_radius()));
 }
 void player::set_pos(Point p) {
@@ -170,6 +167,15 @@ Point random_point_item_position(Array<item>& ai) {
 	}
 }
 
+Point random_player_respawn_position(player& player2, player& player3) {
+	while (true) {
+		Point p = random_maze_brock_position();
+		if (player2.get_pos().distanceFrom(p) > maze_brock_size * 7 && player3.get_pos().distanceFrom(p) > maze_brock_size * 7)return p;//敵プレイヤーと7マス以上離して復活
+	}
+}
+
+
+
 void draw_timer(uint16 t){
 	timer_box.drawFrame();
 	FontAsset(U"font40")(U"{:0>2}:{:0>2}"_fmt(t / 60 / 60, t / 60 % 60)).drawAt(timer_box.center(), Palette::White);
@@ -183,4 +189,17 @@ void draw_big_point_box(uint16 t) {
 void draw_small_point_box(uint16 t) {
 	small_point_box.drawFrame();
 	FontAsset(U"font40")(U"{:0>4}pt"_fmt(t)).drawAt(small_point_box.center());
+}
+
+
+bool tag(player ghost, player tagger) {
+	auto p = tagger.get_pos();
+	for (auto i : step(light_range)) {
+		if (!intersect_maze(p + delta_point[tagger.get_direction()])) {
+			p += delta_point[tagger.get_direction()];
+		}
+		if (ghost.get_pos().distanceFrom(p)<=maze_brock_size/2)return true;
+	}
+	Print << tagger.get_pos()-p<<tagger.get_direction()<<tagger.direction;
+	return false;
 }

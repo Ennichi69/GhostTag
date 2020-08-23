@@ -13,8 +13,7 @@ public:
 	void update();
 	void update_direction(e_direction e_dir);
 	Line light()const;
-	bool intersects(Line l);
-	bool intersects(item it);
+	bool intersects(item& it);
 	void set_pos(Point p);
 	void set_pos(uint16 h, uint16 w);
 	void set_direction(e_direction e_dir);
@@ -28,13 +27,14 @@ public:
 	e_direction get_next_direction();
 	bool get_has_item();
 	void set_color(Color c);//画像読み込ませたら消す
-private:
 	Point pos;
 	e_direction direction;//今向いている向き
 	e_direction next_direction;//次に向く向き
 	uint16 score;
 	bool has_item;//スペシャルアイテムを所持しているか
 	Color col;//イラストに置き換えるまでの仮に色を設定
+
+private:
 };
 
 typedef enum {
@@ -64,9 +64,12 @@ bool intersect_maze(Point p);
 Point maze_brock_position(uint16 h, uint16 w);
 Point random_maze_brock_position();//ランダムな迷路内で通行可能な場所の座標
 Point random_point_item_position(Array<item>&ai);//ポイントアイテムをランダムに設置
+Point random_player_respawn_position(player& player2, player& player3);//プレイヤーの復活地点
 void draw_timer(uint16 t);//タイマーを書く
 void draw_big_point_box(uint16 t);
 void draw_small_point_box(uint16 t);
+
+bool tag(player ghost, player tagger);//捕獲判定 原因不明のバグが発生しています
 
 const Grid<bool>maze_data = {
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},

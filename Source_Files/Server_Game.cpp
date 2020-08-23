@@ -39,8 +39,21 @@ void server_game::update() {
 		player2.update();
 		player3.update();
 	}
-	if (player0.intersects(player2.light())) {
-		
+	if (tag(player0,player2)) {
+		player2.add_score(tag_score);
+		player0.set_pos(random_player_respawn_position(player2, player3));
+	}
+	if (tag(player0,player3)) {
+		player3.add_score(tag_score);
+		player0.set_pos(random_player_respawn_position(player2, player3));
+	}
+	if (tag(player1,player2)) {
+		player2.add_score(tag_score);
+		player1.set_pos(random_player_respawn_position(player2, player3));
+	}
+	if (tag(player1,player3)) {
+		player3.add_score(tag_score);
+		player1.set_pos(random_player_respawn_position(player2, player3));
 	}
 	for (auto &it : array_point_items) {
 		if (player0.intersects(it)) {
@@ -53,7 +66,6 @@ void server_game::update() {
 		}
 	}
 	timer--;
-
 	//全てのデータを送り返しておく(意味が無いものも含まれる)
 
 	getData().send_data[e_communication::timer] = timer;
@@ -97,6 +109,11 @@ void server_game::update() {
 	player3.set_pos(Point(getData().receive_data[e_communication::player3_x], getData().receive_data[e_communication::player3_y]));
 	player2.set_direction(e_direction(getData().receive_data[e_communication::player2_direction]));
 	player3.set_direction(e_direction(getData().receive_data[e_communication::player3_direction]));
+	player2.set_next_direction(e_direction(getData().send_data[e_communication::player2_next_direction]));
+	player3.set_next_direction(e_direction(getData().send_data[e_communication::player3_next_direction]));
+	if (timer == 0) {
+		changeScene(e_scene::result);
+	}
 }
 
 void server_game::draw()const {
