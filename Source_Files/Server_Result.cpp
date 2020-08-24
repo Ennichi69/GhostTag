@@ -27,6 +27,7 @@ void server_result::draw()const {
 	player2_result_box.drawFrame(5);
 	player3_result_box.drawFrame(5);
 	ghost_result_box.drawFrame(5);
+	tagger_result_box.drawFrame(5);
 	FontAsset(U"font40")(U"Player0:{:0>4}pt"_fmt(player0_score)).drawAt(player0_result_box.center());
 	FontAsset(U"font40")(U"Player1:{:0>4}pt"_fmt(player1_score)).drawAt(player1_result_box.center());
 	FontAsset(U"font40")(U"Player2:{:0>4}pt"_fmt(player2_score)).drawAt(player2_result_box.center());
