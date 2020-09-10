@@ -30,10 +30,6 @@ void server_game::update() {
 		changeScene(e_scene::error);
 	}
 
-	player0.update_direction(left_joystick_direction());
-	player1.update_direction(right_joystick_direction());
-	player0.update();
-	player1.update();
 	for (uint16 i = timer; i < getData().receive_data[e_communication::timer]; i++) {
 		//ラグ補正
 		player2.update();
@@ -41,42 +37,87 @@ void server_game::update() {
 	}
 	getData().send_data[e_communication::player2_status] = 0;
 	getData().send_data[e_communication::player3_status] = 0;
-	if (tag(player0,player2)) {
-		effect.add<tag_effect>(player0.get_pos());
-		player2.add_score(tag_score);
-		player0.set_pos(random_player_respawn_position(player2, player3));
-		getData().send_data[e_communication::player2_status] = 1;
+
+	uint16 inv_timer_0 = player0.get_invincible_timer();
+	uint16 inv_timer_1 = player1.get_invincible_timer();
+	if (inv_timer_0 > 60) {
+		player0.update();
+		player0.count_invincible_timer();
 	}
-	if (tag(player0,player3)) {
-		effect.add<tag_effect>(player0.get_pos());
-		player3.add_score(tag_score);
-		player0.set_pos(random_player_respawn_position(player2, player3));
-		getData().send_data[e_communication::player3_status] = 1;
-	}
-	if (tag(player1,player2)) {
-		effect.add<tag_effect>(player1.get_pos());
-		player2.add_score(tag_score);
-		player1.set_pos(random_player_respawn_position(player2, player3));
-		getData().send_data[e_communication::player2_status] = 1;
-	}
-	if (tag(player1,player3)) {
-		effect.add<tag_effect>(player1.get_pos());
-		player3.add_score(tag_score);
-		player1.set_pos(random_player_respawn_position(player2, player3));
-		getData().send_data[e_communication::player3_status] = 1;
-	}
-	for (auto &it : array_point_items) {
-		if (player0.intersects(it)) {
-			effect.add<item_effect>(it.get_pos());
-			it.set_pos(random_point_item_position(array_point_items));
-			player0.add_score(point_item_score);
+	else {
+		player0.update_direction(left_joystick_direction());
+		player0.update();
+
+		if (player0.get_invincible_timer() == 0) {
+			if (tag(player0, player2)) {
+				effect.add<tag_effect>(player0.get_pos());
+				player2.add_score(tag_score);
+				player0.set_pos(random_player_respawn_position(player2, player3));
+				player0.set_invincible_timer();
+				player0.set_direction(neutral);
+				player0.set_next_direction(neutral);
+				getData().send_data[e_communication::player2_status] = 1;
+			}
+			else if (tag(player0, player3)) {
+				effect.add<tag_effect>(player0.get_pos());
+				player3.add_score(tag_score);
+				player0.set_pos(random_player_respawn_position(player2, player3));
+				player0.set_invincible_timer();
+				player0.set_direction(neutral);
+				player0.set_next_direction(neutral);
+				getData().send_data[e_communication::player3_status] = 1;
+			}
 		}
-		if (player1.intersects(it)) {
-			effect.add<item_effect>(it.get_pos());
-			it.set_pos(random_point_item_position(array_point_items));
-			player1.add_score(point_item_score);
+		else {
+			player0.count_invincible_timer();
 		}
 	}
+
+	if (inv_timer_1 > 60) {
+		player1.update();
+		player1.count_invincible_timer();
+	}
+	else {
+		player1.update_direction(right_joystick_direction());
+		player1.update();
+
+		if (player1.get_invincible_timer() == 0) {
+			if (tag(player1, player2)) {
+				effect.add<tag_effect>(player1.get_pos());
+				player2.add_score(tag_score);
+				player1.set_pos(random_player_respawn_position(player2, player3));
+				player1.set_invincible_timer();
+				player1.set_direction(neutral);
+				player1.set_next_direction(neutral);
+				getData().send_data[e_communication::player2_status] = 1;
+			}
+			else if (tag(player1, player3)) {
+				effect.add<tag_effect>(player1.get_pos());
+				player3.add_score(tag_score);
+				player1.set_pos(random_player_respawn_position(player2, player3));
+				player1.set_invincible_timer();
+				player1.set_direction(neutral);
+				player1.set_next_direction(neutral);
+				getData().send_data[e_communication::player3_status] = 1;
+			}
+			for (auto& it : array_point_items) {
+				if (player0.intersects(it)) {
+					effect.add<item_effect>(it.get_pos());
+					it.set_pos(random_point_item_position(array_point_items));
+					player0.add_score(point_item_score);
+				}
+				if (player1.intersects(it)) {
+					effect.add<item_effect>(it.get_pos());
+					it.set_pos(random_point_item_position(array_point_items));
+					player1.add_score(point_item_score);
+				}
+			}
+		}
+		else {
+			player1.count_invincible_timer();
+		}
+	}
+
 	timer--;
 	//全てのデータを送り返しておく(意味が無いものも含まれる)
 
@@ -131,7 +172,7 @@ void server_game::update() {
 void server_game::draw()const {
 	draw_maze();
 	draw_timer(timer);
-	draw_big_point_box(player0.get_score()+player1.get_score());
+	draw_big_point_box(player0.get_score() + player1.get_score());
 	draw_small_point_box(player2.get_score() + player3.get_score());
 	left_item_circle.draw();
 	right_item_circle.draw();

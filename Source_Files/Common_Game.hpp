@@ -27,6 +27,10 @@ public:
 	e_direction get_next_direction();
 	bool get_has_item();
 	void set_color(Color c);//画像読み込ませたら消す
+	//sinatori
+	uint16 get_invincible_timer();
+	void set_invincible_timer();
+	void count_invincible_timer();
 private:
 	Point pos;
 	e_direction direction;//今向いている向き
@@ -35,6 +39,9 @@ private:
 	bool has_item;//スペシャルアイテムを所持しているか
 	Color col;//イラストに置き換えるまでの仮に色を設定
 
+	//sinatori
+	uint16 walking_timer;//テクスチャ変更用変数
+	uint16 invincible_timer;//無敵時間変数
 };
 
 typedef enum {
@@ -76,7 +83,7 @@ bool intersect_maze(Rect r);
 bool intersect_maze(Point p);
 Point maze_brock_position(uint16 h, uint16 w);
 Point random_maze_brock_position();//ランダムな迷路内で通行可能な場所の座標
-Point random_point_item_position(Array<item>&ai);//ポイントアイテムをランダムに設置
+Point random_point_item_position(Array<item>& ai);//ポイントアイテムをランダムに設置
 Point random_player_respawn_position(player& player2, player& player3);//プレイヤーの復活地点
 void draw_timer(uint16 t);//タイマーを書く
 void draw_big_point_box(uint16 t);
@@ -124,6 +131,9 @@ const uint16 point_item_score = 100;
 const uint16 tag_score = 800;
 
 const Point delta_point[5] = { Point(0,0),Point(-1,0),Point(0,-1),Point(1,0),Point(0,1) };//移動時の差分 neutral left up right down
+
+//sinatori
+const uint16 default_invincible = 90;
 
 //それぞれのプレイヤーの初期座標
 const uint16 init_player0_x = 1;

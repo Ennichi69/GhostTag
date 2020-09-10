@@ -6,6 +6,8 @@ player::player() {
 	next_direction = neutral;
 	score = 0;
 	has_item = false;
+	walking_timer = 0;
+	invincible_timer = 0;
 }
 player::player(Point p) {
 	pos = p;
@@ -13,9 +15,23 @@ player::player(Point p) {
 	next_direction = neutral;
 	score = 0;
 	has_item = false;
+	walking_timer = 0;
+	invincible_timer = 0;
 }
-void player::draw() const{
-	Circle(pos, maze_brock_size / 2).draw(col);
+void player::draw() const {
+	//sinatori ã‰º¶‰EÃŽ~
+	//ŽžŠÔ‚²‚Æ‚ÉŠG‚ð•ÏX
+	if (invincible_timer > 60)return;
+	if (invincible_timer > 0) {
+		//‚±‚±¯‚ª‰ñ“]‚Æ‚©‚©‚Á‚±‚¢‚¢ƒGƒtƒFƒNƒg‚Â‚¯‚Ä‚Ý‚½‚¢
+		Circle(pos, invincible_timer + 20).draw(Color(col, 200));
+	}
+	if (walking_timer % 30 > 20) {
+		Circle(pos, maze_brock_size).draw(col);
+	}
+	else {
+		Circle(pos, maze_brock_size / 2).draw(col);
+	}
 }
 void player::draw_light() const {
 	light().draw(6, Palette::Yellow);
@@ -24,8 +40,15 @@ void player::update() {
 	if (!intersect_maze(Rect(Arg::center(pos), maze_brock_size).movedBy(delta_point[next_direction]))) {
 		direction = next_direction;
 	}
-	if (!intersect_maze(Rect(Arg::center(pos), maze_brock_size).movedBy(delta_point[direction]*frame_per_move))) {
+	if (!intersect_maze(Rect(Arg::center(pos), maze_brock_size).movedBy(delta_point[direction] * frame_per_move))) {
 		pos.moveBy(delta_point[direction] * frame_per_move);
+	}
+	//sinatori “®‚¢‚½‚çŠG‚ðˆê‚Â•Ï‚¦‚é
+	if (direction == neutral) {
+		walking_timer = 0;
+	}
+	else {
+		walking_timer++;
 	}
 }
 void player::update_direction(e_direction e_dir) {
@@ -42,7 +65,7 @@ Line player::light()const {
 	}
 	return Line(p, pos);
 }
-bool player::intersects(item &it) {
+bool player::intersects(item& it) {
 	return Rect(Arg::center(pos), maze_brock_size).intersects(Circle(it.get_pos(), it.get_radius()));
 }
 void player::set_pos(Point p) {
@@ -52,6 +75,10 @@ void player::set_pos(uint16 h, uint16 w) {
 	pos = maze_brock_position(h, w);
 }
 void player::set_direction(e_direction e_dir) {
+	//sinatori Œü‚«‚ð•Ï‚¦‚½‚çŠG‚ðÅ‰‚©‚ç‚É‚µ‚æ‚¤
+	if (e_dir != direction) {
+		walking_timer = 0;
+	}
 	direction = e_dir;
 }
 void player::set_next_direction(e_direction e_n_dir) {
@@ -84,7 +111,16 @@ bool player::get_has_item() {
 void player::set_color(Color c) {
 	col = c;
 }
-
+//sinatori
+uint16 player::get_invincible_timer() {
+	return invincible_timer;
+}
+void player::set_invincible_timer() {
+	invincible_timer = default_invincible;
+}
+void player::count_invincible_timer() {
+	invincible_timer--;
+}
 
 item::item() {
 	pos = Point(0, 0);
@@ -164,7 +200,7 @@ bool intersect_maze(Point p) {
 }
 
 Point maze_brock_position(uint16 h, uint16 w) {
-	return Scene::Center()+Point((-maze_width + 1) * maze_brock_size / 2, (-maze_height + 1) * maze_brock_size / 2)+Point(w * maze_brock_size, h * maze_brock_size);
+	return Scene::Center() + Point((-maze_width + 1) * maze_brock_size / 2, (-maze_height + 1) * maze_brock_size / 2) + Point(w * maze_brock_size, h * maze_brock_size);
 }
 
 Point random_maze_brock_position() {
@@ -196,7 +232,7 @@ Point random_player_respawn_position(player& player2, player& player3) {
 
 
 
-void draw_timer(uint16 t){
+void draw_timer(uint16 t) {
 	timer_box.drawFrame();
 	FontAsset(U"font40")(U"{:0>2}:{:0>2}"_fmt(t / 60 / 60, t / 60 % 60)).drawAt(timer_box.center(), Palette::White);
 }
