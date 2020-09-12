@@ -16,6 +16,42 @@ client_game::client_game(const InitData& init) :IScene(init) {
 	player2.set_color(init_player2_color);
 	player3.set_color(init_player3_color);
 	array_point_items.resize(array_point_items_size);
+	
+	player0.set_frame_per_move(4);
+	player1.set_frame_per_move(4);
+
+	player2.set_texture(0, U"pictures/girl_left1.png");
+	player2.set_texture(1, U"pictures/girl_left2.png");
+	player2.set_texture(2, U"pictures/girl_up1.png");
+	player2.set_texture(3, U"pictures/girl_up2.png");
+	player2.set_texture(4, U"pictures/girl_left1.png");
+	player2.set_texture(5, U"pictures/girl_left2.png");
+	player2.set_texture(6, U"pictures/girl_down1.png");
+	player2.set_texture(7, U"pictures/girl_down2.png");
+	player2.set_frame_per_move(5);
+
+	player3.set_texture(0, U"pictures/boy_left1.png");
+	player3.set_texture(1, U"pictures/boy_left2.png");
+	player3.set_texture(2, U"pictures/boy_up1.png");
+	player3.set_texture(3, U"pictures/boy_up2.png");
+	player3.set_texture(4, U"pictures/boy_left1.png");
+	player3.set_texture(5, U"pictures/boy_left2.png");
+	player3.set_texture(6, U"pictures/boy_down1.png");
+	player3.set_texture(7, U"pictures/boy_down2.png");
+	player3.set_frame_per_move(5);
+
+	//道のテクスチャを初期化
+	junction_u = Texture(Resource(U"pictures/junction_a.png"));
+	junction_l = Texture(Resource(U"pictures/junction_b.png"));
+	junction_d = Texture(Resource(U"pictures/junction_c.png"));
+	junction_r = Texture(Resource(U"pictures/junction_d.png"));
+
+	corner_ld = Texture(Resource(U"pictures/corner_a.png"));
+	corner_rd = Texture(Resource(U"pictures/corner_b.png"));
+	corner_ru = Texture(Resource(U"pictures/corner_c.png"));
+	corner_lu = Texture(Resource(U"pictures/corner_d.png"));
+	street_ud = Texture(Resource(U"pictures/street_vert.png"));
+	street_lr = Texture(Resource(U"pictures/street_hori.png"));
 }
 
 void client_game::update() {
@@ -101,6 +137,46 @@ void client_game::update() {
 	}
 	if (timer == 0) {
 		changeScene(e_scene::result);
+	}
+}
+
+void client_game::draw_maze() const {
+	for (auto i : step(maze_height)) {
+		for (auto j : step(maze_width)) {
+			if (maze_data[i][j]) {
+				Rect(Arg::center(maze_brock_position(i, j)), maze_brock_size).draw(Palette::Orange);
+			}
+			else {
+				if (i == 0 || i == maze_height - 1 || j == 0 || j == maze_width - 1)continue;//マップには存在しない
+				if (maze_data[i - 1][j]) {
+					if (maze_data[i][j - 1])
+						corner_rd.draw(Arg::center(maze_brock_position(i, j)));
+					else if (maze_data[i + 1][j])
+						street_lr.draw(Arg::center(maze_brock_position(i, j)));
+					else if (maze_data[i][j + 1])
+						corner_ld.draw(Arg::center(maze_brock_position(i, j)));
+					else
+						junction_u.draw(Arg::center(maze_brock_position(i, j)));
+				}
+				else if (maze_data[i][j - 1]) {
+					if (maze_data[i + 1][j])
+						corner_ru.draw(Arg::center(maze_brock_position(i, j)));
+					else if (maze_data[i][j + 1])
+						street_ud.draw(Arg::center(maze_brock_position(i, j)));
+					else
+						junction_l.draw(Arg::center(maze_brock_position(i, j)));
+				}
+				else if (maze_data[i + 1][j]) {
+					if (maze_data[i][j + 1])
+						corner_lu.draw(Arg::center(maze_brock_position(i, j)));
+					else
+						junction_d.draw(Arg::center(maze_brock_position(i, j)));
+				}
+				else {
+					junction_r.draw(Arg::center(maze_brock_position(i, j)));
+				}
+			}
+		}
 	}
 }
 

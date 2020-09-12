@@ -31,6 +31,8 @@ public:
 	uint16 get_invincible_timer();
 	void set_invincible_timer();
 	void count_invincible_timer();
+	void set_texture(uint16 i, String file_name);
+	void set_frame_per_move(uint16 fpm);
 private:
 	Point pos;
 	e_direction direction;//今向いている向き
@@ -42,6 +44,8 @@ private:
 	//sinatori
 	uint16 walking_timer;//テクスチャ変更用変数
 	uint16 invincible_timer;//無敵時間変数
+	Texture player_picture[8];// left, down, up
+	uint16 frame_per_move;//これがmaze_brock_sizeの約数でないと動かない
 };
 
 typedef enum {
@@ -78,7 +82,6 @@ struct tag_effect :IEffect {
 	bool update(double t)override;
 };
 
-void draw_maze();
 bool intersect_maze(Rect r);
 bool intersect_maze(Point p);
 Point maze_brock_position(uint16 h, uint16 w);
@@ -120,7 +123,6 @@ const Circle right_item_circle = Circle(960 + 800, 1000, 70);
 const uint16 maze_height = 18;
 const uint16 maze_width = 42;
 const uint16 maze_brock_size = 40;
-const uint16 frame_per_move = 4;//これがmaze_brock_sizeの約数でないと動かないクソ仕様だが多分この数字変えないので問題ない
 const uint16 init_time = 7500;
 const uint16 light_range = 120;
 const uint16 item_radius = 10;

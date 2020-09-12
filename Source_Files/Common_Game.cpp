@@ -26,11 +26,12 @@ void player::draw() const {
 		//ここ星が回転とかかっこいいエフェクトつけてみたい
 		Circle(pos, invincible_timer + 20).draw(Color(col, 200));
 	}
-	if (walking_timer % 30 > 20) {
-		Circle(pos, maze_brock_size).draw(col);
+
+	if (direction == neutral) {
+		player_picture[7].draw(Arg::center(pos));//ニュートラルの時の画像は一応下向きにしておく
 	}
 	else {
-		Circle(pos, maze_brock_size / 2).draw(col);
+		player_picture[(direction - 1) * 2 + (walking_timer / 5) % 2].draw(Arg::center(pos));
 	}
 }
 void player::draw_light() const {
@@ -121,6 +122,12 @@ void player::set_invincible_timer() {
 void player::count_invincible_timer() {
 	invincible_timer--;
 }
+void player::set_texture(uint16 i, String file_name) {
+	player_picture[i] = Texture(Resource(file_name));
+}
+void player::set_frame_per_move(uint16 fpm) {
+	frame_per_move = fpm;
+}
 
 item::item() {
 	pos = Point(0, 0);
@@ -161,18 +168,6 @@ tag_effect::tag_effect(const Point& p) {
 bool tag_effect::update(double t) {
 	FontAsset(U"font40")(U"Tag!").drawAt(pos.movedBy(0, t * -80.0), Palette::Limegreen);
 	return t < 1.0;
-}
-
-
-
-void draw_maze() {
-	for (auto i : step(maze_height)) {
-		for (auto j : step(maze_width)) {
-			if (maze_data[i][j]) {
-				Rect(Arg::center(maze_brock_position(i, j)), maze_brock_size).draw(Palette::Orange);
-			}
-		}
-	}
 }
 
 bool intersect_maze(Rect r) {

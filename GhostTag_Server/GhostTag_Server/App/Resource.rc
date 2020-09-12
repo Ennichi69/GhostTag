@@ -57,7 +57,44 @@ Resource(engine/soundfont/GMGSx.sf2.zstdcmp)
 //
 //////////////////////////////////////////////////////
 
+Resource(pictures/pump_left1.png)
+Resource(pictures/pump_left2.png)
+Resource(pictures/pump_down1.png)
+Resource(pictures/pump_down2.png)
+Resource(pictures/pump_up1.png)
+Resource(pictures/pump_up2.png)
 
+Resource(pictures/ghost_left1.png)
+Resource(pictures/ghost_left2.png)
+Resource(pictures/ghost_down1.png)
+Resource(pictures/ghost_down2.png)
+Resource(pictures/ghost_up1.png)
+Resource(pictures/ghost_up2.png)
+
+Resource(pictures/girl_left1.png)
+Resource(pictures/girl_left2.png)
+Resource(pictures/girl_down1.png)
+Resource(pictures/girl_down2.png)
+Resource(pictures/girl_up1.png)
+Resource(pictures/girl_up2.png)
+
+Resource(pictures/boy_left1.png)
+Resource(pictures/boy_left2.png)
+Resource(pictures/boy_down1.png)
+Resource(pictures/boy_down2.png)
+Resource(pictures/boy_up1.png)
+Resource(pictures/boy_up2.png)
+
+Resource(pictures/junction_a.png)
+Resource(pictures/junction_b.png)
+Resource(pictures/junction_c.png)
+Resource(pictures/junction_d.png)
+Resource(pictures/corner_a.png)
+Resource(pictures/corner_b.png)
+Resource(pictures/corner_c.png)
+Resource(pictures/corner_d.png)
+Resource(pictures/street_vert.png)
+Resource(pictures/street_hori.png)
 
 /* 
 	//
