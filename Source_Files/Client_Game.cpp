@@ -24,8 +24,8 @@ client_game::client_game(const InitData& init) :IScene(init) {
 	player2.set_texture(1, U"pictures/girl_left2.png");
 	player2.set_texture(2, U"pictures/girl_up1.png");
 	player2.set_texture(3, U"pictures/girl_up2.png");
-	player2.set_texture(4, U"pictures/girl_left1.png");
-	player2.set_texture(5, U"pictures/girl_left2.png");
+	player2.set_texture(4, U"pictures/girl_right1.png");
+	player2.set_texture(5, U"pictures/girl_right2.png");
 	player2.set_texture(6, U"pictures/girl_down1.png");
 	player2.set_texture(7, U"pictures/girl_down2.png");
 	player2.set_frame_per_move(5);
@@ -34,8 +34,8 @@ client_game::client_game(const InitData& init) :IScene(init) {
 	player3.set_texture(1, U"pictures/boy_left2.png");
 	player3.set_texture(2, U"pictures/boy_up1.png");
 	player3.set_texture(3, U"pictures/boy_up2.png");
-	player3.set_texture(4, U"pictures/boy_left1.png");
-	player3.set_texture(5, U"pictures/boy_left2.png");
+	player3.set_texture(4, U"pictures/boy_right1.png");
+	player3.set_texture(5, U"pictures/boy_right2.png");
 	player3.set_texture(6, U"pictures/boy_down1.png");
 	player3.set_texture(7, U"pictures/boy_down2.png");
 	player3.set_frame_per_move(5);
@@ -52,6 +52,12 @@ client_game::client_game(const InitData& init) :IScene(init) {
 	corner_lu = Texture(Resource(U"pictures/corner_d.png"));
 	street_ud = Texture(Resource(U"pictures/street_vert.png"));
 	street_lr = Texture(Resource(U"pictures/street_hori.png"));
+
+	maze_walls[2] = Texture(Resource(U"pictures/wall1.png"));
+	maze_walls[3] = Texture(Resource(U"pictures/wall2.png"));
+	maze_walls[4] = Texture(Resource(U"pictures/bookshelf.png"));
+	maze_walls[5] = Texture(Resource(U"pictures/window.png"));
+	maze_walls[6] = Texture(Resource(U"pictures/door.png"));
 }
 
 void client_game::update() {
@@ -144,7 +150,12 @@ void client_game::draw_maze() const {
 	for (auto i : step(maze_height)) {
 		for (auto j : step(maze_width)) {
 			if (maze_data[i][j]) {
-				Rect(Arg::center(maze_brock_position(i, j)), maze_brock_size).draw(Palette::Orange);
+				if (maze_data[i][j] == 1) {
+					Rect(Arg::center(maze_brock_position(i, j)), maze_brock_size).draw(Palette::Black);
+				}
+				else {
+					maze_walls[maze_data[i][j]].draw(Arg::center(maze_brock_position(i, j)));
+				}
 			}
 			else {
 				if (i == 0 || i == maze_height - 1 || j == 0 || j == maze_width - 1)continue;//É}ÉbÉvÇ…ÇÕë∂ç›ÇµÇ»Ç¢

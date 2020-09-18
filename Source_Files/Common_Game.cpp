@@ -145,6 +145,9 @@ void item::draw() {
 void item::set_pos(Point p) {
 	pos = p;
 }
+void item::set_texture() {//–¢’è
+	//item_picture = Texture(Resource(item_path));
+}
 Point item::get_pos() {
 	return pos;
 }
