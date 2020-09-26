@@ -7,16 +7,56 @@ public:
 	server_game(const InitData& init);
 	void update() override;
 	void draw()const override;
+<<<<<<< HEAD
+=======
+	void draw_maze()const;
+>>>>>>> develop
 private:
 	player player0;
 	player player1;
 	player player2;
 	player player3;
 	uint16 timer;
+<<<<<<< HEAD
 	Array<item>array_point_items;
 	item ghost_special_item;
 	item tagger_special_item;
 	bool exist_ghost_special_item;
 	bool exist_tagger_special_item;
 	Effect effect;
+=======
+	Array<item>array_items;
+	Effect effect;
+
+	Texture junction_u;
+	Texture junction_l;
+	Texture junction_d;
+	Texture junction_r;
+
+	Texture corner_ld;
+	Texture corner_rd;
+	Texture corner_ru;
+	Texture corner_lu;
+	Texture street_ud;
+	Texture street_lr;
+
+	Texture maze_walls[7];
+
+	//Texture maze_pictures[18];
+	//3 * 6 
+	//1~9はテンキー対応(5は欠番)(左下1,右上9)
+	//┌┬┐
+	//├┼┤
+	//└┴┘
+	//10は横線、11は縦線
+	//12 wall1
+	//13 wall2
+	//14 bookshelf
+	//15 window
+	//16 door
+	//maze_wallsだけ使うなら-10して12~16使用
+
+	Texture special_thunder_picture;
+	Texture special_wing_picture;
+>>>>>>> develop
 };
