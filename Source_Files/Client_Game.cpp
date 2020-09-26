@@ -262,16 +262,16 @@ void client_game::draw()const {
 	draw_small_point_box(player0.get_score() + player1.get_score());
 	left_item_circle.draw();
 	right_item_circle.draw();
-	if (player2.get_special_item() == special_thunder) {
+	if (player2.get_special_item() == special_thunder || player2.get_special_item_thunder_timer() != 0) {
 		special_thunder_picture.scaled(2.0).drawAt(left_item_circle.center);
 	}
-	else if (player2.get_special_item() == special_wing) {
+	else if (player2.get_special_item() == special_wing || player2.get_special_item_wing_timer() != 0) {
 		special_wing_picture.scaled(2.0).drawAt(left_item_circle.center);
 	}
-	if (player3.get_special_item() == special_thunder) {
+	if (player3.get_special_item() == special_thunder || player3.get_special_item_thunder_timer() != 0) {
 		special_thunder_picture.scaled(2.0).drawAt(right_item_circle.center);
 	}
-	else if (player3.get_special_item() == special_wing) {
+	else if (player3.get_special_item() == special_wing || player3.get_special_item_wing_timer() != 0) {
 		special_wing_picture.scaled(2.0).drawAt(right_item_circle.center);
 	}
 	left_special_item_timer_box.drawFrame(0, 3, Palette::White);
