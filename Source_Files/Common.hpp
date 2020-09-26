@@ -40,6 +40,10 @@ typedef enum {
 	player1_speed,
 	player2_speed,
 	player3_speed,
+	player0_button_down,//特殊ボタンが押されているか
+	player1_button_down,
+	player2_button_down,
+	player3_button_down,
 	point_item_status = 50,//[0]x座標,[0]y座標,[0]type,[1]x座標,[1]y座標,[1]type,[2]x座標...の順
 
 

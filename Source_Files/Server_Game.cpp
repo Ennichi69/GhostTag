@@ -282,6 +282,32 @@ void server_game::update() {
 			player1.set_special_item(nothing);
 		}
 	}
+	if (player2.get_special_item_thunder_timer() != 0) {
+		player2.count_special_item_thunder_timer();
+		if (player2.get_special_item_thunder_timer() == 0) {
+			player2.set_special_item(nothing);
+		}
+	}
+	if (player3.get_special_item_thunder_timer() != 0) {
+		player3.count_special_item_thunder_timer();
+		if (player3.get_special_item_thunder_timer() == 0) {
+			player3.set_special_item(nothing);
+		}
+	}
+	if (player3.get_special_item_wing_timer() != 0) {
+		player3.count_special_item_wing_timer();
+		if (player3.get_special_item_wing_timer() == 0) {
+			player3.set_frame_per_move(tagger_speed);
+			player3.set_special_item(nothing);
+		}
+	}
+	if (player2.get_special_item_wing_timer() != 0) {
+		player2.count_special_item_wing_timer();
+		if (player2.get_special_item_wing_timer() == 0) {
+			player2.set_frame_per_move(tagger_speed);
+			player2.set_special_item(nothing);
+		}
+	}
 	timer--;
 	//全てのデータを送り返しておく(意味が無いものも含まれる)
 
@@ -322,25 +348,42 @@ void server_game::update() {
 	getData().send_data[e_communication::player1_speed] = player1.get_frame_per_move();
 	getData().send_data[e_communication::player2_speed] = player2.get_frame_per_move();
 	getData().send_data[e_communication::player3_speed] = player3.get_frame_per_move();
+	getData().send_data[e_communication::player0_button_down] = left_button_down();
+	getData().send_data[e_communication::player1_button_down] = right_button_down();
+
 	for (auto i : step(array_point_items_size)) {
 		getData().send_data[e_communication::point_item_status + i * 3] = array_items[i].get_pos().x;
 		getData().send_data[e_communication::point_item_status + i * 3 + 1] = array_items[i].get_pos().y;
 		getData().send_data[e_communication::point_item_status + i * 3 + 2] = array_items[i].get_type();
 	}
 	getData().tcp_server.send(getData().send_data);
-	while (getData().tcp_server.read(getData().receive_data));
-	player2.set_pos(Point(getData().receive_data[e_communication::player2_x], getData().receive_data[e_communication::player2_y]));
-	player3.set_pos(Point(getData().receive_data[e_communication::player3_x], getData().receive_data[e_communication::player3_y]));
-	player2.set_direction(e_direction(getData().receive_data[e_communication::player2_direction]));
-	player3.set_direction(e_direction(getData().receive_data[e_communication::player3_direction]));
-	player2.set_next_direction(e_direction(getData().receive_data[e_communication::player2_next_direction]));
-	player3.set_next_direction(e_direction(getData().receive_data[e_communication::player3_next_direction]));
-	player2.set_special_item_thunder_timer(getData().receive_data[e_communication::player2_special_item_thunder_timer]);
-	player3.set_special_item_thunder_timer(getData().receive_data[e_communication::player3_special_item_thunder_timer]);
-	player2.set_special_item_wing_timer(getData().receive_data[e_communication::player2_special_item_wing_timer]);
-	player3.set_special_item_wing_timer(getData().receive_data[e_communication::player3_special_item_wing_timer]);
-	player2.set_frame_per_move(getData().receive_data[e_communication::player2_speed]); 
-	player3.set_frame_per_move(getData().receive_data[e_communication::player3_speed]);
+	while (getData().tcp_server.read(getData().receive_data)) {
+		player2.set_pos(Point(getData().receive_data[e_communication::player2_x], getData().receive_data[e_communication::player2_y]));
+		player3.set_pos(Point(getData().receive_data[e_communication::player3_x], getData().receive_data[e_communication::player3_y]));
+		player2.set_direction(e_direction(getData().receive_data[e_communication::player2_direction]));
+		player3.set_direction(e_direction(getData().receive_data[e_communication::player3_direction]));
+		player2.set_next_direction(e_direction(getData().receive_data[e_communication::player2_next_direction]));
+		player3.set_next_direction(e_direction(getData().receive_data[e_communication::player3_next_direction]));
+		//相手側のスペシャルアイテムの使用
+		if (getData().receive_data[e_communication::player2_button_down] && player2.get_special_item() == special_thunder) {
+			player2.set_special_item(in_use);
+			player2.set_special_item_thunder_timer(special_thunder_effect_time);
+		}
+		if (getData().receive_data[e_communication::player2_button_down] && player2.get_special_item() == special_wing) {
+			player2.set_special_item(in_use);
+			player2.set_special_item_wing_timer(special_wing_tagger_effect_time);
+			player2.set_frame_per_move(special_wing_tagger_speed);
+		}
+		if (getData().receive_data[e_communication::player3_button_down] && player3.get_special_item() == special_thunder) {
+			player3.set_special_item(in_use);
+			player3.set_special_item_thunder_timer(special_thunder_effect_time);
+		}
+		if (getData().receive_data[e_communication::player3_button_down] && player3.get_special_item() == special_wing) {
+			player3.set_special_item(in_use);
+			player3.set_special_item_wing_timer(special_wing_tagger_effect_time);
+			player3.set_frame_per_move(special_wing_tagger_speed);
+		}
+	}
 	if (timer == 0) {
 		changeScene(e_scene::result);
 	}
