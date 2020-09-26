@@ -14,12 +14,9 @@ private:
 	player player1;
 	player player2;
 	player player3;
-	Array<item>array_point_items;
-	item ghost_special_item;
-	item tagger_special_item;
-	bool exist_ghost_special_item;
-	bool exist_tagger_special_item;
+	Array<item>array_items;
 	Effect effect;
+
 
 	Texture junction_u;
 	Texture junction_l;
@@ -34,6 +31,7 @@ private:
 	Texture street_lr;
 
 	Texture maze_walls[7];
+
 	
 	//Texture maze_pictures[18];
 	//3 * 6 
@@ -48,4 +46,7 @@ private:
 	//15 window
 	//16 door
 	//maze_walls‚¾‚¯Žg‚¤‚È‚ç-10‚µ‚Ä12~16Žg—p
+
+	Texture special_thunder_picture;
+	Texture special_wing_picture;
 };

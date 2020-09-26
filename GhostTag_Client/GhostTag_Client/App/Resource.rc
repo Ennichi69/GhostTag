@@ -110,6 +110,12 @@ Resource(pictures/wall2.png)
 Resource(pictures/window.png)
 Resource(pictures/door.png)
 
+Resource(pictures/point_candy1.png)
+Resource(pictures/point_candy2.png)
+Resource(pictures/point_chocolate.png)
+Resource(pictures/special_thunder.png)
+Resource(pictures/special_wing.png)
+
 /* 
 	//
 	// Define your resource path inside `Resource()` macro.
