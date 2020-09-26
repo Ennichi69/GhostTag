@@ -5,38 +5,20 @@ player::player() {
 	direction = neutral;
 	next_direction = neutral;
 	score = 0;
-<<<<<<< HEAD
 	has_item = false;
 	walking_timer = 0;
 	invincible_timer = 0;
-=======
-	walking_timer = 0;
-	invincible_timer = 0;
-	special_item = nothing;
-	special_item_thunder_timer = 0;
-	special_item_wing_timer = 0;
->>>>>>> develop
 }
 player::player(Point p) {
 	pos = p;
 	direction = neutral;
 	next_direction = neutral;
 	score = 0;
-<<<<<<< HEAD
 	has_item = false;
 	walking_timer = 0;
 	invincible_timer = 0;
 }
 void player::draw() const{
-=======
-	walking_timer = 0;
-	invincible_timer = 0;
-	special_item = nothing;
-	special_item_thunder_timer = 0;
-	special_item_wing_timer = 0;
-}
-void player::draw() const {
->>>>>>> develop
 	//sinatori 上下左右静止
 	//時間ごとに絵を変更
 	if (invincible_timer > 60)return;
@@ -44,40 +26,22 @@ void player::draw() const {
 		//ここ星が回転とかかっこいいエフェクトつけてみたい
 		Circle(pos, invincible_timer + 20).draw(Color(col, 200));
 	}
-<<<<<<< HEAD
 	if (walking_timer % 30 > 20) {
 		Circle(pos, maze_brock_size).draw(col);
 	}
 	else {
 		Circle(pos, maze_brock_size / 2).draw(col);
-=======
-	if (direction == neutral) {
-		player_picture[7].draw(Arg::center(pos));//ニュートラルの時の画像は一応下向きにしておく
-	}
-	else {
-		player_picture[(direction - 1) * 2 + (walking_timer / 5) % 2].draw(Arg::center(pos));
->>>>>>> develop
 	}
 }
 void player::draw_light() const {
 	light().draw(6, Palette::Yellow);
 }
 void player::update() {
-<<<<<<< HEAD
 	if (!intersect_maze(Rect(Arg::center(pos), maze_brock_size).movedBy(delta_point[next_direction]))) {
 		direction = next_direction;
 	}
 	if (!intersect_maze(Rect(Arg::center(pos), maze_brock_size).movedBy(delta_point[direction]*frame_per_move))) {
 		pos.moveBy(delta_point[direction] * frame_per_move);
-=======
-	for (auto i : step(frame_per_move)) {
-		if (!intersect_maze(Rect(Arg::center(pos), maze_brock_size).movedBy(delta_point[next_direction]))) {
-			direction = next_direction;
-		}
-		if (!intersect_maze(Rect(Arg::center(pos), maze_brock_size).movedBy(delta_point[direction]))) {
-			pos.moveBy(delta_point[direction]);
-		}
->>>>>>> develop
 	}
 	//sinatori 動いたら絵を一つ変える
 	if (direction == neutral) {
@@ -101,11 +65,7 @@ Line player::light()const {
 	}
 	return Line(p, pos);
 }
-<<<<<<< HEAD
 bool player::intersects(item &it) {
-=======
-bool player::intersects(item& it) {
->>>>>>> develop
 	return Rect(Arg::center(pos), maze_brock_size).intersects(Circle(it.get_pos(), it.get_radius()));
 }
 void player::set_pos(Point p) {
@@ -127,7 +87,6 @@ void player::set_next_direction(e_direction e_n_dir) {
 void player::set_score(uint16 t) {
 	score = t;
 }
-<<<<<<< HEAD
 void player::add_score(uint16 t) {
 	score += t;
 }
@@ -135,21 +94,11 @@ void player::set_has_item(bool b) {
 	has_item = b;
 }
 Point player::get_pos() {
-=======
-void player::set_special_item(e_item_type t) {
-	special_item = t;
-}
-void player::add_score(uint16 t) {
-	score += t;
-}
-Point player::get_pos()const {
->>>>>>> develop
 	return pos;
 }
 uint16 player::get_score()const {
 	return score;
 }
-<<<<<<< HEAD
 e_direction player::get_direction() {
 	return direction;
 }
@@ -158,45 +107,10 @@ e_direction player::get_next_direction() {
 }
 bool player::get_has_item() {
 	return has_item;
-=======
-e_direction player::get_direction()const {
-	return direction;
-}
-e_direction player::get_next_direction()const {
-	return next_direction;
-}
-e_item_type player::get_special_item()const {
-	return special_item;
-}
-uint16 player::get_special_item_thunder_timer()const {
-	return special_item_thunder_timer;
-}
-uint16 player::get_special_item_wing_timer()const {
-	return special_item_wing_timer;
->>>>>>> develop
 }
 void player::set_color(Color c) {
 	col = c;
 }
-<<<<<<< HEAD
-=======
-void player::set_special_item_thunder_timer(uint16 t) {
-	special_item_thunder_timer = t;
-}
-void player::set_special_item_wing_timer(uint16 t) {
-	special_item_wing_timer = t;
-}
-void player::count_special_item_thunder_timer() {
-	if (special_item_thunder_timer != 0) {
-		special_item_thunder_timer--;
-	}
-}
-void player::count_special_item_wing_timer() {
-	if (special_item_wing_timer != 0) {
-		special_item_wing_timer--;
-	}
-}
->>>>>>> develop
 //sinatori
 uint16 player::get_invincible_timer() {
 	return invincible_timer;
@@ -207,100 +121,29 @@ void player::set_invincible_timer() {
 void player::count_invincible_timer() {
 	invincible_timer--;
 }
-<<<<<<< HEAD
 
 item::item() {
 	pos = Point(0, 0);
 	type = point;
-=======
-void player::set_texture(uint16 i, String file_name) {
-	player_picture[i] = Texture(Resource(file_name));
-}
-void player::set_frame_per_move(uint16 fpm) {
-	frame_per_move = fpm;
-}
-uint16 player::get_frame_per_move() const {
-	return frame_per_move;
-}
-
-item::item() {
-	pos = Point(0, 0);
-	type = point1;
-	picture = Texture(Resource(U"pictures/point_candy1.png"));
->>>>>>> develop
 	radius = item_radius;
 }
 item::item(Point p, e_item_type t) {
 	pos = p;
 	type = t;
-<<<<<<< HEAD
 	radius = item_radius;
 }
 void item::draw() {
 	Circle(pos, radius).draw(Palette::Yellow);
-=======
-	if (t == point1) {
-		picture = Texture(Resource(U"pictures/point_candy1.png"));
-	}
-	else if (t == point2) {
-		picture = Texture(Resource(U"pictures/point_candy2.png"));
-	}
-	else if (t == point3) {
-		picture = Texture(Resource(U"pictures/point_chocolate.png"));
-	}
-	else if (t == special_thunder) {
-		picture = Texture(Resource(U"pictures/special_thunder.png"));
-	}
-	else if (t == special_wing) {
-		picture = Texture(Resource(U"pictures/special_wing.png"));
-	}
-	else {
-		t = point1;
-		picture = Texture(Resource(U"pictures/point_candy1.png"));
-	}
-	radius = item_radius;
-}
-void item::draw() {
-	picture.draw(Arg::center(pos));
->>>>>>> develop
 }
 void item::set_pos(Point p) {
 	pos = p;
 }
-<<<<<<< HEAD
-=======
-void item::set_type(e_item_type t) {
-	type = t;
-	if (t == point1) {
-		picture = Texture(Resource(U"pictures/point_candy1.png"));
-	}
-	else if (t == point2) {
-		picture = Texture(Resource(U"pictures/point_candy2.png"));
-	}
-	else if (t == point3) {
-		picture = Texture(Resource(U"pictures/point_chocolate.png"));
-	}
-	else if (t == special_thunder) {
-		picture = Texture(Resource(U"pictures/special_thunder.png"));
-	}
-	else if (t == special_wing) {
-		picture = Texture(Resource(U"pictures/special_wing.png"));
-	}
-	else {
-		picture = Texture(Resource(U"pictures/point_candy1.png"));
-	}
-}
-void item::set_texture(String file_name) {
-	picture = Texture(Resource(file_name));
-}
->>>>>>> develop
 Point item::get_pos() {
 	return pos;
 }
 uint16 item::get_radius() {
 	return radius;
 }
-<<<<<<< HEAD
 
 item_effect::item_effect(const Point& p) {
 	pos = p;
@@ -308,19 +151,6 @@ item_effect::item_effect(const Point& p) {
 bool item_effect::update(double t) {
 	const double e = EaseOutExpo(t);
 	Circle(pos, e * 60).drawFrame(12.0 * (1.0 - e), Palette::Lime);
-=======
-e_item_type item::get_type() {
-	return type;
-}
-
-item_effect::item_effect(const Point& p, const Color& c) {
-	pos = p;
-	col = c;
-}
-bool item_effect::update(double t) {
-	const double e = EaseOutExpo(t);
-	Circle(pos, e * 60).drawFrame(12.0 * (1.0 - e), col);
->>>>>>> develop
 	return t < 1.0;
 }
 
@@ -333,7 +163,6 @@ bool tag_effect::update(double t) {
 	return t < 1.0;
 }
 
-<<<<<<< HEAD
 
 
 void draw_maze() {
@@ -346,8 +175,6 @@ void draw_maze() {
 	}
 }
 
-=======
->>>>>>> develop
 bool intersect_maze(Rect r) {
 	bool f = false;
 	for (auto i : step(maze_height)) {
@@ -373,11 +200,7 @@ bool intersect_maze(Point p) {
 }
 
 Point maze_brock_position(uint16 h, uint16 w) {
-<<<<<<< HEAD
 	return Scene::Center()+Point((-maze_width + 1) * maze_brock_size / 2, (-maze_height + 1) * maze_brock_size / 2)+Point(w * maze_brock_size, h * maze_brock_size);
-=======
-	return Scene::Center() + Point((-maze_width + 1) * maze_brock_size / 2, (-maze_height + 1) * maze_brock_size / 2) + Point(w * maze_brock_size, h * maze_brock_size);
->>>>>>> develop
 }
 
 Point random_maze_brock_position() {
@@ -389,30 +212,14 @@ Point random_maze_brock_position() {
 	}
 }
 
-<<<<<<< HEAD
 Point random_point_item_position(Array<item>& ai) {
-=======
-item random_next_item(Array<item>& ai) {
->>>>>>> develop
 	while (true) {
 		bool f = true;
 		Point p = random_maze_brock_position();
 		for (auto it : ai) {
 			if (it.get_pos().distanceFrom(p) < maze_brock_size * 4)f = false;//他のアイテムと4ブロック以内に湧かせない
 		}
-<<<<<<< HEAD
 		if (f)return p;
-=======
-		if (f) {
-			if (Random(0, 10) == 0) {
-				//1/10の確率でスペシャルアイテムが出る
-				return item(p, (e_item_type)Random(3, 4));
-			}
-			else {
-				return item(p, (e_item_type)Random(0, 2));
-			}
-		}
->>>>>>> develop
 	}
 }
 
@@ -425,11 +232,7 @@ Point random_player_respawn_position(player& player2, player& player3) {
 
 
 
-<<<<<<< HEAD
 void draw_timer(uint16 t){
-=======
-void draw_timer(uint16 t) {
->>>>>>> develop
 	timer_box.drawFrame();
 	FontAsset(U"font40")(U"{:0>2}:{:0>2}"_fmt(t / 60 / 60, t / 60 % 60)).drawAt(timer_box.center(), Palette::White);
 }
@@ -445,11 +248,7 @@ void draw_small_point_box(uint16 t) {
 }
 
 
-<<<<<<< HEAD
 bool tag(player ghost, player tagger) {
-=======
-bool is_tagged(player ghost, player tagger) {
->>>>>>> develop
 	auto p = tagger.get_pos();
 	for (auto i : step(light_range)) {
 		if (!intersect_maze(p + delta_point[tagger.get_direction()])) {
@@ -458,18 +257,4 @@ bool is_tagged(player ghost, player tagger) {
 		if (Rect(Arg::center(ghost.get_pos()), maze_brock_size).intersects(p))return true;
 	}
 	return false;
-<<<<<<< HEAD
-=======
-}
-
-void left_special_item_timer_draw(uint16 t, uint16 a, Color col) {
-	Rect(left_special_item_timer_box.x, left_special_item_timer_box.y, left_special_item_timer_box.w * t / a, left_special_item_timer_box.h).draw(col);
-}
-void right_special_item_timer_draw(uint16 t, uint16 a, Color col) {
-	Rect(right_special_item_timer_box.x + right_special_item_timer_box.w - right_special_item_timer_box.w * t / a, right_special_item_timer_box.y, right_special_item_timer_box.w * t / a, right_special_item_timer_box.h).draw(col);
-}
-
-void thunder_effect_draw() {
-	Scene::Rect().draw(Color(255, 0, 0, 20));
->>>>>>> develop
 }
