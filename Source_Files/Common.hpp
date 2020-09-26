@@ -24,17 +24,28 @@ typedef enum {
 	player1_score,
 	player2_score,
 	player3_score,
-	point_item_status = 40,//[0]x座標,[0]y座標,[1]x座標,[1]y座標,[2]x座標...の順
-	ghost_special_item_x = 70,
-	ghost_special_item_y,
-	ghost_special_item_status,//0 マップ上にない 1マップ上にある
-	tagger_special_item_x,
-	tagger_special_item_y,
-	tagger_special_item_status,//0 マップ上にない 1マップ上にある
-	player0_has_item,//false:0 true:1
-	player1_has_item,//false:0 true:1
-	player2_has_item,//false:0 true:1
-	player3_has_item//false:0 true:1
+	player0_special_item,//e_item_type
+	player1_special_item,//e_item_type
+	player2_special_item,//e_item_type
+	player3_special_item,//e_item_type
+	player0_special_item_thunder_timer,
+	player1_special_item_thunder_timer,
+	player2_special_item_thunder_timer,
+	player3_special_item_thunder_timer,
+	player0_special_item_wing_timer,
+	player1_special_item_wing_timer,
+	player2_special_item_wing_timer,
+	player3_special_item_wing_timer,
+	player0_speed,
+	player1_speed,
+	player2_speed,
+	player3_speed,
+	player0_button_down,//特殊ボタンが押されているか
+	player1_button_down,
+	player2_button_down,
+	player3_button_down,
+	point_item_status = 50,//[0]x座標,[0]y座標,[0]type,[1]x座標,[1]y座標,[1]type,[2]x座標...の順
+
 
 } e_communication;
 
