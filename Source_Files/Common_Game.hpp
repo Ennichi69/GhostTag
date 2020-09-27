@@ -150,7 +150,7 @@ const Circle right_item_circle = Circle(960 + 800, 1000, 70);
 const uint16 maze_height = 18;
 const uint16 maze_width = 42;
 const uint16 maze_brock_size = 40;
-const uint16 init_time = 300;
+const uint16 init_time = 7500;
 const uint16 light_range = 120;
 const uint16 item_radius = 10;
 
