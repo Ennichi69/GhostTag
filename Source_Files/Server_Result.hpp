@@ -11,7 +11,7 @@ private:
 	uint16 player1_score;
 	uint16 player2_score;
 	uint16 player3_score;
-
+	Texture result_picture;
 };
 
 

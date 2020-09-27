@@ -9,6 +9,9 @@ client_title::client_title(const InitData& init) :IScene(init) {
 		getData().receive_data[i] = 0;
 	}
 	getData().send_data[e_communication::scene_status] = e_scene::title;
+
+	//タイトル画面の画像を設定
+	title_picture = Texture(Resource(U"pictures/title.png"));
 }
 
 void client_title::update() {
@@ -26,5 +29,6 @@ void client_title::update() {
 }
 
 void client_title::draw()const {
-	FontAsset(U"font100")(U"タイトル画面\nServer側のEnterキーを押してください").drawAt(Scene::Center());
+	title_picture.draw();
+	FontAsset(U"font40")(U"Client").draw(Point(0, 0));
 }

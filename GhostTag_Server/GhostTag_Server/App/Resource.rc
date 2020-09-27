@@ -116,6 +116,9 @@ Resource(pictures/point_chocolate.png)
 Resource(pictures/special_thunder.png)
 Resource(pictures/special_wing.png)
 
+Resource(pictures/title.png)
+Resource(pictures/result.png)
+
 /* 
 	//
 	// Define your resource path inside `Resource()` macro.

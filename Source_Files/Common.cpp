@@ -32,6 +32,7 @@ void init() {
 	Window::SetFullscreen(true, unspecified, WindowResizeOption::KeepSceneSize);
 	//‰¼ƒtƒHƒ“ƒg
 	FontAsset::Register(U"font40", 40);
+	FontAsset::Register(U"font60", 60);
 	FontAsset::Register(U"font80", 80);
 	FontAsset::Register(U"font100", 100);
 	FontAsset::Register(U"font200", 200);

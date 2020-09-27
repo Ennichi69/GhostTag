@@ -237,7 +237,7 @@ void server_game::update() {
 		}
 	}
 	//スペシャルアイテムの使用
-	if (left_button_down()&&player0.get_special_item()==special_thunder) {
+	if (left_button_down() && player0.get_special_item() == special_thunder) {
 		player0.set_special_item(in_use);
 		player0.set_special_item_thunder_timer(special_thunder_effect_time);
 	}
