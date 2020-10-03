@@ -7,7 +7,10 @@ client_result::client_result(const InitData& init) :IScene(init) {
 	player2_score = getData().receive_data[e_communication::player2_score];
 	player3_score = getData().receive_data[e_communication::player3_score];
 	result_picture = Texture(Resource(U"pictures/result.png"));
+	win_picture = Texture(Resource(U"pictures/win.png"));
+	lose_picture = Texture(Resource(U"pictures/lose.png"));
 }
+
 
 void client_result::update() {
 	if (getData().tcp_client.hasError()) {
@@ -27,9 +30,18 @@ void client_result::draw()const {
 	FontAsset(U"font60")(U"{:0>4}"_fmt(player0_score)).drawAt(Point(700, 370));
 	FontAsset(U"font60")(U"{:0>4}"_fmt(player1_score)).drawAt(Point(700, 490));
 	FontAsset(U"font80")(U"{:0>4}"_fmt(player0_score + player1_score)).drawAt(Point(700, 720));
-	FontAsset(U"font60")(U"{:0>4}"_fmt(player2_score)).drawAt(Point(1660, 370));
-	FontAsset(U"font60")(U"{:0>4}"_fmt(player3_score)).drawAt(Point(1660, 490));
-	FontAsset(U"font80")(U"{:0>4}"_fmt(player2_score + player3_score)).drawAt(Point(1660, 720));
+	FontAsset(U"font60")(U"{:0>4}"_fmt(player2_score)).drawAt(Point(1560, 370));
+	FontAsset(U"font60")(U"{:0>4}"_fmt(player3_score)).drawAt(Point(1560, 490));
+	FontAsset(U"font80")(U"{:0>4}"_fmt(player2_score + player3_score)).drawAt(Point(1560, 720));
+	if (player2_score + player3_score > player0_score + player1_score) {
+		win_picture.drawAt(1920 - 500, 950);
+	}
+	else if (player0_score + player1_score == player2_score + player3_score) {
+		//Draw‚Ì‰æ‘œ‚ª‚È‚¢‚æ
+	}
+	else {
+		lose_picture.drawAt(1920 - 500, 950);
+	}
 	/*
 	player0_result_box.drawFrame(5);
 	player1_result_box.drawFrame(5);

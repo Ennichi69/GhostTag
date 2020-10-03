@@ -187,6 +187,9 @@ Resource(pictures/pump_up1_wing.png)
 Resource(pictures/pump_up2_thunder.png)
 Resource(pictures/pump_up2_wing.png)
 
+Resource(pictures/win.png)
+Resource(pictures/lose.png)
+
 Resource(fonts/4x4kanafont.ttf)
 /* 
 	//

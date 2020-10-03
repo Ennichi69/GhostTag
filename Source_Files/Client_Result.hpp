@@ -12,6 +12,8 @@ private:
 	uint16 player2_score;
 	uint16 player3_score;
 	Texture result_picture;
+	Texture win_picture;
+	Texture lose_picture;
 };
 
 
