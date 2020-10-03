@@ -30,10 +30,15 @@ void init() {
 	Scene::Resize(sceneSize);
 	Window::Resize(sceneSize, WindowResizeOption::KeepSceneSize);
 	Window::SetFullscreen(true, unspecified, WindowResizeOption::KeepSceneSize);
-	//‰¼ƒtƒHƒ“ƒg
-	FontAsset::Register(U"font40", 40);
-	FontAsset::Register(U"font60", 60);
-	FontAsset::Register(U"font80", 80);
-	FontAsset::Register(U"font100", 100);
-	FontAsset::Register(U"font200", 200);
+	FontAsset::Register(U"Mplus_40", 40);
+	FontAsset::Register(U"Mplus_60", 60);
+	FontAsset::Register(U"Mplus_80", 80);
+	FontAsset::Register(U"Mplus_100", 100);
+	FontAsset::Register(U"Mplus_200", 200);
+	FontAsset::Register(U"font40", 40, Resource(U"fonts/4x4kanafont.ttf"));
+	FontAsset::Register(U"font60", 60, Resource(U"fonts/4x4kanafont.ttf"));
+	FontAsset::Register(U"font80", 80, Resource(U"fonts/4x4kanafont.ttf"));
+	FontAsset::Register(U"font100", 100, Resource(U"fonts/4x4kanafont.ttf"));
+	FontAsset::Register(U"font200", 200, Resource(U"fonts/4x4kanafont.ttf"));
+
 }

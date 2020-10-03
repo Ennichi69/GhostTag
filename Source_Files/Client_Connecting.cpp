@@ -22,6 +22,6 @@ void client_connecting::update() {
 
 void client_connecting::draw() const {
 	rect_return_button.draw(ColorF(1.0, transition_return_button.value())).drawFrame(5);
-	FontAsset(U"font80")(U"もどる").drawAt(rect_return_button.center());
-	FontAsset(U"font200")(U"通信待機中...").drawAt(Scene::Center());
+	FontAsset(U"Mplus_80")(U"もどる").drawAt(rect_return_button.center());
+	FontAsset(U"Mplus_200")(U"通信待機中...").drawAt(Scene::Center());
 }

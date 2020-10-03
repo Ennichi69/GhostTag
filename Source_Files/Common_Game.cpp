@@ -37,8 +37,17 @@ void player::draw() const {
 		player_picture[(direction - 1) * 2 + (walking_timer / 5) % 2].draw(Arg::center(pos));
 	}
 }
+void player::draw_range(Rect r)const {
+	if (direction == neutral) {
+		player_picture[7].drawAtClipped(pos, r);
+	}
+	else {
+		player_picture[(direction - 1) * 2 + (walking_timer / 5) % 2].drawAtClipped(pos, r);
+	}
+}
 void player::draw_light() const {
-	light().draw(6, Palette::Yellow);
+	light_rect().draw(Color(255, 255, 0, 30));
+	light_triangle().draw(Color(255, 255, 0, 30));
 }
 void player::update() {
 	for (auto i : step(frame_per_move)) {
@@ -62,14 +71,57 @@ void player::update_direction(e_direction e_dir) {
 		next_direction = e_dir;
 	}
 }
-Line player::light()const {
-	Point p = pos;
-	for (auto i : step(light_range)) {
-		if (!intersect_maze(p + delta_point[direction])) {
-			p += delta_point[direction];
+Rect player::light_rect()const {
+	Point p, q;
+	e_direction dir = direction;
+	if (dir == e_direction::neutral) {
+		dir = e_direction::down;
+	}
+	p = q = pos + delta_point[dir] * maze_brock_size / 2;
+	for (auto i : step(1000)) {
+		if(!intersect_maze(p + delta_point[dir])) {
+			p += delta_point[dir];
+		}
+		else {
+			break;
 		}
 	}
-	return Line(p, pos);
+	p += delta_point[dir].yx() * maze_brock_size / 2;
+	q -= delta_point[dir].yx() * maze_brock_size / 2;
+	return Rect(p, q - p);
+}
+Triangle player::light_triangle()const {
+	Point p, q;
+	e_direction dir = direction;
+	if (dir == e_direction::neutral) {
+		dir = e_direction::down;
+	}
+	p = pos + (delta_point[dir] + delta_point[dir].yx()) * maze_brock_size / 2;
+	q = pos + (delta_point[dir] - delta_point[dir].yx()) * maze_brock_size / 2;
+	return Triangle(pos, p, q);
+}
+Rect player::rect_ghost_visible()const {
+	Point p, q;
+	e_direction dir = direction;
+	if (dir == e_direction::neutral) {
+		dir = e_direction::down;
+	}
+	p = q = pos - delta_point[dir] * maze_brock_size / 2;
+	for (auto i : step(1000)) {
+		if (!intersect_maze(p + delta_point[dir])) {
+			p += delta_point[dir];
+		}
+		else {
+			break;
+		}
+	}
+	p += delta_point[dir].yx() * maze_brock_size / 2;
+	q -= delta_point[dir].yx() * maze_brock_size / 2;
+	//‚‚³‚â•‚ª•‰‚É‚È‚é‚Æ‚¤‚Ü‚­‚¢‚©‚È‚©‚Á‚½‚Ì‚Å
+	Point a, b;
+	a = Point(Min(p.x, q.x), Min(p.y, q.y));
+	b = Point(Max(p.x, q.x), Max(p.y, q.y));
+	return Rect(a, b - a);
 }
 bool player::intersects(item& it) {
 	return Rect(Arg::center(pos), maze_brock_size).intersects(Circle(it.get_pos(), it.get_radius()));
@@ -314,22 +366,22 @@ Point random_player_respawn_position(player& player2, player& player3) {
 
 
 void draw_timer(uint16 t) {
-	timer_box.drawFrame();
 	FontAsset(U"font40")(U"{:0>2}:{:0>2}"_fmt(t / 60 / 60, t / 60 % 60)).drawAt(timer_box.center(), Palette::White);
 }
 
 void draw_big_point_box(uint16 t) {
-	big_point_box.drawFrame();
-	FontAsset(U"font40")(U"{:0>4}pt"_fmt(t)).drawAt(big_point_box.center());
+	FontAsset(U"font40")(U"{:0>4}"_fmt(t)).drawAt(big_point_box.center());
 }
 
 void draw_small_point_box(uint16 t) {
-	small_point_box.drawFrame();
-	FontAsset(U"font40")(U"{:0>4}pt"_fmt(t)).drawAt(small_point_box.center());
+	FontAsset(U"font40")(U"{:0>4}"_fmt(t)).drawAt(small_point_box.center());
 }
 
 
 bool is_tagged(player ghost, player tagger) {
+	//’¼ÚÚG‚µ‚Ä‚¢‚é‚©‚Ì”»’è‚É•ÏX
+	return Rect(Arg::center(ghost.get_pos()), maze_brock_size).intersects(tagger.get_pos());
+	/*
 	auto p = tagger.get_pos();
 	for (auto i : step(light_range)) {
 		if (!intersect_maze(p + delta_point[tagger.get_direction()])) {
@@ -338,6 +390,7 @@ bool is_tagged(player ghost, player tagger) {
 		if (Rect(Arg::center(ghost.get_pos()), maze_brock_size).intersects(p))return true;
 	}
 	return false;
+	*/
 }
 
 void left_special_item_timer_draw(uint16 t, uint16 a, Color col) {

@@ -19,11 +19,14 @@ class player {
 public:
 	player();
 	player(Point p);
-	void draw() const;
+	void draw()const;
+	void draw_range(Rect r)const;
 	void draw_light()const;
 	void update();
 	void update_direction(e_direction e_dir);
-	Line light()const;
+	Rect light_rect()const;
+	Triangle light_triangle()const;
+	Rect rect_ghost_visible()const;
 	bool intersects(item& it);
 	void set_pos(Point p);
 	void set_pos(uint16 h, uint16 w);
@@ -140,13 +143,13 @@ const Grid<uint16>maze_data = {
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 };
 
-const Rect timer_box = Rect(Arg::center(960, 1000), 300, 120);
-const Rect big_point_box = Rect(Arg::center(850, 90), 300, 120);
-const Rect small_point_box = Rect(Arg::center(1200, 120), 200, 60);
+const Rect timer_box = Rect(Point(822, 923), Point(1097, 1063) - Point(822, 923));
+const Rect big_point_box = Rect(Point(804, 26), Point(1116, 162) - Point(804, 26));
+const Rect small_point_box = Rect(Point(1178, 49), Point(1410, 162) - Point(1178, 49));
 const Rect left_special_item_timer_box = Rect(Arg::center(960 - 450, 1000), 500, 80);
 const Rect right_special_item_timer_box = Rect(Arg::center(960 + 450, 1000), 500, 80);
-const Circle left_item_circle = Circle(960 - 800, 1000, 70);
-const Circle right_item_circle = Circle(960 + 800, 1000, 70);
+const Circle left_item_circle = Circle(161, 972, 70);
+const Circle right_item_circle = Circle(1764, 971, 70);
 const uint16 maze_height = 18;
 const uint16 maze_width = 42;
 const uint16 maze_brock_size = 40;
@@ -154,7 +157,7 @@ const uint16 init_time = 7500;
 const uint16 light_range = 120;
 const uint16 item_radius = 10;
 
-const uint16 array_point_items_size = 14;//ポイントアイテムの個数
+const uint16 array_point_items_size = 15;//ポイントアイテムの個数
 
 const uint16 point_item_score = 100;
 const uint16 additional_item_score = 50;

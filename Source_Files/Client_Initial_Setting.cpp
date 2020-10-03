@@ -73,7 +73,7 @@ void client_initial_setting::update() {
 
 void client_initial_setting::draw()const {
 	rect_ok_button.draw(ColorF(1.0, transition_ok_button.value())).drawFrame(5);
-	FontAsset(U"font100")(U"OK").drawAt(rect_ok_button.center());
+	FontAsset(U"Mplus_100")(U"OK").drawAt(rect_ok_button.center());
 	for (auto i : step(4)) {
 		if (input_textbox_number == i) {
 			rect_textbox[i].draw();
@@ -81,6 +81,6 @@ void client_initial_setting::draw()const {
 		else {
 			rect_textbox[i].draw(ColorF(1.0, 0.8));
 		}
-		FontAsset(U"font100")(text[i]).drawAt(rect_textbox[i].center(), Palette::Black);
+		FontAsset(U"Mplus_100")(text[i]).drawAt(rect_textbox[i].center(), Palette::Black);
 	}
 }

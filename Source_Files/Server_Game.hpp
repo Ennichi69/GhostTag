@@ -45,6 +45,8 @@ private:
 	//16 door
 	//maze_walls‚¾‚¯Žg‚¤‚È‚ç-10‚µ‚Ä12~16Žg—p
 
+	Texture background;
+
 	Texture special_thunder_picture;
 	Texture special_wing_picture;
 };
