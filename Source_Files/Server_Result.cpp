@@ -26,20 +26,20 @@ void server_result::update() {
 
 void server_result::draw()const {
 	result_picture.draw();	
-	FontAsset(U"font60")(U"{:0>4}"_fmt(player0_score)).drawAt(Point(700, 370));
-	FontAsset(U"font60")(U"{:0>4}"_fmt(player1_score)).drawAt(Point(700, 490));
-	FontAsset(U"font80")(U"{:0>4}"_fmt(player0_score + player1_score)).drawAt(Point(700, 720));
-	FontAsset(U"font60")(U"{:0>4}"_fmt(player2_score)).drawAt(Point(1560, 370));
-	FontAsset(U"font60")(U"{:0>4}"_fmt(player3_score)).drawAt(Point(1560, 490));
-	FontAsset(U"font80")(U"{:0>4}"_fmt(player2_score + player3_score)).drawAt(Point(1560, 720));
+	FontAsset(U"font60")(U"{:0>4}"_fmt(player2_score)).drawAt(Point(700, 370));
+	FontAsset(U"font60")(U"{:0>4}"_fmt(player3_score)).drawAt(Point(700, 490));
+	FontAsset(U"font80")(U"{:0>4}"_fmt(player2_score + player3_score)).drawAt(Point(700, 720));
+	FontAsset(U"font60")(U"{:0>4}"_fmt(player0_score)).drawAt(Point(1560, 370));
+	FontAsset(U"font60")(U"{:0>4}"_fmt(player1_score)).drawAt(Point(1560, 490));
+	FontAsset(U"font80")(U"{:0>4}"_fmt(player0_score + player1_score)).drawAt(Point(1560, 720));
 	if (player0_score + player1_score > player2_score + player3_score) {
-		win_picture.drawAt(500, 950);
+		win_picture.drawAt(1920 - 500, 950);
 	}
 	else if (player0_score + player1_score == player2_score + player3_score) {
 		//Draw‚Ì‰æ‘œ‚ª‚È‚¢‚æ
 	}
 	else {
-		lose_picture.drawAt(500, 950);
+		lose_picture.drawAt(1920 - 500, 950);
 	}
 	/*
 	player0_result_box.drawFrame(5);

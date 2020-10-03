@@ -38,6 +38,7 @@ void player::draw() const {
 	}
 }
 void player::draw_range(Rect r)const {
+//	if (r.intersects(pos))draw();
 	if (direction == neutral) {
 		player_picture[7].drawAtClipped(pos, r);
 	}
@@ -78,8 +79,16 @@ Rect player::light_rect()const {
 		dir = e_direction::down;
 	}
 	p = q = pos + delta_point[dir] * maze_brock_size / 2;
-	for (auto i : step(1000)) {
-		if(!intersect_maze(p + delta_point[dir])) {
+	for (auto i : step(100)) {
+		if (!intersect_maze(p + delta_point[dir] * 10)) {
+			p += delta_point[dir] * 10;
+		}
+		else {
+			break;
+		}
+	}
+	for (auto i : step(10)) {
+		if (!intersect_maze(p + delta_point[dir])) {
 			p += delta_point[dir];
 		}
 		else {
@@ -107,7 +116,15 @@ Rect player::rect_ghost_visible()const {
 		dir = e_direction::down;
 	}
 	p = q = pos - delta_point[dir] * maze_brock_size / 2;
-	for (auto i : step(1000)) {
+	for (auto i : step(100)) {
+		if (!intersect_maze(p + delta_point[dir] * 10)) {
+			p += delta_point[dir] * 10;
+		}
+		else {
+			break;
+		}
+	}
+	for (auto i : step(10)) {
 		if (!intersect_maze(p + delta_point[dir])) {
 			p += delta_point[dir];
 		}
