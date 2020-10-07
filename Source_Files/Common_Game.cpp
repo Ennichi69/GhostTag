@@ -411,10 +411,14 @@ bool is_tagged(player ghost, player tagger) {
 }
 
 void left_special_item_timer_draw(uint16 t, uint16 a, Color col) {
-	Rect(left_special_item_timer_box.x, left_special_item_timer_box.y, left_special_item_timer_box.w * t / a, left_special_item_timer_box.h).draw(col);
+	for (uint16 i = 0;i < 6;i++) {
+		Rect(263 - i * 7, 976 + i * 14, 350 * t / a, 14).draw(col);
+	}
 }
 void right_special_item_timer_draw(uint16 t, uint16 a, Color col) {
-	Rect(right_special_item_timer_box.x + right_special_item_timer_box.w - right_special_item_timer_box.w * t / a, right_special_item_timer_box.y, right_special_item_timer_box.w * t / a, right_special_item_timer_box.h).draw(col);
+	for (uint16 i = 0;i < 6;i++) {
+		Rect(1663 + i * 7 - 350 * t / a, 975 + i * 14, 350 * t / a, 14).draw(col);
+	}
 }
 
 void thunder_effect_draw() {

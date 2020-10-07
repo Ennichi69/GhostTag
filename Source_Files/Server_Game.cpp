@@ -658,10 +658,8 @@ void server_game::draw()const {
 	else if (player1.get_special_item() == special_wing || player1.get_special_item_wing_timer() != 0) {
 		special_wing_picture.scaled(2.0).drawAt(right_item_circle.center);
 	}
-	left_special_item_timer_box.drawFrame(0, 3, Palette::White);
 	left_special_item_timer_draw(player0.get_special_item_thunder_timer(), special_thunder_effect_time, Palette::Yellow);
 	left_special_item_timer_draw(player0.get_special_item_wing_timer(), special_wing_ghost_effect_time, Palette::Aqua);
-	right_special_item_timer_box.drawFrame(0, 3, Palette::White);
 	right_special_item_timer_draw(player1.get_special_item_thunder_timer(), special_thunder_effect_time, Palette::Yellow);
 	right_special_item_timer_draw(player1.get_special_item_wing_timer(), special_wing_ghost_effect_time, Palette::Aqua);
 	if (player2.get_special_item_thunder_timer() != 0 || player3.get_special_item_thunder_timer() != 0) {
