@@ -49,4 +49,7 @@ private:
 
 	Texture special_thunder_picture;
 	Texture special_wing_picture;
+
+	Texture pumpkin_picture;
+	Texture ghost_picture;
 };

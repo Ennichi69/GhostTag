@@ -44,24 +44,24 @@ client_game::client_game(const InitData& init) :IScene(init) {
 	player1.set_texture(7, U"pictures/ghost_down2.png");
 	player1.set_frame_per_move(ghost_speed);
 
-	player2.set_texture(0, U"pictures/girl_left1.png");
-	player2.set_texture(1, U"pictures/girl_left2.png");
-	player2.set_texture(2, U"pictures/girl_up1.png");
-	player2.set_texture(3, U"pictures/girl_up2.png");
-	player2.set_texture(4, U"pictures/girl_right1.png");
-	player2.set_texture(5, U"pictures/girl_right2.png");
-	player2.set_texture(6, U"pictures/girl_down1.png");
-	player2.set_texture(7, U"pictures/girl_down2.png");
+	player2.set_texture(0, U"pictures/boy_left1.png");
+	player2.set_texture(1, U"pictures/boy_left2.png");
+	player2.set_texture(2, U"pictures/boy_up1.png");
+	player2.set_texture(3, U"pictures/boy_up2.png");
+	player2.set_texture(4, U"pictures/boy_right1.png");
+	player2.set_texture(5, U"pictures/boy_right2.png");
+	player2.set_texture(6, U"pictures/boy_down1.png");
+	player2.set_texture(7, U"pictures/boy_down2.png");
 	player2.set_frame_per_move(tagger_speed);
 
-	player3.set_texture(0, U"pictures/boy_left1.png");
-	player3.set_texture(1, U"pictures/boy_left2.png");
-	player3.set_texture(2, U"pictures/boy_up1.png");
-	player3.set_texture(3, U"pictures/boy_up2.png");
-	player3.set_texture(4, U"pictures/boy_right1.png");
-	player3.set_texture(5, U"pictures/boy_right2.png");
-	player3.set_texture(6, U"pictures/boy_down1.png");
-	player3.set_texture(7, U"pictures/boy_down2.png");
+	player3.set_texture(0, U"pictures/girl_left1.png");
+	player3.set_texture(1, U"pictures/girl_left2.png");
+	player3.set_texture(2, U"pictures/girl_up1.png");
+	player3.set_texture(3, U"pictures/girl_up2.png");
+	player3.set_texture(4, U"pictures/girl_right1.png");
+	player3.set_texture(5, U"pictures/girl_right2.png");
+	player3.set_texture(6, U"pictures/girl_down1.png");
+	player3.set_texture(7, U"pictures/girl_down2.png");
 	player3.set_frame_per_move(tagger_speed);
 
 	//道のテクスチャを初期化
@@ -87,21 +87,28 @@ client_game::client_game(const InitData& init) :IScene(init) {
 
 	special_thunder_picture = Texture(Resource(U"pictures/special_thunder.png"));
 	special_wing_picture = Texture(Resource(U"pictures/special_wing.png"));
+
+	pumpkin_picture = Texture(Resource(U"pictures/pump_left1.png"));
+	ghost_picture = Texture(Resource(U"pictures/ghost_left1.png"));
 }
 
 void client_game::update() {
+	Array<uint8>serial_array;
+	if (getData().serial_available) {
+		serial_array = getData().serial.readBytes();
+	}
 	if (getData().tcp_client.hasError()) {
 		//通信エラー発生時、エラー画面に遷移
 		getData().tcp_client.disconnect();
 		changeScene(e_scene::error);
 	}
-	if (player0.get_special_item_thunder_timer() == 0 && player1.get_special_item_thunder_timer() == 0) {
-		player2.update_direction(left_joystick_direction());
-		player3.update_direction(right_joystick_direction());
-		player2.update();
-		player3.update();
-	}
-	for (uint16 i = timer; i < getData().receive_data[e_communication::timer]; i++) {
+	if (timer < start_time) {
+		if (player0.get_special_item_thunder_timer() == 0 && player1.get_special_item_thunder_timer() == 0) {
+			player2.update_direction(left_joystick_direction(serial_array, getData().serial_available));
+			player3.update_direction(right_joystick_direction(serial_array, getData().serial_available));
+			player2.update();
+			player3.update();
+		}
 		//ラグ補正
 		if (player2.get_special_item_thunder_timer() == 0 && player3.get_special_item_thunder_timer() == 0) {
 			player0.update();
@@ -148,8 +155,8 @@ void client_game::update() {
 	getData().send_data[e_communication::player1_speed] = player1.get_frame_per_move();
 	getData().send_data[e_communication::player2_speed] = player2.get_frame_per_move();
 	getData().send_data[e_communication::player3_speed] = player3.get_frame_per_move();
-	getData().send_data[e_communication::player2_button_down] = left_button_down();
-	getData().send_data[e_communication::player3_button_down] = right_button_down();
+	getData().send_data[e_communication::player2_button_down] = left_button_down(serial_array,  getData().serial_available);
+	getData().send_data[e_communication::player3_button_down] = right_button_down(serial_array,  getData().serial_available);
 
 	for (auto i : step(array_point_items_size)) {
 		getData().send_data[e_communication::point_item_status + i * 3] = array_items[i].get_pos().x;
@@ -182,88 +189,94 @@ void client_game::update() {
 			}
 		}
 		timer = getData().receive_data[e_communication::timer];
-		if (getData().receive_data[e_communication::player2_status]) {
-			effect.add<tag_effect>(player2.get_pos());
+		if (getData().receive_data[e_communication::player2_status]==e_ghost_type::pumpkin) {
+			effect.add<tag_effect>(player2.get_pos(), pumpkin_picture);
 		}
-		if (getData().receive_data[e_communication::player3_status]) {
-			effect.add<tag_effect>(player3.get_pos());
+		if (getData().receive_data[e_communication::player2_status] == e_ghost_type::ghost) {
+			effect.add<tag_effect>(player2.get_pos(), ghost_picture);
+		}
+		if (getData().receive_data[e_communication::player3_status] == e_ghost_type::pumpkin) {
+			effect.add<tag_effect>(player3.get_pos(), pumpkin_picture);
+		}
+		if (getData().receive_data[e_communication::player3_status]==e_ghost_type::ghost) {
+			effect.add<tag_effect>(player3.get_pos(), ghost_picture);
 		}
 		player0.set_special_item((e_item_type)getData().receive_data[e_communication::player0_special_item]);
 		player1.set_special_item((e_item_type)getData().receive_data[e_communication::player1_special_item]);
 		player2.set_special_item((e_item_type)getData().receive_data[e_communication::player2_special_item]);
 		player3.set_special_item((e_item_type)getData().receive_data[e_communication::player3_special_item]);
 		if (player0.get_special_item_thunder_timer() == 0 && getData().receive_data[e_communication::player0_special_item_thunder_timer] != 0) {
-			player2.set_texture(0, U"pictures/girl_left1_thunder.png");
-			player2.set_texture(1, U"pictures/girl_left2_thunder.png");
-			player2.set_texture(2, U"pictures/girl_up1_thunder.png");
-			player2.set_texture(3, U"pictures/girl_up2_thunder.png");
-			player2.set_texture(4, U"pictures/girl_right1_thunder.png");
-			player2.set_texture(5, U"pictures/girl_right2_thunder.png");
-			player2.set_texture(6, U"pictures/girl_down1_thunder.png");
-			player2.set_texture(7, U"pictures/girl_down2_thunder.png");
-			player3.set_texture(0, U"pictures/boy_left1_thunder.png");
-			player3.set_texture(1, U"pictures/boy_left2_thunder.png");
-			player3.set_texture(2, U"pictures/boy_up1_thunder.png");
-			player3.set_texture(3, U"pictures/boy_up2_thunder.png");
-			player3.set_texture(4, U"pictures/boy_right1_thunder.png");
-			player3.set_texture(5, U"pictures/boy_right2_thunder.png");
-			player3.set_texture(6, U"pictures/boy_down1_thunder.png");
-			player3.set_texture(7, U"pictures/boy_down2_thunder.png");
+			player2.set_texture(0, U"pictures/boy_left1_thunder.png");
+			player2.set_texture(1, U"pictures/boy_left2_thunder.png");
+			player2.set_texture(2, U"pictures/boy_up1_thunder.png");
+			player2.set_texture(3, U"pictures/boy_up2_thunder.png");
+			player2.set_texture(4, U"pictures/boy_right1_thunder.png");
+			player2.set_texture(5, U"pictures/boy_right2_thunder.png");
+			player2.set_texture(6, U"pictures/boy_down1_thunder.png");
+			player2.set_texture(7, U"pictures/boy_down2_thunder.png");
+			player3.set_texture(0, U"pictures/girl_left1_thunder.png");
+			player3.set_texture(1, U"pictures/girl_left2_thunder.png");
+			player3.set_texture(2, U"pictures/girl_up1_thunder.png");
+			player3.set_texture(3, U"pictures/girl_up2_thunder.png");
+			player3.set_texture(4, U"pictures/girl_right1_thunder.png");
+			player3.set_texture(5, U"pictures/girl_right2_thunder.png");
+			player3.set_texture(6, U"pictures/girl_down1_thunder.png");
+			player3.set_texture(7, U"pictures/girl_down2_thunder.png");
 		}
 		if (player0.get_special_item_thunder_timer() != 0 && getData().receive_data[e_communication::player0_special_item_thunder_timer] == 0) {
-			player2.set_texture(0, U"pictures/girl_left1.png");
-			player2.set_texture(1, U"pictures/girl_left2.png");
-			player2.set_texture(2, U"pictures/girl_up1.png");
-			player2.set_texture(3, U"pictures/girl_up2.png");
-			player2.set_texture(4, U"pictures/girl_right1.png");
-			player2.set_texture(5, U"pictures/girl_right2.png");
-			player2.set_texture(6, U"pictures/girl_down1.png");
-			player2.set_texture(7, U"pictures/girl_down2.png");
-			player3.set_texture(0, U"pictures/boy_left1.png");
-			player3.set_texture(1, U"pictures/boy_left2.png");
-			player3.set_texture(2, U"pictures/boy_up1.png");
-			player3.set_texture(3, U"pictures/boy_up2.png");
-			player3.set_texture(4, U"pictures/boy_right1.png");
-			player3.set_texture(5, U"pictures/boy_right2.png");
-			player3.set_texture(6, U"pictures/boy_down1.png");
-			player3.set_texture(7, U"pictures/boy_down2.png");
+			player2.set_texture(0, U"pictures/boy_left1.png");
+			player2.set_texture(1, U"pictures/boy_left2.png");
+			player2.set_texture(2, U"pictures/boy_up1.png");
+			player2.set_texture(3, U"pictures/boy_up2.png");
+			player2.set_texture(4, U"pictures/boy_right1.png");
+			player2.set_texture(5, U"pictures/boy_right2.png");
+			player2.set_texture(6, U"pictures/boy_down1.png");
+			player2.set_texture(7, U"pictures/boy_down2.png");
+			player3.set_texture(0, U"pictures/girl_left1.png");
+			player3.set_texture(1, U"pictures/girl_left2.png");
+			player3.set_texture(2, U"pictures/girl_up1.png");
+			player3.set_texture(3, U"pictures/girl_up2.png");
+			player3.set_texture(4, U"pictures/girl_right1.png");
+			player3.set_texture(5, U"pictures/girl_right2.png");
+			player3.set_texture(6, U"pictures/girl_down1.png");
+			player3.set_texture(7, U"pictures/girl_down2.png");
 		}
 		player0.set_special_item_thunder_timer(getData().receive_data[e_communication::player0_special_item_thunder_timer]);
 		if (player1.get_special_item_thunder_timer() == 0 && getData().receive_data[e_communication::player1_special_item_thunder_timer] != 0) {
-			player2.set_texture(0, U"pictures/girl_left1_thunder.png");
-			player2.set_texture(1, U"pictures/girl_left2_thunder.png");
-			player2.set_texture(2, U"pictures/girl_up1_thunder.png");
-			player2.set_texture(3, U"pictures/girl_up2_thunder.png");
-			player2.set_texture(4, U"pictures/girl_right1_thunder.png");
-			player2.set_texture(5, U"pictures/girl_right2_thunder.png");
-			player2.set_texture(6, U"pictures/girl_down1_thunder.png");
-			player2.set_texture(7, U"pictures/girl_down2_thunder.png");
-			player3.set_texture(0, U"pictures/boy_left1_thunder.png");
-			player3.set_texture(1, U"pictures/boy_left2_thunder.png");
-			player3.set_texture(2, U"pictures/boy_up1_thunder.png");
-			player3.set_texture(3, U"pictures/boy_up2_thunder.png");
-			player3.set_texture(4, U"pictures/boy_right1_thunder.png");
-			player3.set_texture(5, U"pictures/boy_right2_thunder.png");
-			player3.set_texture(6, U"pictures/boy_down1_thunder.png");
-			player3.set_texture(7, U"pictures/boy_down2_thunder.png");
+			player2.set_texture(0, U"pictures/boy_left1_thunder.png");
+			player2.set_texture(1, U"pictures/boy_left2_thunder.png");
+			player2.set_texture(2, U"pictures/boy_up1_thunder.png");
+			player2.set_texture(3, U"pictures/boy_up2_thunder.png");
+			player2.set_texture(4, U"pictures/boy_right1_thunder.png");
+			player2.set_texture(5, U"pictures/boy_right2_thunder.png");
+			player2.set_texture(6, U"pictures/boy_down1_thunder.png");
+			player2.set_texture(7, U"pictures/boy_down2_thunder.png");
+			player3.set_texture(0, U"pictures/girl_left1_thunder.png");
+			player3.set_texture(1, U"pictures/girl_left2_thunder.png");
+			player3.set_texture(2, U"pictures/girl_up1_thunder.png");
+			player3.set_texture(3, U"pictures/girl_up2_thunder.png");
+			player3.set_texture(4, U"pictures/girl_right1_thunder.png");
+			player3.set_texture(5, U"pictures/girl_right2_thunder.png");
+			player3.set_texture(6, U"pictures/girl_down1_thunder.png");
+			player3.set_texture(7, U"pictures/girl_down2_thunder.png");
 		}
 		if (player1.get_special_item_thunder_timer() != 0 && getData().receive_data[e_communication::player1_special_item_thunder_timer] == 0) {
-			player2.set_texture(0, U"pictures/girl_left1.png");
-			player2.set_texture(1, U"pictures/girl_left2.png");
-			player2.set_texture(2, U"pictures/girl_up1.png");
-			player2.set_texture(3, U"pictures/girl_up2.png");
-			player2.set_texture(4, U"pictures/girl_right1.png");
-			player2.set_texture(5, U"pictures/girl_right2.png");
-			player2.set_texture(6, U"pictures/girl_down1.png");
-			player2.set_texture(7, U"pictures/girl_down2.png");
-			player3.set_texture(0, U"pictures/boy_left1.png");
-			player3.set_texture(1, U"pictures/boy_left2.png");
-			player3.set_texture(2, U"pictures/boy_up1.png");
-			player3.set_texture(3, U"pictures/boy_up2.png");
-			player3.set_texture(4, U"pictures/boy_right1.png");
-			player3.set_texture(5, U"pictures/boy_right2.png");
-			player3.set_texture(6, U"pictures/boy_down1.png");
-			player3.set_texture(7, U"pictures/boy_down2.png");
+			player2.set_texture(0, U"pictures/boy_left1.png");
+			player2.set_texture(1, U"pictures/boy_left2.png");
+			player2.set_texture(2, U"pictures/boy_up1.png");
+			player2.set_texture(3, U"pictures/boy_up2.png");
+			player2.set_texture(4, U"pictures/boy_right1.png");
+			player2.set_texture(5, U"pictures/boy_right2.png");
+			player2.set_texture(6, U"pictures/boy_down1.png");
+			player2.set_texture(7, U"pictures/boy_down2.png");
+			player3.set_texture(0, U"pictures/girl_left1.png");
+			player3.set_texture(1, U"pictures/girl_left2.png");
+			player3.set_texture(2, U"pictures/girl_up1.png");
+			player3.set_texture(3, U"pictures/girl_up2.png");
+			player3.set_texture(4, U"pictures/girl_right1.png");
+			player3.set_texture(5, U"pictures/girl_right2.png");
+			player3.set_texture(6, U"pictures/girl_down1.png");
+			player3.set_texture(7, U"pictures/girl_down2.png");
 		}
 		player1.set_special_item_thunder_timer(getData().receive_data[e_communication::player1_special_item_thunder_timer]);
 		if (player0.get_special_item_wing_timer() == 0 && getData().send_data[e_communication::player0_special_item_wing_timer] != 0) {
@@ -385,49 +398,52 @@ void client_game::update() {
 		}
 		player3.set_special_item_thunder_timer(getData().receive_data[e_communication::player3_special_item_thunder_timer]);
 		if (player2.get_special_item_wing_timer() == 0 && getData().receive_data[e_communication::player2_special_item_wing_timer] != 0) {
-			player2.set_texture(0, U"pictures/girl_left1_wing.png");
-			player2.set_texture(1, U"pictures/girl_left2_wing.png");
-			player2.set_texture(2, U"pictures/girl_up1_wing.png");
-			player2.set_texture(3, U"pictures/girl_up2_wing.png");
-			player2.set_texture(4, U"pictures/girl_right1_wing.png");
-			player2.set_texture(5, U"pictures/girl_right2_wing.png");
-			player2.set_texture(6, U"pictures/girl_down1_wing.png");
-			player2.set_texture(7, U"pictures/girl_down2_wing.png");
+			player2.set_texture(0, U"pictures/boy_left1_wing.png");
+			player2.set_texture(1, U"pictures/boy_left2_wing.png");
+			player2.set_texture(2, U"pictures/boy_up1_wing.png");
+			player2.set_texture(3, U"pictures/boy_up2_wing.png");
+			player2.set_texture(4, U"pictures/boy_right1_wing.png");
+			player2.set_texture(5, U"pictures/boy_right2_wing.png");
+			player2.set_texture(6, U"pictures/boy_down1_wing.png");
+			player2.set_texture(7, U"pictures/boy_down2_wing.png");
 		}
 		if (player2.get_special_item_wing_timer() != 0 && getData().receive_data[e_communication::player2_special_item_wing_timer] == 0) {
-			player2.set_texture(0, U"pictures/girl_left1.png");
-			player2.set_texture(1, U"pictures/girl_left2.png");
-			player2.set_texture(2, U"pictures/girl_up1.png");
-			player2.set_texture(3, U"pictures/girl_up2.png");
-			player2.set_texture(4, U"pictures/girl_right1.png");
-			player2.set_texture(5, U"pictures/girl_right2.png");
-			player2.set_texture(6, U"pictures/girl_down1.png");
-			player2.set_texture(7, U"pictures/girl_down2.png");
+			player2.set_texture(0, U"pictures/boy_left1.png");
+			player2.set_texture(1, U"pictures/boy_left2.png");
+			player2.set_texture(2, U"pictures/boy_up1.png");
+			player2.set_texture(3, U"pictures/boy_up2.png");
+			player2.set_texture(4, U"pictures/boy_right1.png");
+			player2.set_texture(5, U"pictures/boy_right2.png");
+			player2.set_texture(6, U"pictures/boy_down1.png");
+			player2.set_texture(7, U"pictures/boy_down2.png");
 		}
 		player2.set_special_item_wing_timer(getData().receive_data[e_communication::player2_special_item_wing_timer]);
 		if (player3.get_special_item_wing_timer() == 0 && getData().receive_data[e_communication::player3_special_item_wing_timer] != 0) {
-			player3.set_texture(0, U"pictures/boy_left1_wing.png");
-			player3.set_texture(1, U"pictures/boy_left2_wing.png");
-			player3.set_texture(2, U"pictures/boy_up1_wing.png");
-			player3.set_texture(3, U"pictures/boy_up2_wing.png");
-			player3.set_texture(4, U"pictures/boy_right1_wing.png");
-			player3.set_texture(5, U"pictures/boy_right2_wing.png");
-			player3.set_texture(6, U"pictures/boy_down1_wing.png");
-			player3.set_texture(7, U"pictures/boy_down2_wing.png");
+			player3.set_texture(0, U"pictures/girl_left1_wing.png");
+			player3.set_texture(1, U"pictures/girl_left2_wing.png");
+			player3.set_texture(2, U"pictures/girl_up1_wing.png");
+			player3.set_texture(3, U"pictures/girl_up2_wing.png");
+			player3.set_texture(4, U"pictures/girl_right1_wing.png");
+			player3.set_texture(5, U"pictures/girl_right2_wing.png");
+			player3.set_texture(6, U"pictures/girl_down1_wing.png");
+			player3.set_texture(7, U"pictures/girl_down2_wing.png");
 		}
 		if (player3.get_special_item_wing_timer() != 0 && getData().receive_data[e_communication::player3_special_item_wing_timer] == 0) {
-			player3.set_texture(0, U"pictures/boy_left1.png");
-			player3.set_texture(1, U"pictures/boy_left2.png");
-			player3.set_texture(2, U"pictures/boy_up1.png");
-			player3.set_texture(3, U"pictures/boy_up2.png");
-			player3.set_texture(4, U"pictures/boy_right1.png");
-			player3.set_texture(5, U"pictures/boy_right2.png");
-			player3.set_texture(6, U"pictures/boy_down1.png");
-			player3.set_texture(7, U"pictures/boy_down2.png");
+			player3.set_texture(0, U"pictures/girl_left1.png");
+			player3.set_texture(1, U"pictures/girl_left2.png");
+			player3.set_texture(2, U"pictures/girl_up1.png");
+			player3.set_texture(3, U"pictures/girl_up2.png");
+			player3.set_texture(4, U"pictures/girl_right1.png");
+			player3.set_texture(5, U"pictures/girl_right2.png");
+			player3.set_texture(6, U"pictures/girl_down1.png");
+			player3.set_texture(7, U"pictures/girl_down2.png");
 		}
 		player3.set_special_item_wing_timer(getData().receive_data[e_communication::player3_special_item_wing_timer]);
 		player2.set_frame_per_move(getData().receive_data[e_communication::player2_speed]);
 		player3.set_frame_per_move(getData().receive_data[e_communication::player3_speed]);
+	}
+	if (timer > start_time) {
+		effect.clear();
 	}
 	if (timer == 0) {
 		changeScene(e_scene::result);
@@ -482,47 +498,52 @@ void client_game::draw_maze() const {
 void client_game::draw()const {
 	background.draw(Point(0, 0));
 	draw_maze();
-	draw_timer(timer);
 	draw_big_point_box(player2.get_score() + player3.get_score());
 	draw_small_point_box(player0.get_score() + player1.get_score());
-//	left_item_circle.draw();
-//	right_item_circle.draw();
-	if (player2.get_special_item() == special_thunder || player2.get_special_item_thunder_timer() != 0) {
-		special_thunder_picture.scaled(2.0).drawAt(left_item_circle.center);
-	}
-	else if (player2.get_special_item() == special_wing || player2.get_special_item_wing_timer() != 0) {
-		special_wing_picture.scaled(2.0).drawAt(left_item_circle.center);
-	}
-	if (player3.get_special_item() == special_thunder || player3.get_special_item_thunder_timer() != 0) {
-		special_thunder_picture.scaled(2.0).drawAt(right_item_circle.center);
-	}
-	else if (player3.get_special_item() == special_wing || player3.get_special_item_wing_timer() != 0) {
-		special_wing_picture.scaled(2.0).drawAt(right_item_circle.center);
-	}
-	left_special_item_timer_draw(player2.get_special_item_thunder_timer(), special_thunder_effect_time, Palette::Yellow);
-	left_special_item_timer_draw(player2.get_special_item_wing_timer(), special_wing_tagger_effect_time, Palette::Aqua);
-	right_special_item_timer_draw(player3.get_special_item_thunder_timer(), special_thunder_effect_time, Palette::Yellow);
-	right_special_item_timer_draw(player3.get_special_item_wing_timer(), special_wing_tagger_effect_time, Palette::Aqua);
-	if (player0.get_special_item_thunder_timer() != 0 || player1.get_special_item_thunder_timer() != 0) {
-		//相手に一時停止を使われたとき
-		thunder_effect_draw();
-	}
-	for (auto i : array_items) {
-		i.draw();
-	}
-	player2.draw();
-	player3.draw();
-	if (player2.get_special_item_thunder_timer() != 0 || player3.get_special_item_thunder_timer() != 0) {
-		player0.draw();
-		player1.draw();
+	//	left_item_circle.draw();
+	//	right_item_circle.draw();
+	if (timer > start_time) {
+		countdown_clock_draw(timer - start_time);
 	}
 	else {
-		player0.draw_range(player2.rect_ghost_visible());
-		player0.draw_range(player3.rect_ghost_visible());
-		player1.draw_range(player2.rect_ghost_visible());
-		player1.draw_range(player3.rect_ghost_visible());
+		draw_timer(timer);
+		if (player2.get_special_item() == special_thunder || player2.get_special_item_thunder_timer() != 0) {
+			special_thunder_picture.scaled(2.0).drawAt(left_item_circle.center);
+		}
+		else if (player2.get_special_item() == special_wing || player2.get_special_item_wing_timer() != 0) {
+			special_wing_picture.scaled(2.0).drawAt(left_item_circle.center);
+		}
+		if (player3.get_special_item() == special_thunder || player3.get_special_item_thunder_timer() != 0) {
+			special_thunder_picture.scaled(2.0).drawAt(right_item_circle.center);
+		}
+		else if (player3.get_special_item() == special_wing || player3.get_special_item_wing_timer() != 0) {
+			special_wing_picture.scaled(2.0).drawAt(right_item_circle.center);
+		}
+		left_special_item_timer_draw(player2.get_special_item_thunder_timer(), special_thunder_effect_time, Palette::Yellow);
+		left_special_item_timer_draw(player2.get_special_item_wing_timer(), special_wing_tagger_effect_time, Palette::Aqua);
+		right_special_item_timer_draw(player3.get_special_item_thunder_timer(), special_thunder_effect_time, Palette::Yellow);
+		right_special_item_timer_draw(player3.get_special_item_wing_timer(), special_wing_tagger_effect_time, Palette::Aqua);
+		if (player0.get_special_item_thunder_timer() != 0 || player1.get_special_item_thunder_timer() != 0) {
+			//相手に一時停止を使われたとき
+			thunder_effect_draw();
+		}
+		for (auto i : array_items) {
+			i.draw();
+		}
+		player2.draw();
+		player3.draw();
+		if (player2.get_special_item_thunder_timer() != 0 || player3.get_special_item_thunder_timer() != 0) {
+			player0.draw();
+			player1.draw();
+		}
+		else {
+			player0.draw_range(player2.rect_ghost_visible());
+			player0.draw_range(player3.rect_ghost_visible());
+			player1.draw_range(player2.rect_ghost_visible());
+			player1.draw_range(player3.rect_ghost_visible());
+		}
+		player2.draw_light();
+		player3.draw_light();
+		effect.update();
 	}
-	player2.draw_light();
-	player3.draw_light();
-	effect.update();
 }

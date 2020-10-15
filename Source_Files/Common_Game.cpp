@@ -79,7 +79,7 @@ Rect player::light_rect()const {
 		dir = e_direction::down;
 	}
 	p = q = pos + delta_point[dir] * maze_brock_size / 2;
-	for (auto i : step(100)) {
+	for (auto i : step(180)) {
 		if (!intersect_maze(p + delta_point[dir] * 10)) {
 			p += delta_point[dir] * 10;
 		}
@@ -116,7 +116,7 @@ Rect player::rect_ghost_visible()const {
 		dir = e_direction::down;
 	}
 	p = q = pos - delta_point[dir] * maze_brock_size / 2;
-	for (auto i : step(100)) {
+	for (auto i : step(180)) {
 		if (!intersect_maze(p + delta_point[dir] * 10)) {
 			p += delta_point[dir] * 10;
 		}
@@ -308,12 +308,13 @@ bool item_effect::update(double t) {
 	return t < 1.0;
 }
 
-tag_effect::tag_effect(const Point& p) {
+tag_effect::tag_effect(const Point& p, Texture& t) {
 	pos = p;
+	texture = &t;
 }
 
 bool tag_effect::update(double t) {
-	FontAsset(U"font40")(U"Tag!").drawAt(pos.movedBy(0, t * -80.0), Palette::Limegreen);
+	texture->drawAt(pos.movedBy(0, t * -80.0), ColorF(1, 1, 1, 1 - t));
 	return t < 1.0;
 }
 
@@ -376,11 +377,9 @@ item random_next_item(Array<item>& ai) {
 Point random_player_respawn_position(player& player2, player& player3) {
 	while (true) {
 		Point p = random_maze_brock_position();
-		if (player2.get_pos().distanceFrom(p) > maze_brock_size * 7 && player3.get_pos().distanceFrom(p) > maze_brock_size * 7)return p;//敵プレイヤーと7マス以上離して復活
+		if (player2.get_pos().distanceFrom(p) > maze_brock_size * 8 && player3.get_pos().distanceFrom(p) > maze_brock_size * 8)return p;//敵プレイヤーと8マス以上離して復活
 	}
 }
-
-
 
 void draw_timer(uint16 t) {
 	FontAsset(U"font40")(U"{:0>2}:{:0>2}"_fmt(t / 60 / 60, t / 60 % 60)).drawAt(timer_box.center(), Palette::White);
@@ -423,4 +422,30 @@ void right_special_item_timer_draw(uint16 t, uint16 a, Color col) {
 
 void thunder_effect_draw() {
 	Scene::Rect().draw(Color(255, 0, 0, 20));
+}
+
+void countdown_clock_draw(uint16 t) {
+	if (t > 300) {
+		Circle(Scene::Center(), 150).drawArc(0, 1_pi * ((t - 300) * 6) / 180, 0, 40, Palette::Blue);
+		FontAsset(U"font200")(U"5").drawAt(Scene::Center());
+	}
+	else if (t > 240) {
+		Circle(Scene::Center(), 150).drawArc(0, 1_pi * ((t - 240) * 6) / 180, 0, 40, Palette::Green);
+		FontAsset(U"font200")(U"4").drawAt(Scene::Center());
+	}
+	else if (t > 180) {
+		Circle(Scene::Center(), 150).drawArc(0, 1_pi * ((t - 180) * 6) / 180, 0, 40, Palette::Yellow);
+		FontAsset(U"font200")(U"3").drawAt(Scene::Center());
+	}
+	else if (t > 120) {
+		Circle(Scene::Center(), 150).drawArc(0, 1_pi * ((t - 120) * 6) / 180, 0, 40, Palette::Orange);
+		FontAsset(U"font200")(U"2").drawAt(Scene::Center());
+	}
+	else if (t > 60) {
+		Circle(Scene::Center(), 150).drawArc(0, 1_pi * ((t - 60) * 6) / 180, 0, 40, Palette::Red);
+		FontAsset(U"font200")(U"1").drawAt(Scene::Center());
+	}
+	else {
+		FontAsset(U"font200")(U"START!!").drawAt(Scene::Center(), Palette::Yellow);
+	}
 }
