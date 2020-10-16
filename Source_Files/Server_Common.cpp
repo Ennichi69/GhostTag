@@ -2,14 +2,12 @@
 
 server_game_data::server_game_data() {
 	const Array<SerialPortInfo>infos = System::EnumerateSerialPorts();
-	serial_available = true;
-	if (infos.size() == 1) {
-		if (!serial.open(infos[0].port)) {
-			serial_available = false;
+	serial_available = false;
+	for (auto i : infos) {
+		if (serial.open(i.port)) {
+			serial_available = true;
+			break;
 		}
-	}
-	else {
-		serial_available = false;
 	}
 }
 
