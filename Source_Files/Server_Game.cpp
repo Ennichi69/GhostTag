@@ -25,7 +25,7 @@ server_game::server_game(const InitData& init) :IScene(init) {
 
 	//ポイントアイテムを初期化
 	for (auto i : step(array_point_items_size)) {
-		array_items.push_back(random_next_item(array_items));
+		array_items.push_back(random_next_item(array_items, item_pictures));
 	}
 
 	//テクスチャを初期化
@@ -87,6 +87,12 @@ server_game::server_game(const InitData& init) :IScene(init) {
 	maze_walls[4] = Texture(Resource(U"pictures/bookshelf.png"));
 	maze_walls[5] = Texture(Resource(U"pictures/window.png"));
 	maze_walls[6] = Texture(Resource(U"pictures/door.png"));
+
+	item_pictures[0] = Texture(Resource(U"pictures/point_candy1.png"));
+	item_pictures[1] = Texture(Resource(U"pictures/point_candy2.png"));
+	item_pictures[2] = Texture(Resource(U"pictures/point_chocolate.png"));
+	item_pictures[3] = Texture(Resource(U"pictures/special_thunder.png"));
+	item_pictures[4] = Texture(Resource(U"pictures/special_wing.png"));
 
 	background = Texture(Resource(U"pictures/background.png"));
 
@@ -200,12 +206,12 @@ void server_game::update() {
 					if (player0.get_special_item() == nothing) {
 						player0.set_special_item(it.get_type());
 						effect.add<item_effect>(it.get_pos(), Palette::Orange);
-						it = random_next_item(array_items);
+						it = random_next_item(array_items, item_pictures);
 					}
 				}
 				else {
 					effect.add<item_effect>(it.get_pos(), Palette::Lime);
-					it = random_next_item(array_items);
+					it = random_next_item(array_items, item_pictures);
 					player0.add_score(point_item_score);
 					if (player0.get_special_item_wing_timer() != 0) {
 						player0.add_score(additional_item_score);
@@ -217,12 +223,12 @@ void server_game::update() {
 					if (player1.get_special_item() == nothing) {
 						player1.set_special_item(it.get_type());
 						effect.add<item_effect>(it.get_pos(), Palette::Orange);
-						it = random_next_item(array_items);
+						it = random_next_item(array_items, item_pictures);
 					}
 				}
 				else {
 					effect.add<item_effect>(it.get_pos(), Palette::Lime);
-					it = random_next_item(array_items);
+					it = random_next_item(array_items, item_pictures);
 					player1.add_score(point_item_score);
 					if (player1.get_special_item_wing_timer() != 0) {
 						player1.add_score(additional_item_score);
@@ -234,7 +240,7 @@ void server_game::update() {
 					if (player2.get_special_item() == nothing) {
 						player2.set_special_item(it.get_type());
 						effect.add<item_effect>(it.get_pos(), Palette::Orange);
-						it = random_next_item(array_items);
+						it = random_next_item(array_items, item_pictures);
 					}
 				}
 			}
@@ -243,7 +249,7 @@ void server_game::update() {
 					if (player3.get_special_item() == nothing) {
 						player3.set_special_item(it.get_type());
 						effect.add<item_effect>(it.get_pos(), Palette::Orange);
-						it = random_next_item(array_items);
+						it = random_next_item(array_items, item_pictures);
 					}
 				}
 			}
@@ -653,7 +659,6 @@ void server_game::draw_maze() const {
 void server_game::draw()const {
 	background.draw(Point(0, 0));
 	draw_maze();
-
 	draw_big_point_box(player0.get_score() + player1.get_score());
 	draw_small_point_box(player2.get_score() + player3.get_score());
 	//	left_item_circle.draw();

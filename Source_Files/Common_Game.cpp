@@ -231,62 +231,27 @@ uint16 player::get_frame_per_move() const {
 item::item() {
 	pos = Point(0, 0);
 	type = point1;
-	picture = Texture(Resource(U"pictures/point_candy1.png"));
+	picture = NULL;
 	radius = item_radius;
 }
-item::item(Point p, e_item_type t) {
+item::item(Point p, e_item_type t,Texture& te) {
 	pos = p;
 	type = t;
-	if (t == point1) {
-		picture = Texture(Resource(U"pictures/point_candy1.png"));
-	}
-	else if (t == point2) {
-		picture = Texture(Resource(U"pictures/point_candy2.png"));
-	}
-	else if (t == point3) {
-		picture = Texture(Resource(U"pictures/point_chocolate.png"));
-	}
-	else if (t == special_thunder) {
-		picture = Texture(Resource(U"pictures/special_thunder.png"));
-	}
-	else if (t == special_wing) {
-		picture = Texture(Resource(U"pictures/special_wing.png"));
-	}
-	else {
-		t = point1;
-		picture = Texture(Resource(U"pictures/point_candy1.png"));
-	}
+	picture = &te;
 	radius = item_radius;
 }
 void item::draw() {
-	picture.draw(Arg::center(pos));
+	picture->draw(Arg::center(pos));
 }
 void item::set_pos(Point p) {
 	pos = p;
 }
-void item::set_type(e_item_type t) {
+void item::set_type(e_item_type t, Texture* te) {
 	type = t;
-	if (t == point1) {
-		picture = Texture(Resource(U"pictures/point_candy1.png"));
-	}
-	else if (t == point2) {
-		picture = Texture(Resource(U"pictures/point_candy2.png"));
-	}
-	else if (t == point3) {
-		picture = Texture(Resource(U"pictures/point_chocolate.png"));
-	}
-	else if (t == special_thunder) {
-		picture = Texture(Resource(U"pictures/special_thunder.png"));
-	}
-	else if (t == special_wing) {
-		picture = Texture(Resource(U"pictures/special_wing.png"));
-	}
-	else {
-		picture = Texture(Resource(U"pictures/point_candy1.png"));
-	}
+	picture = te + t;
 }
-void item::set_texture(String file_name) {
-	picture = Texture(Resource(file_name));
+void item::set_texture(Texture& te) {
+	picture = &te;
 }
 Point item::get_pos() {
 	return pos;
@@ -355,7 +320,7 @@ Point random_maze_brock_position() {
 	}
 }
 
-item random_next_item(Array<item>& ai) {
+item random_next_item(Array<item>& ai, Texture* tex) {
 	while (true) {
 		bool f = true;
 		Point p = random_maze_brock_position();
@@ -363,13 +328,15 @@ item random_next_item(Array<item>& ai) {
 			if (it.get_pos().distanceFrom(p) < maze_brock_size * 4)f = false;//他のアイテムと4ブロック以内に湧かせない
 		}
 		if (f) {
+			uint16 t;
 			if (Random(0, 10) == 0) {
 				//1/10の確率でスペシャルアイテムが出る
-				return item(p, (e_item_type)Random(3, 4));
+				t = Random(3, 4);
 			}
 			else {
-				return item(p, (e_item_type)Random(0, 2));
+				t = Random(0, 2);
 			}
+			return item(p, (e_item_type)t, tex[t]);
 		}
 	}
 }

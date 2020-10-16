@@ -79,11 +79,11 @@ private:
 class item {
 public:
 	item();
-	item(Point p, e_item_type t);
+	item(Point p, e_item_type t, Texture& te);
 	void draw();
 	void set_pos(Point p);
-	void set_type(e_item_type t);
-	void set_texture(String file_name);
+	void set_type(e_item_type t, Texture* te);
+	void set_texture(Texture &te);
 	Point get_pos();
 	uint16 get_radius();
 	e_item_type get_type();
@@ -91,7 +91,7 @@ private:
 	Point pos;
 	uint16 radius;
 	e_item_type type;
-	Texture picture;
+	Texture* picture;
 };
 
 //アイテム取得時エフェクト
@@ -116,7 +116,7 @@ bool intersect_maze(Point p);
 Point maze_brock_position(uint16 h, uint16 w);
 Point random_maze_brock_position();//ランダムな迷路内で通行可能な場所の座標
 Point random_player_respawn_position(player& player2, player& player3);//プレイヤーの復活地点
-item random_next_item(Array<item>& ai);//アイテムをランダムに設置
+item random_next_item(Array<item>& ai, Texture *tex);//アイテムをランダムに設置
 void draw_timer(uint16 t);//タイマーを書く
 void draw_big_point_box(uint16 t);
 void draw_small_point_box(uint16 t);

@@ -83,6 +83,12 @@ client_game::client_game(const InitData& init) :IScene(init) {
 	maze_walls[5] = Texture(Resource(U"pictures/window.png"));
 	maze_walls[6] = Texture(Resource(U"pictures/door.png"));
 
+	item_pictures[0] = Texture(Resource(U"pictures/point_candy1.png"));
+	item_pictures[1] = Texture(Resource(U"pictures/point_candy2.png"));
+	item_pictures[2] = Texture(Resource(U"pictures/point_chocolate.png"));
+	item_pictures[3] = Texture(Resource(U"pictures/special_thunder.png"));
+	item_pictures[4] = Texture(Resource(U"pictures/special_wing.png"));
+
 	background = Texture(Resource(U"pictures/background.png"));
 
 	special_thunder_picture = Texture(Resource(U"pictures/special_thunder.png"));
@@ -185,7 +191,7 @@ void client_game::update() {
 					effect.add<item_effect>(array_items[i].get_pos(), Palette::Orange);
 				}
 				array_items[i].set_pos(Point(getData().receive_data[e_communication::point_item_status + i * 3], getData().receive_data[e_communication::point_item_status + i * 3 + 1]));
-				array_items[i].set_type((e_item_type)getData().receive_data[e_communication::point_item_status + i * 3 + 2]);
+				array_items[i].set_type((e_item_type)getData().receive_data[e_communication::point_item_status + i * 3 + 2], item_pictures);
 			}
 		}
 		timer = getData().receive_data[e_communication::timer];
