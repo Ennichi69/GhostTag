@@ -24,14 +24,14 @@ bool right_button_down(Array<uint8>& a, bool b) {
 		return KeyEnter.down();
 	}
 }
-e_direction left_joystick_direction(Array<uint8>& a,bool b) {
+e_direction left_joystick_direction(Array<uint8>& a,bool b, e_direction now_direction) {
 	//PC環境だとWASD 本番環境ではジョイスティック(左)
 	if (b) {
 		for (auto i : a) {
-			if (i == 11)return e_direction::left;
-			if (i == 12)return e_direction::up;
-			if (i == 13)return e_direction::right;
-			if (i == 14)return e_direction::down;
+			if (i == 11 && now_direction != left)return e_direction::left;
+			if (i == 12 && now_direction != up)return e_direction::up;
+			if (i == 13 && now_direction != right)return e_direction::right;
+			if (i == 14 && now_direction != down)return e_direction::down;
 		}
 		return e_direction::neutral;
 	}
@@ -43,14 +43,14 @@ e_direction left_joystick_direction(Array<uint8>& a,bool b) {
 		return e_direction::neutral;
 	}
 }
-e_direction right_joystick_direction(Array<uint8>& a, bool b) {
+e_direction right_joystick_direction(Array<uint8>& a, bool b, e_direction now_direction) {
 	if (b) {
 		//PC環境だと←↑→↓ 本番環境ではジョイスティック(右)
 		for (auto i : a) {
-			if (i == 21)return e_direction::left;
-			if (i == 22)return e_direction::up;
-			if (i == 23)return e_direction::right;
-			if (i == 24)return e_direction::down;
+			if (i == 21 && now_direction != left)return e_direction::left;
+			if (i == 22 && now_direction != up)return e_direction::up;
+			if (i == 23 && now_direction != right)return e_direction::right;
+			if (i == 24 && now_direction != down)return e_direction::down;
 		}
 		return e_direction::neutral;
 	}

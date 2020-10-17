@@ -110,8 +110,8 @@ void client_game::update() {
 	}
 	if (timer < start_time) {
 		if (player0.get_special_item_thunder_timer() == 0 && player1.get_special_item_thunder_timer() == 0) {
-			player2.update_direction(left_joystick_direction(serial_array, getData().serial_available));
-			player3.update_direction(right_joystick_direction(serial_array, getData().serial_available));
+			player2.update_direction(left_joystick_direction(serial_array, getData().serial_available, player2.get_direction()));
+			player3.update_direction(right_joystick_direction(serial_array, getData().serial_available, player3.get_direction()));
 			player2.update();
 			player3.update();
 		}

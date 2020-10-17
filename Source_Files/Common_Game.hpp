@@ -199,7 +199,7 @@ const uint16 special_wing_ghost_effect_time = 300;
 const uint16 special_wing_tagger_effect_time = 180;
 
 
-const uint16 ghost_speed = 4;
-const uint16 tagger_speed = 5;
-const uint16 special_wing_ghost_speed = 6;
-const uint16 special_wing_tagger_speed = 6;
+const uint16 ghost_speed = 3;
+const uint16 tagger_speed = 4;
+const uint16 special_wing_ghost_speed = 5;
+const uint16 special_wing_tagger_speed = 5;

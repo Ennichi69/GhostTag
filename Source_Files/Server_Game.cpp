@@ -135,7 +135,7 @@ void server_game::update() {
 		}
 		else {
 			if (player2.get_special_item_thunder_timer() == 0 && player3.get_special_item_thunder_timer() == 0) {
-				player0.update_direction(left_joystick_direction(serial_array, getData().serial_available));
+				player0.update_direction(left_joystick_direction(serial_array, getData().serial_available, player0.get_direction()));
 				player0.update();
 			}
 			if (player0.get_invincible_timer() == 0) {
@@ -171,7 +171,7 @@ void server_game::update() {
 		}
 		else {
 			if (player2.get_special_item_thunder_timer() == 0 && player3.get_special_item_thunder_timer() == 0) {
-				player1.update_direction(right_joystick_direction(serial_array, getData().serial_available));
+				player1.update_direction(right_joystick_direction(serial_array, getData().serial_available, player1.get_direction()));
 				player1.update();
 			}
 			if (player1.get_invincible_timer() == 0) {

@@ -68,8 +68,8 @@ typedef enum {
 
 bool left_button_down(Array<uint8>& a, bool b);
 bool right_button_down(Array<uint8>& a, bool b);
-e_direction left_joystick_direction(Array<uint8>& a, bool b);
-e_direction right_joystick_direction(Array<uint8>& a, bool b);
+e_direction left_joystick_direction(Array<uint8>& a, bool b, e_direction now_direction);
+e_direction right_joystick_direction(Array<uint8>& a, bool b, e_direction now_direction);
 void init();
 
 constexpr uint16 port = 50000;//É|Å[Égî‘çÜ
