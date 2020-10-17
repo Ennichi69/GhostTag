@@ -5,7 +5,6 @@ player::player() {
 	direction = neutral;
 	next_direction = neutral;
 	score = 0;
-	walking_timer = 0;
 	invincible_timer = 0;
 	special_item = nothing;
 	special_item_thunder_timer = 0;
@@ -16,13 +15,12 @@ player::player(Point p) {
 	direction = neutral;
 	next_direction = neutral;
 	score = 0;
-	walking_timer = 0;
 	invincible_timer = 0;
 	special_item = nothing;
 	special_item_thunder_timer = 0;
 	special_item_wing_timer = 0;
 }
-void player::draw() const {
+void player::draw(uint16 timer) const {
 	//sinatori 上下左右静止
 	//時間ごとに絵を変更
 	if (invincible_timer > 60)return;
@@ -34,16 +32,16 @@ void player::draw() const {
 		player_picture[7].draw(Arg::center(pos));//ニュートラルの時の画像は一応下向きにしておく
 	}
 	else {
-		player_picture[(direction - 1) * 2 + (walking_timer / 5) % 2].draw(Arg::center(pos));
+		player_picture[(direction - 1) * 2 + (timer / 5) % 2].draw(Arg::center(pos));
 	}
 }
-void player::draw_range(Rect r)const {
+void player::draw_range(Rect r, uint16 timer)const {
 //	if (r.intersects(pos))draw();
 	if (direction == neutral) {
 		player_picture[7].drawAtClipped(pos, r);
 	}
 	else {
-		player_picture[(direction - 1) * 2 + (walking_timer / 5) % 2].drawAtClipped(pos, r);
+		player_picture[(direction - 1) * 2 + (timer / 5) % 2].drawAtClipped(pos, r);
 	}
 }
 void player::draw_light() const {
@@ -51,6 +49,19 @@ void player::draw_light() const {
 	light_triangle().draw(Color(255, 255, 0, 30));
 }
 void player::update() {
+	//8フレーム前まで見て、曲がれるか
+	Point p = pos;
+	for (auto i : step(frame_per_move * 8)) {
+		if (!intersect_maze(Rect(Arg::center(p), maze_brock_size).movedBy(delta_point[next_direction]))) {
+			direction = next_direction;
+			p.moveBy(delta_point[direction] * i);
+			pos = p;
+			break;
+		}
+		else {
+			p.moveBy(-delta_point[direction]);
+		}
+	}
 	for (auto i : step(frame_per_move)) {
 		if (!intersect_maze(Rect(Arg::center(pos), maze_brock_size).movedBy(delta_point[next_direction]))) {
 			direction = next_direction;
@@ -60,12 +71,12 @@ void player::update() {
 		}
 	}
 	//sinatori 動いたら絵を一つ変える
-	if (direction == neutral) {
-		walking_timer = 0;
-	}
-	else {
-		walking_timer++;
-	}
+//	if (direction == neutral) {
+//		walking_timer = 0;
+//	}
+//	else {
+//		walking_timer++;
+//	}
 }
 void player::update_direction(e_direction e_dir) {
 	if (e_dir != neutral) {
@@ -151,9 +162,9 @@ void player::set_pos(uint16 h, uint16 w) {
 }
 void player::set_direction(e_direction e_dir) {
 	//sinatori 向きを変えたら絵を最初からにしよう
-	if (e_dir != direction) {
-		walking_timer = 0;
-	}
+//	if (e_dir != direction) {
+//		walking_timer = 0;
+//	}
 	direction = e_dir;
 }
 void player::set_next_direction(e_direction e_n_dir) {
@@ -266,6 +277,7 @@ e_item_type item::get_type() {
 item_effect::item_effect(const Point& p, const Color& c) {
 	pos = p;
 	col = c;
+	AudioAsset(U"item_get").play();
 }
 bool item_effect::update(double t) {
 	const double e = EaseOutExpo(t);
@@ -276,6 +288,7 @@ bool item_effect::update(double t) {
 tag_effect::tag_effect(const Point& p, Texture& t) {
 	pos = p;
 	texture = &t;
+	AudioAsset(U"tag").play();
 }
 
 bool tag_effect::update(double t) {

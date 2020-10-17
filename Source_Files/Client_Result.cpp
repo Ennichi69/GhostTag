@@ -20,7 +20,7 @@ void client_result::update() {
 	}
 	getData().tcp_client.send(getData().send_data);
 	while (getData().tcp_client.read(getData().receive_data));
-	if (KeyEnter.down()) {
+	if (getData().receive_data[e_communication::scene_status] == e_scene::title) {
 		changeScene(e_scene::title);
 	}
 }
@@ -37,7 +37,7 @@ void client_result::draw()const {
 		win_picture.drawAt(500, 950);
 	}
 	else if (player0_score + player1_score == player2_score + player3_score) {
-		//Draw‚Ì‰æ‘œ‚ª‚È‚¢‚æ
+		//ˆø‚«•ª‚¯‚Ì‰æ‘œ‚ª‚È‚¢‚æ
 	}
 	else {
 		lose_picture.drawAt(500, 950);

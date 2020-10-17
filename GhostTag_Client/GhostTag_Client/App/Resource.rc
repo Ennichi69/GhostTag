@@ -191,6 +191,15 @@ Resource(pictures/win.png)
 Resource(pictures/lose.png)
 
 Resource(fonts/4x4kanafont.ttf)
+
+Resource(musics/game_set.mp3)
+Resource(musics/item_get.mp3)
+Resource(musics/main_theme.mp3)
+Resource(musics/respawn.mp3)
+Resource(musics/tag.mp3)
+Resource(musics/thunder.mp3)
+Resource(musics/wing.mp3)
+
 /* 
 	//
 	// Define your resource path inside `Resource()` macro.

@@ -121,6 +121,7 @@ void client_game::update() {
 			player1.update();
 		}
 	}
+	if (timer == start_time)AudioAsset(U"main_theme").play();
 	timer = getData().receive_data[e_communication::timer];
 	timer--;
 	//全てのデータを送り返しておく(意味が無いものも含まれる)
@@ -184,11 +185,13 @@ void client_game::update() {
 		player3.set_score(getData().receive_data[e_communication::player3_score]);
 		for (auto i : step(array_point_items_size)) {
 			if (array_items[i].get_pos() != Point(getData().receive_data[e_communication::point_item_status + i * 3], getData().receive_data[e_communication::point_item_status + i * 3 + 1])) {
-				if (array_items[i].get_type() == point1 || array_items[i].get_type() == point2 || array_items[i].get_type() == point3) {
-					effect.add<item_effect>(array_items[i].get_pos(), Palette::Lime);
-				}
-				else {
-					effect.add<item_effect>(array_items[i].get_pos(), Palette::Orange);
+				if (timer <= start_time) {
+					if (array_items[i].get_type() == point1 || array_items[i].get_type() == point2 || array_items[i].get_type() == point3) {
+						effect.add<item_effect>(array_items[i].get_pos(), Palette::Lime);
+					}
+					else {
+						effect.add<item_effect>(array_items[i].get_pos(), Palette::Orange);
+					}
 				}
 				array_items[i].set_pos(Point(getData().receive_data[e_communication::point_item_status + i * 3], getData().receive_data[e_communication::point_item_status + i * 3 + 1]));
 				array_items[i].set_type((e_item_type)getData().receive_data[e_communication::point_item_status + i * 3 + 2], item_pictures);
@@ -212,6 +215,7 @@ void client_game::update() {
 		player2.set_special_item((e_item_type)getData().receive_data[e_communication::player2_special_item]);
 		player3.set_special_item((e_item_type)getData().receive_data[e_communication::player3_special_item]);
 		if (player0.get_special_item_thunder_timer() == 0 && getData().receive_data[e_communication::player0_special_item_thunder_timer] != 0) {
+			AudioAsset(U"thunder").play();
 			player2.set_texture(0, U"pictures/boy_left1_thunder.png");
 			player2.set_texture(1, U"pictures/boy_left2_thunder.png");
 			player2.set_texture(2, U"pictures/boy_up1_thunder.png");
@@ -249,6 +253,7 @@ void client_game::update() {
 		}
 		player0.set_special_item_thunder_timer(getData().receive_data[e_communication::player0_special_item_thunder_timer]);
 		if (player1.get_special_item_thunder_timer() == 0 && getData().receive_data[e_communication::player1_special_item_thunder_timer] != 0) {
+			AudioAsset(U"thunder").play();
 			player2.set_texture(0, U"pictures/boy_left1_thunder.png");
 			player2.set_texture(1, U"pictures/boy_left2_thunder.png");
 			player2.set_texture(2, U"pictures/boy_up1_thunder.png");
@@ -330,6 +335,7 @@ void client_game::update() {
 		player0.set_frame_per_move(getData().receive_data[e_communication::player0_speed]);
 		player1.set_frame_per_move(getData().receive_data[e_communication::player1_speed]);
 		if (player2.get_special_item_thunder_timer() == 0 && getData().receive_data[e_communication::player2_special_item_thunder_timer] != 0) {
+			AudioAsset(U"thunder").play();
 			player0.set_texture(0, U"pictures/pump_left1_thunder.png");
 			player0.set_texture(1, U"pictures/pump_left2_thunder.png");
 			player0.set_texture(2, U"pictures/pump_up1_thunder.png");
@@ -367,6 +373,7 @@ void client_game::update() {
 		}
 		player2.set_special_item_thunder_timer(getData().receive_data[e_communication::player2_special_item_thunder_timer]);
 		if (player3.get_special_item_thunder_timer() == 0 && getData().receive_data[e_communication::player3_special_item_thunder_timer] != 0) {
+			AudioAsset(U"thunder").play();
 			player0.set_texture(0, U"pictures/pump_left1_thunder.png");
 			player0.set_texture(1, U"pictures/pump_left2_thunder.png");
 			player0.set_texture(2, U"pictures/pump_up1_thunder.png");
@@ -404,6 +411,7 @@ void client_game::update() {
 		}
 		player3.set_special_item_thunder_timer(getData().receive_data[e_communication::player3_special_item_thunder_timer]);
 		if (player2.get_special_item_wing_timer() == 0 && getData().receive_data[e_communication::player2_special_item_wing_timer] != 0) {
+			AudioAsset(U"wing").play();
 			player2.set_texture(0, U"pictures/boy_left1_wing.png");
 			player2.set_texture(1, U"pictures/boy_left2_wing.png");
 			player2.set_texture(2, U"pictures/boy_up1_wing.png");
@@ -425,6 +433,7 @@ void client_game::update() {
 		}
 		player2.set_special_item_wing_timer(getData().receive_data[e_communication::player2_special_item_wing_timer]);
 		if (player3.get_special_item_wing_timer() == 0 && getData().receive_data[e_communication::player3_special_item_wing_timer] != 0) {
+			AudioAsset(U"wing").play();
 			player3.set_texture(0, U"pictures/girl_left1_wing.png");
 			player3.set_texture(1, U"pictures/girl_left2_wing.png");
 			player3.set_texture(2, U"pictures/girl_up1_wing.png");
@@ -452,6 +461,8 @@ void client_game::update() {
 		effect.clear();
 	}
 	if (timer == 0) {
+		AudioAsset(U"main_theme").stop();
+		AudioAsset(U"game_set").play();
 		changeScene(e_scene::result);
 	}
 }
@@ -510,6 +521,10 @@ void client_game::draw()const {
 	//	right_item_circle.draw();
 	if (timer > start_time) {
 		countdown_clock_draw(timer - start_time);
+		if (timer < start_time + 180) {
+			player2.draw(timer);
+			player3.draw(timer);
+		}
 	}
 	else {
 		draw_timer(timer);
@@ -536,17 +551,17 @@ void client_game::draw()const {
 		for (auto i : array_items) {
 			i.draw();
 		}
-		player2.draw();
-		player3.draw();
+		player2.draw(timer);
+		player3.draw(timer);
 		if (player2.get_special_item_thunder_timer() != 0 || player3.get_special_item_thunder_timer() != 0) {
-			player0.draw();
-			player1.draw();
+			player0.draw(timer);
+			player1.draw(timer);
 		}
 		else {
-			player0.draw_range(player2.rect_ghost_visible());
-			player0.draw_range(player3.rect_ghost_visible());
-			player1.draw_range(player2.rect_ghost_visible());
-			player1.draw_range(player3.rect_ghost_visible());
+			player0.draw_range(player2.rect_ghost_visible(), timer);
+			player0.draw_range(player3.rect_ghost_visible(), timer);
+			player1.draw_range(player2.rect_ghost_visible(), timer);
+			player1.draw_range(player3.rect_ghost_visible(), timer);
 		}
 		player2.draw_light();
 		player3.draw_light();

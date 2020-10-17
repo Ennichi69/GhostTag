@@ -117,6 +117,7 @@ void server_game::update() {
 
 	}
 	else {
+		if (timer == start_time)AudioAsset(U"main_theme").play();
 		//ラグ補正
 		if (player0.get_special_item_thunder_timer() != 0 && player1.get_special_item_thunder_timer() != 0) {
 			player2.update();
@@ -200,62 +201,65 @@ void server_game::update() {
 		}
 
 		//アイテムとの当たり判定
-		for (auto& it : array_items) {
-			if (player0.intersects(it)) {
-				if (it.get_type() == special_thunder || it.get_type() == special_wing) {
-					if (player0.get_special_item() == nothing) {
-						player0.set_special_item(it.get_type());
-						effect.add<item_effect>(it.get_pos(), Palette::Orange);
+		if (timer <= start_time) {
+			for (auto& it : array_items) {
+				if (player0.intersects(it)) {
+					if (it.get_type() == special_thunder || it.get_type() == special_wing) {
+						if (player0.get_special_item() == nothing) {
+							player0.set_special_item(it.get_type());
+							effect.add<item_effect>(it.get_pos(), Palette::Orange);
+							it = random_next_item(array_items, item_pictures);
+						}
+					}
+					else {
+						effect.add<item_effect>(it.get_pos(), Palette::Lime);
 						it = random_next_item(array_items, item_pictures);
+						player0.add_score(point_item_score);
+						if (player0.get_special_item_wing_timer() != 0) {
+							player0.add_score(additional_item_score);
+						}
 					}
 				}
-				else {
-					effect.add<item_effect>(it.get_pos(), Palette::Lime);
-					it = random_next_item(array_items, item_pictures);
-					player0.add_score(point_item_score);
-					if (player0.get_special_item_wing_timer() != 0) {
-						player0.add_score(additional_item_score);
+				if (player1.intersects(it)) {
+					if (it.get_type() == special_thunder || it.get_type() == special_wing) {
+						if (player1.get_special_item() == nothing) {
+							player1.set_special_item(it.get_type());
+							effect.add<item_effect>(it.get_pos(), Palette::Orange);
+							it = random_next_item(array_items, item_pictures);
+						}
 					}
-				}
-			}
-			if (player1.intersects(it)) {
-				if (it.get_type() == special_thunder || it.get_type() == special_wing) {
-					if (player1.get_special_item() == nothing) {
-						player1.set_special_item(it.get_type());
-						effect.add<item_effect>(it.get_pos(), Palette::Orange);
+					else {
+						effect.add<item_effect>(it.get_pos(), Palette::Lime);
 						it = random_next_item(array_items, item_pictures);
+						player1.add_score(point_item_score);
+						if (player1.get_special_item_wing_timer() != 0) {
+							player1.add_score(additional_item_score);
+						}
 					}
 				}
-				else {
-					effect.add<item_effect>(it.get_pos(), Palette::Lime);
-					it = random_next_item(array_items, item_pictures);
-					player1.add_score(point_item_score);
-					if (player1.get_special_item_wing_timer() != 0) {
-						player1.add_score(additional_item_score);
+				if (player2.intersects(it)) {
+					if (it.get_type() == special_thunder || it.get_type() == special_wing) {
+						if (player2.get_special_item() == nothing) {
+							player2.set_special_item(it.get_type());
+							effect.add<item_effect>(it.get_pos(), Palette::Orange);
+							it = random_next_item(array_items, item_pictures);
+						}
 					}
 				}
-			}
-			if (player2.intersects(it)) {
-				if (it.get_type() == special_thunder || it.get_type() == special_wing) {
-					if (player2.get_special_item() == nothing) {
-						player2.set_special_item(it.get_type());
-						effect.add<item_effect>(it.get_pos(), Palette::Orange);
-						it = random_next_item(array_items, item_pictures);
-					}
-				}
-			}
-			if (player3.intersects(it)) {
-				if (it.get_type() == special_thunder || it.get_type() == special_wing) {
-					if (player3.get_special_item() == nothing) {
-						player3.set_special_item(it.get_type());
-						effect.add<item_effect>(it.get_pos(), Palette::Orange);
-						it = random_next_item(array_items, item_pictures);
+				if (player3.intersects(it)) {
+					if (it.get_type() == special_thunder || it.get_type() == special_wing) {
+						if (player3.get_special_item() == nothing) {
+							player3.set_special_item(it.get_type());
+							effect.add<item_effect>(it.get_pos(), Palette::Orange);
+							it = random_next_item(array_items, item_pictures);
+						}
 					}
 				}
 			}
 		}
 		//スペシャルアイテムの使用
 		if (left_button_down(serial_array, getData().serial_available) && player0.get_special_item() == special_thunder) {
+			AudioAsset(U"thunder").play();
 			player0.set_special_item(in_use);
 			player0.set_special_item_thunder_timer(special_thunder_effect_time);
 			player2.set_texture(0, U"pictures/boy_left1_thunder.png");
@@ -276,6 +280,7 @@ void server_game::update() {
 			player3.set_texture(7, U"pictures/girl_down2_thunder.png");
 		}
 		if (left_button_down(serial_array, getData().serial_available) && player0.get_special_item() == special_wing) {
+			AudioAsset(U"wing").play();
 			player0.set_special_item(in_use);
 			player0.set_special_item_wing_timer(special_wing_ghost_effect_time);
 			player0.set_frame_per_move(special_wing_ghost_speed);
@@ -289,6 +294,7 @@ void server_game::update() {
 			player0.set_texture(7, U"pictures/pump_down2_wing.png");
 		}
 		if (right_button_down(serial_array, getData().serial_available) && player1.get_special_item() == special_thunder) {
+			AudioAsset(U"thunder").play();
 			player1.set_special_item(in_use);
 			player1.set_special_item_thunder_timer(special_thunder_effect_time);
 			player2.set_texture(0, U"pictures/boy_left1_thunder.png");
@@ -309,6 +315,7 @@ void server_game::update() {
 			player3.set_texture(7, U"pictures/girl_down2_thunder.png");
 		}
 		if (right_button_down(serial_array, getData().serial_available) && player1.get_special_item() == special_wing) {
+			AudioAsset(U"wing").play();
 			player1.set_special_item(in_use);
 			player1.set_special_item_wing_timer(special_wing_ghost_effect_time);
 			player1.set_frame_per_move(special_wing_ghost_speed);
@@ -537,6 +544,7 @@ void server_game::update() {
 		player3.set_next_direction(e_direction(getData().receive_data[e_communication::player3_next_direction]));
 		//相手側のスペシャルアイテムの使用
 		if (getData().receive_data[e_communication::player2_button_down] && player2.get_special_item() == special_thunder) {
+			AudioAsset(U"thunder").play();
 			player2.set_special_item(in_use);
 			player2.set_special_item_thunder_timer(special_thunder_effect_time);
 			player0.set_texture(0, U"pictures/pump_left1_thunder.png");
@@ -570,6 +578,7 @@ void server_game::update() {
 			player2.set_texture(7, U"pictures/boy_down2_wing.png");
 		}
 		if (getData().receive_data[e_communication::player3_button_down] && player3.get_special_item() == special_thunder) {
+			AudioAsset(U"thunder").play();
 			player3.set_special_item(in_use);
 			player3.set_special_item_thunder_timer(special_thunder_effect_time);
 			player0.set_texture(0, U"pictures/pump_left1_thunder.png");
@@ -607,6 +616,8 @@ void server_game::update() {
 		effect.clear();
 	}
 	if (timer == 0) {
+		AudioAsset(U"main_theme").stop();
+		AudioAsset(U"game_set").play();
 		changeScene(e_scene::result);
 	}
 }
@@ -623,7 +634,8 @@ void server_game::draw_maze() const {
 				}
 			}
 			else {
-				if (i == 0 || i == maze_height - 1 || j == 0 || j == maze_width - 1)continue;//マップには存在しない
+				if (i == 0 || i == maze_height - 1 || j == 0 || j == maze_width - 1)
+					continue;//マップには存在しない
 				if (maze_data[i - 1][j]) {
 					if (maze_data[i][j - 1])
 						corner_rd.draw(Arg::center(maze_brock_position(i, j)));
@@ -665,6 +677,12 @@ void server_game::draw()const {
 	//	right_item_circle.draw();
 	if (timer > start_time) {
 		countdown_clock_draw(timer-start_time);
+		if (timer < start_time + 180) {
+			player0.draw(timer);
+			player1.draw(timer);
+			player2.draw(timer);
+			player3.draw(timer);
+		}
 	}
 	else {
 		//スペシャルアイテム関連
@@ -692,10 +710,10 @@ void server_game::draw()const {
 		for (auto i : array_items) {
 			i.draw();
 		}
-		player0.draw();
-		player1.draw();
-		player2.draw();
-		player3.draw();
+		player0.draw(timer);
+		player1.draw(timer);
+		player2.draw(timer);
+		player3.draw(timer);
 		player2.draw_light();
 		player3.draw_light();
 		effect.update();
