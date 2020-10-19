@@ -3,6 +3,7 @@
 server_game::server_game(const InitData& init) :IScene(init) {
 	getData().send_data[e_communication::scene_status] = e_scene::game;
 
+	item_counter = 0;
 	timer = init_time;
 
 	//それぞれの場所を初期化
@@ -25,7 +26,7 @@ server_game::server_game(const InitData& init) :IScene(init) {
 
 	//ポイントアイテムを初期化
 	for (auto i : step(array_point_items_size)) {
-		array_items.push_back(random_next_item(array_items, item_pictures));
+		array_items.push_back(random_next_item(array_items, item_pictures,item_counter));
 	}
 
 	//テクスチャを初期化
@@ -81,6 +82,8 @@ server_game::server_game(const InitData& init) :IScene(init) {
 	corner_lu = Texture(Resource(U"pictures/corner_d.png"));
 	street_ud = Texture(Resource(U"pictures/street_vert.png"));
 	street_lr = Texture(Resource(U"pictures/street_hori.png"));
+
+	cross = Texture(Resource(U"pictures/cross.png"));
 
 	maze_walls[2] = Texture(Resource(U"pictures/wall1.png"));
 	maze_walls[3] = Texture(Resource(U"pictures/wall2.png"));
@@ -208,12 +211,12 @@ void server_game::update() {
 						if (player0.get_special_item() == nothing) {
 							player0.set_special_item(it.get_type());
 							effect.add<item_effect>(it.get_pos(), Palette::Orange);
-							it = random_next_item(array_items, item_pictures);
+							it = random_next_item(array_items, item_pictures, item_counter);
 						}
 					}
 					else {
 						effect.add<item_effect>(it.get_pos(), Palette::Lime);
-						it = random_next_item(array_items, item_pictures);
+						it = random_next_item(array_items, item_pictures, item_counter);
 						player0.add_score(point_item_score);
 						if (player0.get_special_item_wing_timer() != 0) {
 							player0.add_score(additional_item_score);
@@ -225,12 +228,12 @@ void server_game::update() {
 						if (player1.get_special_item() == nothing) {
 							player1.set_special_item(it.get_type());
 							effect.add<item_effect>(it.get_pos(), Palette::Orange);
-							it = random_next_item(array_items, item_pictures);
+							it = random_next_item(array_items, item_pictures, item_counter);
 						}
 					}
 					else {
 						effect.add<item_effect>(it.get_pos(), Palette::Lime);
-						it = random_next_item(array_items, item_pictures);
+						it = random_next_item(array_items, item_pictures, item_counter);
 						player1.add_score(point_item_score);
 						if (player1.get_special_item_wing_timer() != 0) {
 							player1.add_score(additional_item_score);
@@ -242,7 +245,7 @@ void server_game::update() {
 						if (player2.get_special_item() == nothing) {
 							player2.set_special_item(it.get_type());
 							effect.add<item_effect>(it.get_pos(), Palette::Orange);
-							it = random_next_item(array_items, item_pictures);
+							it = random_next_item(array_items, item_pictures, item_counter);
 						}
 					}
 				}
@@ -251,7 +254,7 @@ void server_game::update() {
 						if (player3.get_special_item() == nothing) {
 							player3.set_special_item(it.get_type());
 							effect.add<item_effect>(it.get_pos(), Palette::Orange);
-							it = random_next_item(array_items, item_pictures);
+							it = random_next_item(array_items, item_pictures, item_counter);
 						}
 					}
 				}
@@ -259,6 +262,7 @@ void server_game::update() {
 		}
 		//スペシャルアイテムの使用
 		if (left_button_down(serial_array, getData().serial_available) && player0.get_special_item() == special_thunder) {
+			AudioAsset(U"thunder").stop();
 			AudioAsset(U"thunder").play();
 			player0.set_special_item(in_use);
 			player0.set_special_item_thunder_timer(special_thunder_effect_time);
@@ -280,6 +284,7 @@ void server_game::update() {
 			player3.set_texture(7, U"pictures/girl_down2_thunder.png");
 		}
 		if (left_button_down(serial_array, getData().serial_available) && player0.get_special_item() == special_wing) {
+			AudioAsset(U"wing").stop();
 			AudioAsset(U"wing").play();
 			player0.set_special_item(in_use);
 			player0.set_special_item_wing_timer(special_wing_ghost_effect_time);
@@ -294,6 +299,7 @@ void server_game::update() {
 			player0.set_texture(7, U"pictures/pump_down2_wing.png");
 		}
 		if (right_button_down(serial_array, getData().serial_available) && player1.get_special_item() == special_thunder) {
+			AudioAsset(U"thunder").stop();
 			AudioAsset(U"thunder").play();
 			player1.set_special_item(in_use);
 			player1.set_special_item_thunder_timer(special_thunder_effect_time);
@@ -315,6 +321,7 @@ void server_game::update() {
 			player3.set_texture(7, U"pictures/girl_down2_thunder.png");
 		}
 		if (right_button_down(serial_array, getData().serial_available) && player1.get_special_item() == special_wing) {
+			AudioAsset(U"wing").stop();
 			AudioAsset(U"wing").play();
 			player1.set_special_item(in_use);
 			player1.set_special_item_wing_timer(special_wing_ghost_effect_time);
@@ -544,6 +551,7 @@ void server_game::update() {
 		player3.set_next_direction(e_direction(getData().receive_data[e_communication::player3_next_direction]));
 		//相手側のスペシャルアイテムの使用
 		if (getData().receive_data[e_communication::player2_button_down] && player2.get_special_item() == special_thunder) {
+			AudioAsset(U"thunder").stop();
 			AudioAsset(U"thunder").play();
 			player2.set_special_item(in_use);
 			player2.set_special_item_thunder_timer(special_thunder_effect_time);
@@ -578,6 +586,7 @@ void server_game::update() {
 			player2.set_texture(7, U"pictures/boy_down2_wing.png");
 		}
 		if (getData().receive_data[e_communication::player3_button_down] && player3.get_special_item() == special_thunder) {
+			AudioAsset(U"thunder").stop();
 			AudioAsset(U"thunder").play();
 			player3.set_special_item(in_use);
 			player3.set_special_item_thunder_timer(special_thunder_effect_time);
@@ -660,8 +669,11 @@ void server_game::draw_maze() const {
 					else
 						junction_d.draw(Arg::center(maze_brock_position(i, j)));
 				}
-				else {
+				else if (maze_data[i][j + 1]) {
 					junction_r.draw(Arg::center(maze_brock_position(i, j)));
+				}
+				else {
+					cross.draw(Arg::center(maze_brock_position(i, j)));
 				}
 			}
 		}

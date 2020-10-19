@@ -30,6 +30,8 @@ private:
 	Texture street_ud;
 	Texture street_lr;
 
+	Texture cross;
+
 	Texture maze_walls[7];
 
 	

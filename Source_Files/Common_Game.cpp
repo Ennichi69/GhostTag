@@ -49,9 +49,9 @@ void player::draw_light() const {
 	light_triangle().draw(Color(255, 255, 0, 30));
 }
 void player::update() {
-	//8フレーム前まで見て、曲がれるか
+	//6フレーム前まで見て、曲がれるか
 	Point p = pos;
-	for (auto i : step(frame_per_move * 8)) {
+	for (auto i : step(frame_per_move * 6)) {
 		if (!intersect_maze(Rect(Arg::center(p), maze_brock_size).movedBy(delta_point[next_direction]))) {
 			direction = next_direction;
 			p.moveBy(delta_point[direction] * i);
@@ -333,7 +333,8 @@ Point random_maze_brock_position() {
 	}
 }
 
-item random_next_item(Array<item>& ai, Texture* tex) {
+item random_next_item(Array<item>& ai, Texture* tex, uint16& counter) {
+	counter++;
 	while (true) {
 		bool f = true;
 		Point p = random_maze_brock_position();
@@ -342,9 +343,13 @@ item random_next_item(Array<item>& ai, Texture* tex) {
 		}
 		if (f) {
 			uint16 t;
-			if (Random(0, 10) == 0) {
-				//1/10の確率でスペシャルアイテムが出る
-				t = Random(3, 4);
+			if (counter % 10 == 0) {
+				if (counter % 20 == 0) {
+					t = 3;
+				}
+				else {
+					t = 4;
+				}
 			}
 			else {
 				t = Random(0, 2);

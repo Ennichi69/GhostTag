@@ -77,6 +77,8 @@ client_game::client_game(const InitData& init) :IScene(init) {
 	street_ud = Texture(Resource(U"pictures/street_vert.png"));
 	street_lr = Texture(Resource(U"pictures/street_hori.png"));
 
+	cross = Texture(Resource(U"pictures/cross.png"));
+
 	maze_walls[2] = Texture(Resource(U"pictures/wall1.png"));
 	maze_walls[3] = Texture(Resource(U"pictures/wall2.png"));
 	maze_walls[4] = Texture(Resource(U"pictures/bookshelf.png"));
@@ -215,6 +217,7 @@ void client_game::update() {
 		player2.set_special_item((e_item_type)getData().receive_data[e_communication::player2_special_item]);
 		player3.set_special_item((e_item_type)getData().receive_data[e_communication::player3_special_item]);
 		if (player0.get_special_item_thunder_timer() == 0 && getData().receive_data[e_communication::player0_special_item_thunder_timer] != 0) {
+			AudioAsset(U"thunder").stop();
 			AudioAsset(U"thunder").play();
 			player2.set_texture(0, U"pictures/boy_left1_thunder.png");
 			player2.set_texture(1, U"pictures/boy_left2_thunder.png");
@@ -253,6 +256,7 @@ void client_game::update() {
 		}
 		player0.set_special_item_thunder_timer(getData().receive_data[e_communication::player0_special_item_thunder_timer]);
 		if (player1.get_special_item_thunder_timer() == 0 && getData().receive_data[e_communication::player1_special_item_thunder_timer] != 0) {
+			AudioAsset(U"thunder").stop();
 			AudioAsset(U"thunder").play();
 			player2.set_texture(0, U"pictures/boy_left1_thunder.png");
 			player2.set_texture(1, U"pictures/boy_left2_thunder.png");
@@ -335,6 +339,7 @@ void client_game::update() {
 		player0.set_frame_per_move(getData().receive_data[e_communication::player0_speed]);
 		player1.set_frame_per_move(getData().receive_data[e_communication::player1_speed]);
 		if (player2.get_special_item_thunder_timer() == 0 && getData().receive_data[e_communication::player2_special_item_thunder_timer] != 0) {
+			AudioAsset(U"thunder").stop();
 			AudioAsset(U"thunder").play();
 			player0.set_texture(0, U"pictures/pump_left1_thunder.png");
 			player0.set_texture(1, U"pictures/pump_left2_thunder.png");
@@ -373,6 +378,7 @@ void client_game::update() {
 		}
 		player2.set_special_item_thunder_timer(getData().receive_data[e_communication::player2_special_item_thunder_timer]);
 		if (player3.get_special_item_thunder_timer() == 0 && getData().receive_data[e_communication::player3_special_item_thunder_timer] != 0) {
+			AudioAsset(U"thunder").stop();
 			AudioAsset(U"thunder").play();
 			player0.set_texture(0, U"pictures/pump_left1_thunder.png");
 			player0.set_texture(1, U"pictures/pump_left2_thunder.png");
@@ -411,6 +417,7 @@ void client_game::update() {
 		}
 		player3.set_special_item_thunder_timer(getData().receive_data[e_communication::player3_special_item_thunder_timer]);
 		if (player2.get_special_item_wing_timer() == 0 && getData().receive_data[e_communication::player2_special_item_wing_timer] != 0) {
+			AudioAsset(U"wing").stop();
 			AudioAsset(U"wing").play();
 			player2.set_texture(0, U"pictures/boy_left1_wing.png");
 			player2.set_texture(1, U"pictures/boy_left2_wing.png");
@@ -433,6 +440,7 @@ void client_game::update() {
 		}
 		player2.set_special_item_wing_timer(getData().receive_data[e_communication::player2_special_item_wing_timer]);
 		if (player3.get_special_item_wing_timer() == 0 && getData().receive_data[e_communication::player3_special_item_wing_timer] != 0) {
+			AudioAsset(U"wing").stop();
 			AudioAsset(U"wing").play();
 			player3.set_texture(0, U"pictures/girl_left1_wing.png");
 			player3.set_texture(1, U"pictures/girl_left2_wing.png");
@@ -504,8 +512,11 @@ void client_game::draw_maze() const {
 					else
 						junction_d.draw(Arg::center(maze_brock_position(i, j)));
 				}
-				else {
+				else if (maze_data[i][j + 1]) {
 					junction_r.draw(Arg::center(maze_brock_position(i, j)));
+				}
+				else {
+					cross.draw(Arg::center(maze_brock_position(i, j)));
 				}
 			}
 		}

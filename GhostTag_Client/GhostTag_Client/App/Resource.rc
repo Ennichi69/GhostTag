@@ -103,6 +103,7 @@ Resource(pictures/corner_c.png)
 Resource(pictures/corner_d.png)
 Resource(pictures/street_vert.png)
 Resource(pictures/street_hori.png)
+Resource(pictures/cross.png)
 
 Resource(pictures/bookshelf.png)
 Resource(pictures/wall1.png)
