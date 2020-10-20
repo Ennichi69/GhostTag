@@ -117,6 +117,10 @@ Resource(pictures/point_chocolate.png)
 Resource(pictures/special_thunder.png)
 Resource(pictures/special_wing.png)
 
+Resource(pictures/golden_point_candy1.png)
+Resource(pictures/golden_point_candy2.png)
+Resource(pictures/golden_point_chocolate.png)
+
 Resource(pictures/title.png)
 Resource(pictures/result.png)
 
@@ -190,6 +194,7 @@ Resource(pictures/pump_up2_wing.png)
 
 Resource(pictures/win.png)
 Resource(pictures/lose.png)
+Resource(pictures/draw.png)
 
 Resource(fonts/4x4kanafont.ttf)
 

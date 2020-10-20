@@ -5,6 +5,9 @@ typedef enum {
 	point1,
 	point2,
 	point3,
+	golden_point1,
+	golden_point2,
+	golden_point3, 
 	special_thunder,
 	special_wing,
 	nothing,
@@ -171,7 +174,9 @@ const uint16 item_radius = 10;
 const uint16 array_point_items_size = 15;//ポイントアイテムの個数
 
 const uint16 point_item_score = 100;
+const uint16 golden_point_item_score = 200;
 const uint16 additional_item_score = 50;
+const uint16 additional_golden_item_score = 100;
 const uint16 tag_score = 500;//捕まえた時の加点
 const uint16 tagged_score = 200;//捕まったときの減点
 

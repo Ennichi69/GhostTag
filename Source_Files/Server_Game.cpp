@@ -91,11 +91,14 @@ server_game::server_game(const InitData& init) :IScene(init) {
 	maze_walls[5] = Texture(Resource(U"pictures/window.png"));
 	maze_walls[6] = Texture(Resource(U"pictures/door.png"));
 
-	item_pictures[0] = Texture(Resource(U"pictures/point_candy1.png"));
-	item_pictures[1] = Texture(Resource(U"pictures/point_candy2.png"));
-	item_pictures[2] = Texture(Resource(U"pictures/point_chocolate.png"));
-	item_pictures[3] = Texture(Resource(U"pictures/special_thunder.png"));
-	item_pictures[4] = Texture(Resource(U"pictures/special_wing.png"));
+	item_pictures[e_item_type::point1] = Texture(Resource(U"pictures/point_candy1.png"));
+	item_pictures[e_item_type::point2] = Texture(Resource(U"pictures/point_candy2.png"));
+	item_pictures[e_item_type::point3] = Texture(Resource(U"pictures/point_chocolate.png"));
+	item_pictures[e_item_type::golden_point1] = Texture(Resource(U"pictures/golden_point_candy1.png"));
+	item_pictures[e_item_type::golden_point2] = Texture(Resource(U"pictures/golden_point_candy2.png"));
+	item_pictures[e_item_type::golden_point3] = Texture(Resource(U"pictures/golden_point_chocolate.png"));
+	item_pictures[e_item_type::special_thunder] = Texture(Resource(U"pictures/special_thunder.png"));
+	item_pictures[e_item_type::special_wing] = Texture(Resource(U"pictures/special_wing.png"));
 
 	background = Texture(Resource(U"pictures/background.png"));
 
@@ -218,12 +221,20 @@ void server_game::update() {
 							it = random_next_item(array_items, item_pictures, item_counter);
 						}
 					}
-					else {
+					else if (it.get_type() == point1 || it.get_type() == point2 || it.get_type() == point3) {
 						effect.add<item_effect>(it.get_pos(), Palette::Lime);
 						it = random_next_item(array_items, item_pictures, item_counter);
 						player0.add_score(point_item_score);
 						if (player0.get_special_item_wing_timer() != 0) {
 							player0.add_score(additional_item_score);
+						}
+					}
+					else {
+						effect.add<item_effect>(it.get_pos(), Palette::Lime);
+						it = random_next_item(array_items, item_pictures, item_counter);
+						player0.add_score(golden_point_item_score);
+						if (player0.get_special_item_wing_timer() != 0) {
+							player0.add_score(additional_golden_item_score);
 						}
 					}
 				}
@@ -235,12 +246,20 @@ void server_game::update() {
 							it = random_next_item(array_items, item_pictures, item_counter);
 						}
 					}
-					else {
+					else if (it.get_type() == point1 || it.get_type() == point2 || it.get_type() == point3) {
 						effect.add<item_effect>(it.get_pos(), Palette::Lime);
 						it = random_next_item(array_items, item_pictures, item_counter);
 						player1.add_score(point_item_score);
 						if (player1.get_special_item_wing_timer() != 0) {
 							player1.add_score(additional_item_score);
+						}
+					}
+					else {
+						effect.add<item_effect>(it.get_pos(), Palette::Lime);
+						it = random_next_item(array_items, item_pictures, item_counter);
+						player1.add_score(golden_point_item_score);
+						if (player1.get_special_item_wing_timer() != 0) {
+							player1.add_score(additional_golden_item_score);
 						}
 					}
 				}

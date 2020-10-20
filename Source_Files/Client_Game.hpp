@@ -49,7 +49,7 @@ private:
 	//16 door
 	//maze_walls‚¾‚¯Žg‚¤‚È‚ç-10‚µ‚Ä12~16Žg—p
 
-	Texture item_pictures[5];
+	Texture item_pictures[8];
 
 	Texture background;
 

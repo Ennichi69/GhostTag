@@ -357,16 +357,17 @@ item random_next_item(Array<item>& ai, Texture* tex, uint16& counter) {
 		}
 		if (f) {
 			uint16 t;
-			if (counter % 10 == 0) {
-				if (counter % 20 == 0) {
-					t = 3;
-				}
-				else {
-					t = 4;
-				}
+			if (counter % 20 == 0) {
+				t = e_item_type::special_wing;
+			}
+			else if(counter % 10 == 0) {
+				t = e_item_type::special_thunder;
+			}
+			else if (counter % 9 == 0) {
+				t = Random((uint16)e_item_type::golden_point1, (uint16)e_item_type::golden_point3);
 			}
 			else {
-				t = Random(0, 2);
+				t = Random((uint16)e_item_type::point1, (uint16)e_item_type::point3);
 			}
 			return item(p, (e_item_type)t, tex[t]);
 		}

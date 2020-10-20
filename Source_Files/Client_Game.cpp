@@ -85,11 +85,14 @@ client_game::client_game(const InitData& init) :IScene(init) {
 	maze_walls[5] = Texture(Resource(U"pictures/window.png"));
 	maze_walls[6] = Texture(Resource(U"pictures/door.png"));
 
-	item_pictures[0] = Texture(Resource(U"pictures/point_candy1.png"));
-	item_pictures[1] = Texture(Resource(U"pictures/point_candy2.png"));
-	item_pictures[2] = Texture(Resource(U"pictures/point_chocolate.png"));
-	item_pictures[3] = Texture(Resource(U"pictures/special_thunder.png"));
-	item_pictures[4] = Texture(Resource(U"pictures/special_wing.png"));
+	item_pictures[e_item_type::point1] = Texture(Resource(U"pictures/point_candy1.png"));
+	item_pictures[e_item_type::point2] = Texture(Resource(U"pictures/point_candy2.png"));
+	item_pictures[e_item_type::point3] = Texture(Resource(U"pictures/point_chocolate.png"));
+	item_pictures[e_item_type::golden_point1] = Texture(Resource(U"pictures/golden_point_candy1.png"));
+	item_pictures[e_item_type::golden_point2] = Texture(Resource(U"pictures/golden_point_candy2.png"));
+	item_pictures[e_item_type::golden_point3] = Texture(Resource(U"pictures/golden_point_chocolate.png"));
+	item_pictures[e_item_type::special_thunder] = Texture(Resource(U"pictures/special_thunder.png"));
+	item_pictures[e_item_type::special_wing] = Texture(Resource(U"pictures/special_wing.png"));
 
 	background = Texture(Resource(U"pictures/background.png"));
 
