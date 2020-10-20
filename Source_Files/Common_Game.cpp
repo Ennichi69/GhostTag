@@ -35,6 +35,10 @@ void player::draw(uint16 timer) const {
 		player_picture[(direction - 1) * 2 + (timer / 5) % 2].draw(Arg::center(pos));
 	}
 }
+void player::draw_before_start(uint16 t)const {
+	t -= 60;
+	player_picture[7].scaled(double(t) / 20).drawAt(pos, ColorF(1.0, 1.0, 1.0, Max(0.3,1 - t / 300.0)));
+}
 void player::draw_range(Rect r, uint16 timer)const {
 //	if (r.intersects(pos))draw();
 	if (direction == neutral) {
@@ -179,6 +183,10 @@ void player::set_special_item(e_item_type t) {
 void player::add_score(uint16 t) {
 	score += t;
 }
+void player::remove_score(uint16 t) {
+	if (score > t)score -= t;
+	else score = 0;
+}
 Point player::get_pos()const {
 	return pos;
 }
@@ -251,8 +259,13 @@ item::item(Point p, e_item_type t,Texture& te) {
 	picture = &te;
 	radius = item_radius;
 }
-void item::draw() {
-	picture->draw(Arg::center(pos));
+void item::draw(bool b) {
+	if (b) {
+		picture->drawAt(pos);
+	}
+	else {
+		picture->scaled(0.5).drawAt(pos);
+	}
 }
 void item::set_pos(Point p) {
 	pos = p;
@@ -277,6 +290,7 @@ e_item_type item::get_type() {
 item_effect::item_effect(const Point& p, const Color& c) {
 	pos = p;
 	col = c;
+	AudioAsset(U"item_get").stop();
 	AudioAsset(U"item_get").play();
 }
 bool item_effect::update(double t) {
@@ -362,7 +376,7 @@ item random_next_item(Array<item>& ai, Texture* tex, uint16& counter) {
 Point random_player_respawn_position(player& player2, player& player3) {
 	while (true) {
 		Point p = random_maze_brock_position();
-		if (player2.get_pos().distanceFrom(p) > maze_brock_size * 8 && player3.get_pos().distanceFrom(p) > maze_brock_size * 8)return p;//敵プレイヤーと8マス以上離して復活
+		if (player2.get_pos().distanceFrom(p) > maze_brock_size * 8 && player3.get_pos().distanceFrom(p) > maze_brock_size * 8 && !player2.rect_ghost_visible().intersects(p) && !player3.rect_ghost_visible().intersects(p))return p;//敵プレイヤーと8マス以上離して復活かつライトが当たっている位置には復活しない
 	}
 }
 

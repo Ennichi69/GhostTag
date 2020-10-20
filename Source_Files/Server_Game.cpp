@@ -146,6 +146,7 @@ void server_game::update() {
 				if (is_tagged(player0, player2)) {
 					effect.add<tag_effect>(player0.get_pos(), pumpkin_picture);
 					player2.add_score(tag_score);
+					player0.remove_score(tagged_score);
 					player0.set_pos(random_player_respawn_position(player2, player3));
 					player0.set_invincible_timer();
 					player0.set_direction(neutral);
@@ -155,6 +156,7 @@ void server_game::update() {
 				else if (is_tagged(player0, player3)) {
 					effect.add<tag_effect>(player0.get_pos(), pumpkin_picture);
 					player3.add_score(tag_score);
+					player0.remove_score(tagged_score);
 					player0.set_pos(random_player_respawn_position(player2, player3));
 					player0.set_invincible_timer();
 					player0.set_direction(neutral);
@@ -182,6 +184,7 @@ void server_game::update() {
 				if (is_tagged(player1, player2)) {
 					effect.add<tag_effect>(player1.get_pos(), ghost_picture);
 					player2.add_score(tag_score);
+					player1.remove_score(tagged_score);
 					player1.set_pos(random_player_respawn_position(player2, player3));
 					player1.set_invincible_timer();
 					player1.set_direction(neutral);
@@ -191,6 +194,7 @@ void server_game::update() {
 				else if (is_tagged(player1, player3)) {
 					effect.add<tag_effect>(player1.get_pos(), ghost_picture);
 					player3.add_score(tag_score);
+					player1.remove_score(tagged_score);
 					player1.set_pos(random_player_respawn_position(player2, player3));
 					player1.set_invincible_timer();
 					player1.set_direction(neutral);
@@ -689,27 +693,31 @@ void server_game::draw()const {
 	//	right_item_circle.draw();
 	if (timer > start_time) {
 		countdown_clock_draw(timer-start_time);
-		if (timer < start_time + 180) {
+		if (timer < start_time + 80) {
 			player0.draw(timer);
 			player1.draw(timer);
 			player2.draw(timer);
 			player3.draw(timer);
+		}
+		else {
+			player0.draw_before_start(timer - start_time);
+			player1.draw_before_start(timer - start_time);
 		}
 	}
 	else {
 		//スペシャルアイテム関連
 		draw_timer(timer);
 		if (player0.get_special_item() == special_thunder || player0.get_special_item_thunder_timer() != 0) {
-			special_thunder_picture.scaled(2.0).drawAt(left_item_circle.center);
+			special_thunder_picture.scaled(4.0).drawAt(left_item_circle.center);
 		}
 		else if (player0.get_special_item() == special_wing || player0.get_special_item_wing_timer() != 0) {
-			special_wing_picture.scaled(2.0).drawAt(left_item_circle.center);
+			special_wing_picture.scaled(4.0).drawAt(left_item_circle.center);
 		}
 		if (player1.get_special_item() == special_thunder || player1.get_special_item_thunder_timer() != 0) {
-			special_thunder_picture.scaled(2.0).drawAt(right_item_circle.center);
+			special_thunder_picture.scaled(4.0).drawAt(right_item_circle.center);
 		}
 		else if (player1.get_special_item() == special_wing || player1.get_special_item_wing_timer() != 0) {
-			special_wing_picture.scaled(2.0).drawAt(right_item_circle.center);
+			special_wing_picture.scaled(4.0).drawAt(right_item_circle.center);
 		}
 		left_special_item_timer_draw(player0.get_special_item_thunder_timer(), special_thunder_effect_time, Palette::Yellow);
 		left_special_item_timer_draw(player0.get_special_item_wing_timer(), special_wing_ghost_effect_time, Palette::Aqua);
@@ -720,7 +728,7 @@ void server_game::draw()const {
 			thunder_effect_draw();
 		}
 		for (auto i : array_items) {
-			i.draw();
+			i.draw(true);
 		}
 		player0.draw(timer);
 		player1.draw(timer);

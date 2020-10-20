@@ -532,24 +532,28 @@ void client_game::draw()const {
 	//	right_item_circle.draw();
 	if (timer > start_time) {
 		countdown_clock_draw(timer - start_time);
-		if (timer < start_time + 180) {
+		if (timer < start_time + 80) {
 			player2.draw(timer);
 			player3.draw(timer);
+		}
+		else {
+			player2.draw_before_start(timer - start_time);
+			player3.draw_before_start(timer - start_time);
 		}
 	}
 	else {
 		draw_timer(timer);
 		if (player2.get_special_item() == special_thunder || player2.get_special_item_thunder_timer() != 0) {
-			special_thunder_picture.scaled(2.0).drawAt(left_item_circle.center);
+			special_thunder_picture.scaled(4.0).drawAt(left_item_circle.center);
 		}
 		else if (player2.get_special_item() == special_wing || player2.get_special_item_wing_timer() != 0) {
-			special_wing_picture.scaled(2.0).drawAt(left_item_circle.center);
+			special_wing_picture.scaled(4.0).drawAt(left_item_circle.center);
 		}
 		if (player3.get_special_item() == special_thunder || player3.get_special_item_thunder_timer() != 0) {
-			special_thunder_picture.scaled(2.0).drawAt(right_item_circle.center);
+			special_thunder_picture.scaled(4.0).drawAt(right_item_circle.center);
 		}
 		else if (player3.get_special_item() == special_wing || player3.get_special_item_wing_timer() != 0) {
-			special_wing_picture.scaled(2.0).drawAt(right_item_circle.center);
+			special_wing_picture.scaled(4.0).drawAt(right_item_circle.center);
 		}
 		left_special_item_timer_draw(player2.get_special_item_thunder_timer(), special_thunder_effect_time, Palette::Yellow);
 		left_special_item_timer_draw(player2.get_special_item_wing_timer(), special_wing_tagger_effect_time, Palette::Aqua);
@@ -560,7 +564,12 @@ void client_game::draw()const {
 			thunder_effect_draw();
 		}
 		for (auto i : array_items) {
-			i.draw();
+			if (i.get_type() == e_item_type::special_thunder || i.get_type() == e_item_type::special_wing) {
+				i.draw(true);
+			}
+			else {
+				i.draw(false);
+			}
 		}
 		player2.draw(timer);
 		player3.draw(timer);
