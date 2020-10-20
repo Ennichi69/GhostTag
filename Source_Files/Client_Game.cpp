@@ -191,11 +191,11 @@ void client_game::update() {
 		for (auto i : step(array_point_items_size)) {
 			if (array_items[i].get_pos() != Point(getData().receive_data[e_communication::point_item_status + i * 3], getData().receive_data[e_communication::point_item_status + i * 3 + 1])) {
 				if (timer <= start_time) {
-					if (array_items[i].get_type() == point1 || array_items[i].get_type() == point2 || array_items[i].get_type() == point3) {
-						effect.add<item_effect>(array_items[i].get_pos(), Palette::Lime);
+					if (array_items[i].get_type() == special_thunder || array_items[i].get_type() == special_wing) {
+						effect.add<item_effect>(array_items[i].get_pos(), Palette::Orange);
 					}
 					else {
-						effect.add<item_effect>(array_items[i].get_pos(), Palette::Orange);
+						effect.add<item_effect>(array_items[i].get_pos(), Palette::Lime);
 					}
 				}
 				array_items[i].set_pos(Point(getData().receive_data[e_communication::point_item_status + i * 3], getData().receive_data[e_communication::point_item_status + i * 3 + 1]));
@@ -297,7 +297,7 @@ void client_game::update() {
 			player3.set_texture(7, U"pictures/girl_down2.png");
 		}
 		player1.set_special_item_thunder_timer(getData().receive_data[e_communication::player1_special_item_thunder_timer]);
-		if (player0.get_special_item_wing_timer() == 0 && getData().send_data[e_communication::player0_special_item_wing_timer] != 0) {
+		if (player0.get_special_item_wing_timer() == 0 && getData().receive_data[e_communication::player0_special_item_wing_timer] != 0) {
 			player0.set_texture(0, U"pictures/pump_left1_wing.png");
 			player0.set_texture(1, U"pictures/pump_left2_wing.png");
 			player0.set_texture(2, U"pictures/pump_up1_wing.png");
@@ -307,7 +307,7 @@ void client_game::update() {
 			player0.set_texture(6, U"pictures/pump_down1_wing.png");
 			player0.set_texture(7, U"pictures/pump_down2_wing.png");
 		}
-		if (player0.get_special_item_wing_timer() != 0 && getData().send_data[e_communication::player0_special_item_wing_timer] == 0) {
+		if (player0.get_special_item_wing_timer() != 0 && getData().receive_data[e_communication::player0_special_item_wing_timer] == 0) {
 			player0.set_texture(0, U"pictures/pump_left1.png");
 			player0.set_texture(1, U"pictures/pump_left2.png");
 			player0.set_texture(2, U"pictures/pump_up1.png");
@@ -318,7 +318,7 @@ void client_game::update() {
 			player0.set_texture(7, U"pictures/pump_down2.png");
 		}
 		player0.set_special_item_wing_timer(getData().receive_data[e_communication::player0_special_item_wing_timer]);
-		if (player1.get_special_item_wing_timer() == 0 && getData().send_data[e_communication::player1_special_item_wing_timer] != 0) {
+		if (player1.get_special_item_wing_timer() == 0 && getData().receive_data[e_communication::player1_special_item_wing_timer] != 0) {
 			player1.set_texture(0, U"pictures/ghost_left1_wing.png");
 			player1.set_texture(1, U"pictures/ghost_left2_wing.png");
 			player1.set_texture(2, U"pictures/ghost_up1_wing.png");
@@ -328,7 +328,7 @@ void client_game::update() {
 			player1.set_texture(6, U"pictures/ghost_down1_wing.png");
 			player1.set_texture(7, U"pictures/ghost_down2_wing.png");
 		}
-		if (player1.get_special_item_wing_timer() != 0 && getData().send_data[e_communication::player1_special_item_wing_timer] == 0) {
+		if (player1.get_special_item_wing_timer() != 0 && getData().receive_data[e_communication::player1_special_item_wing_timer] == 0) {
 			player1.set_texture(0, U"pictures/ghost_left1.png");
 			player1.set_texture(1, U"pictures/ghost_left2.png");
 			player1.set_texture(2, U"pictures/ghost_up1.png");
