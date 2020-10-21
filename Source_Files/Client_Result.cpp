@@ -9,6 +9,7 @@ client_result::client_result(const InitData& init) :IScene(init) {
 	result_picture = Texture(Resource(U"pictures/result.png"));
 	win_picture = Texture(Resource(U"pictures/win.png"));
 	lose_picture = Texture(Resource(U"pictures/lose.png"));
+	draw_picture = Texture(Resource(U"pictures/draw.png"));
 }
 
 
@@ -37,7 +38,7 @@ void client_result::draw()const {
 		win_picture.drawAt(500, 950);
 	}
 	else if (player0_score + player1_score == player2_score + player3_score) {
-		//ˆø‚«•ª‚¯‚Ì‰æ‘œ‚ª‚È‚¢‚æ
+		draw_picture.drawAt(500, 950);
 	}
 	else {
 		lose_picture.drawAt(500, 950);

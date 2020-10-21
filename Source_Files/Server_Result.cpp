@@ -2,13 +2,14 @@
 
 server_result::server_result(const InitData& init) :IScene(init) {
 	getData().send_data[e_communication::scene_status] = e_scene::result;
-	player0_score = getData().receive_data[e_communication::player0_score];
-	player1_score = getData().receive_data[e_communication::player1_score];
-	player2_score = getData().receive_data[e_communication::player2_score];
-	player3_score = getData().receive_data[e_communication::player3_score];
+	player0_score = getData().send_data[e_communication::player0_score];
+	player1_score = getData().send_data[e_communication::player1_score];
+	player2_score = getData().send_data[e_communication::player2_score];
+	player3_score = getData().send_data[e_communication::player3_score];
 	result_picture = Texture(Resource(U"pictures/result.png"));
 	win_picture = Texture(Resource(U"pictures/win.png"));
 	lose_picture = Texture(Resource(U"pictures/lose.png"));
+	draw_picture = Texture(Resource(U"pictures/draw.png"));
 }
 
 void server_result::update() {
@@ -36,7 +37,7 @@ void server_result::draw()const {
 		win_picture.drawAt(1920 - 500, 950);
 	}
 	else if (player0_score + player1_score == player2_score + player3_score) {
-		//Draw‚Ì‰æ‘œ‚ª‚È‚¢‚æ
+		draw_picture.drawAt(1920 - 500, 950);
 	}
 	else {
 		lose_picture.drawAt(1920 - 500, 950);

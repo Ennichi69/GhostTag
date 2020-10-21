@@ -14,6 +14,7 @@ private:
 	Texture result_picture;
 	Texture win_picture;
 	Texture lose_picture;
+	Texture draw_picture;
 };
 
 

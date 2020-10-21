@@ -58,6 +58,4 @@ private:
 
 	Texture pumpkin_picture;
 	Texture ghost_picture;
-
-
 };

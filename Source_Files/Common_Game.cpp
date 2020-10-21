@@ -382,7 +382,12 @@ Point random_player_respawn_position(player& player2, player& player3) {
 }
 
 void draw_timer(uint16 t) {
-	FontAsset(U"font40")(U"{:0>2}:{:0>2}"_fmt(t / 60 / 60, t / 60 % 60)).drawAt(timer_box.center(), Palette::White);
+	if (t < 600) {
+		FontAsset(U"font50")(U"{:0>2}:{:0>2}"_fmt(t / 60 / 60, t / 60 % 60)).drawAt(timer_box.center(), Palette::Orange);
+	}
+	else {
+		FontAsset(U"font40")(U"{:0>2}:{:0>2}"_fmt(t / 60 / 60, t / 60 % 60)).drawAt(timer_box.center(), Palette::White);
+	}
 }
 
 void draw_big_point_box(uint16 t) {

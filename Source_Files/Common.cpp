@@ -81,6 +81,7 @@ void init() {
 	FontAsset::Register(U"Mplus_100", 100);
 	FontAsset::Register(U"Mplus_200", 200);
 	FontAsset::Register(U"font40", 40, Resource(U"fonts/4x4kanafont.ttf"));
+	FontAsset::Register(U"font50", 50, Resource(U"fonts/4x4kanafont.ttf"));
 	FontAsset::Register(U"font60", 60, Resource(U"fonts/4x4kanafont.ttf"));
 	FontAsset::Register(U"font80", 80, Resource(U"fonts/4x4kanafont.ttf"));
 	FontAsset::Register(U"font100", 100, Resource(U"fonts/4x4kanafont.ttf"));
