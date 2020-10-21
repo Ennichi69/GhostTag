@@ -29,23 +29,23 @@ void player::draw(uint16 timer) const {
 		Circle(pos, invincible_timer + 20).draw(Color(col, 200));
 	}
 	if (direction == neutral) {
-		player_picture[7].draw(Arg::center(pos));//ニュートラルの時の画像は一応下向きにしておく
+		TextureAsset(player_picture[7]).draw(Arg::center(pos));//ニュートラルの時の画像は一応下向きにしておく
 	}
 	else {
-		player_picture[(direction - 1) * 2 + (timer / 5) % 2].draw(Arg::center(pos));
+		TextureAsset(player_picture[(direction - 1) * 2 + (timer / 5) % 2]).draw(Arg::center(pos));
 	}
 }
 void player::draw_before_start(uint16 t)const {
 	t -= 60;
-	player_picture[7].scaled(double(t) / 20).drawAt(pos, ColorF(1.0, 1.0, 1.0, Max(0.3,1 - t / 300.0)));
+	TextureAsset(player_picture[7]).scaled(double(t) / 20).drawAt(pos, ColorF(1.0, 1.0, 1.0, Max(0.3,1 - t / 300.0)));
 }
 void player::draw_range(Rect r, uint16 timer)const {
 //	if (r.intersects(pos))draw();
 	if (direction == neutral) {
-		player_picture[7].drawAtClipped(pos, r);
+		TextureAsset(player_picture[7]).drawAtClipped(pos, r);
 	}
 	else {
-		player_picture[(direction - 1) * 2 + (timer / 5) % 2].drawAtClipped(pos, r);
+		TextureAsset(player_picture[(direction - 1) * 2 + (timer / 5) % 2]).drawAtClipped(pos, r);
 	}
 }
 void player::draw_light() const {
@@ -238,7 +238,7 @@ void player::count_invincible_timer() {
 	invincible_timer--;
 }
 void player::set_texture(uint16 i, String file_name) {
-	player_picture[i] = Texture(Resource(file_name));
+	player_picture[i] = file_name;
 }
 void player::set_frame_per_move(uint16 fpm) {
 	frame_per_move = fpm;
@@ -377,7 +377,7 @@ item random_next_item(Array<item>& ai, Texture* tex, uint16& counter) {
 Point random_player_respawn_position(player& player2, player& player3) {
 	while (true) {
 		Point p = random_maze_brock_position();
-		if (player2.get_pos().distanceFrom(p) > maze_brock_size * 8 && player3.get_pos().distanceFrom(p) > maze_brock_size * 8 && !player2.rect_ghost_visible().intersects(p) && !player3.rect_ghost_visible().intersects(p))return p;//敵プレイヤーと8マス以上離して復活かつライトが当たっている位置には復活しない
+		if (player2.get_pos().distanceFrom(p) > maze_brock_size * 10 && player3.get_pos().distanceFrom(p) > maze_brock_size * 10 && !player2.rect_ghost_visible().intersects(p) && !player3.rect_ghost_visible().intersects(p))return p;//敵プレイヤーと10マス以上離して復活かつライトが当たっている位置には復活しない
 	}
 }
 

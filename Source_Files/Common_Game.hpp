@@ -76,7 +76,7 @@ private:
 	//sinatori
 //	uint16 walking_timer;//テクスチャ変更用変数 timer依存にします なぜかバグるので
 	uint16 invincible_timer;//無敵時間変数
-	Texture player_picture[8];// left, down, up
+	String player_picture[8];// left, down, up
 	uint16 frame_per_move;//これがmaze_brock_sizeの約数でないと動かない←修正済
 };
 
