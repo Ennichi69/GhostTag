@@ -169,6 +169,10 @@ void client_game::update() {
 	getData().send_data[e_communication::player3_speed] = player3.get_frame_per_move();
 	getData().send_data[e_communication::player2_button_down] = left_button_down(serial_array,  getData().serial_available);
 	getData().send_data[e_communication::player3_button_down] = right_button_down(serial_array,  getData().serial_available);
+	getData().send_data[e_communication::player0_invincible_timer] = player0.get_invincible_timer();
+	getData().send_data[e_communication::player1_invincible_timer] = player1.get_invincible_timer();
+	getData().send_data[e_communication::player2_invincible_timer] = player2.get_invincible_timer();
+	getData().send_data[e_communication::player3_invincible_timer] = player3.get_invincible_timer();
 
 	for (auto i : step(array_point_items_size)) {
 		getData().send_data[e_communication::point_item_status + i * 3] = array_items[i].get_pos().x;
@@ -467,6 +471,10 @@ void client_game::update() {
 		player3.set_special_item_wing_timer(getData().receive_data[e_communication::player3_special_item_wing_timer]);
 		player2.set_frame_per_move(getData().receive_data[e_communication::player2_speed]);
 		player3.set_frame_per_move(getData().receive_data[e_communication::player3_speed]);
+		player0.set_invincible_timer(getData().receive_data[e_communication::player0_invincible_timer]);
+		player1.set_invincible_timer(getData().receive_data[e_communication::player1_invincible_timer]);
+		player2.set_invincible_timer(getData().receive_data[e_communication::player2_invincible_timer]);
+		player3.set_invincible_timer(getData().receive_data[e_communication::player3_invincible_timer]);
 	}
 	if (timer > start_time) {
 		effect.clear();
@@ -558,9 +566,9 @@ void client_game::draw()const {
 		else if (player3.get_special_item() == special_wing || player3.get_special_item_wing_timer() != 0) {
 			special_wing_picture.scaled(4.0).drawAt(right_item_circle.center);
 		}
-		left_special_item_timer_draw(player2.get_special_item_thunder_timer(), special_thunder_effect_time, Palette::Yellow);
+		left_special_item_timer_draw(player2.get_special_item_thunder_timer(), special_thunder_tagger_effect_time, Palette::Yellow);
 		left_special_item_timer_draw(player2.get_special_item_wing_timer(), special_wing_tagger_effect_time, Palette::Aqua);
-		right_special_item_timer_draw(player3.get_special_item_thunder_timer(), special_thunder_effect_time, Palette::Yellow);
+		right_special_item_timer_draw(player3.get_special_item_thunder_timer(), special_thunder_tagger_effect_time, Palette::Yellow);
 		right_special_item_timer_draw(player3.get_special_item_wing_timer(), special_wing_tagger_effect_time, Palette::Aqua);
 		if (player0.get_special_item_thunder_timer() != 0 || player1.get_special_item_thunder_timer() != 0) {
 			//‘ŠŽè‚ÉˆêŽž’âŽ~‚ðŽg‚í‚ê‚½‚Æ‚«
@@ -577,14 +585,22 @@ void client_game::draw()const {
 		player2.draw(timer);
 		player3.draw(timer);
 		if (player2.get_special_item_thunder_timer() != 0 || player3.get_special_item_thunder_timer() != 0) {
-			player0.draw(timer);
-			player1.draw(timer);
+			if (player0.get_invincible_timer() == 0) {
+				player0.draw(timer);
+			}
+			if (player1.get_invincible_timer() == 0) {
+				player1.draw(timer);
+			}
 		}
 		else {
-			player0.draw_range(player2.rect_ghost_visible(), timer);
-			player0.draw_range(player3.rect_ghost_visible(), timer);
-			player1.draw_range(player2.rect_ghost_visible(), timer);
-			player1.draw_range(player3.rect_ghost_visible(), timer);
+			if (player0.get_invincible_timer() == 0) {
+				player0.draw_range(player2.rect_ghost_visible(), timer);
+				player0.draw_range(player3.rect_ghost_visible(), timer);
+			}
+			if (player1.get_invincible_timer() == 0) {
+				player1.draw_range(player2.rect_ghost_visible(), timer);
+				player1.draw_range(player3.rect_ghost_visible(), timer);
+			}
 		}
 		player2.draw_light();
 		player3.draw_light();

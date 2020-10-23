@@ -26,7 +26,7 @@ server_game::server_game(const InitData& init) :IScene(init) {
 
 	//ポイントアイテムを初期化
 	for (auto i : step(array_point_items_size)) {
-		array_items.push_back(random_next_item(array_items, item_pictures,item_counter));
+		array_items.push_back(random_next_item(array_items, item_pictures, item_counter));
 	}
 
 	//テクスチャを初期化
@@ -69,7 +69,7 @@ server_game::server_game(const InitData& init) :IScene(init) {
 	player3.set_texture(6, U"girl_down1");
 	player3.set_texture(7, U"girl_down2");
 	player3.set_frame_per_move(tagger_speed);
-	
+
 	//道のテクスチャを初期化
 	junction_u = Texture(Resource(U"pictures/junction_a.png"));
 	junction_l = Texture(Resource(U"pictures/junction_b.png"));
@@ -132,82 +132,96 @@ void server_game::update() {
 		getData().send_data[e_communication::player2_status] = e_ghost_type::none;
 		getData().send_data[e_communication::player3_status] = e_ghost_type::none;
 
-		uint16 inv_timer_0 = player0.get_invincible_timer();
-		uint16 inv_timer_1 = player1.get_invincible_timer();
-		if (inv_timer_0 > 60) {
-			if (player2.get_special_item_thunder_timer() == 0 && player3.get_special_item_thunder_timer() == 0) {
-				player0.update();
+		if ((player2.get_special_item_thunder_timer() == 0 && player3.get_special_item_thunder_timer() == 0) || player0.get_invincible_timer() != 0) {
+			player0.update_direction(left_joystick_direction(serial_array, getData().serial_available, player0.get_direction()));
+			player0.update();
+		}
+		if (player0.get_invincible_timer() == 0) {
+			if (is_tagged(player0, player2)) {
+				effect.add<tag_effect>(player0.get_pos(), pumpkin_picture);
+				player2.add_score(tag_score);
+				player0.remove_score(tagged_score);
+				player0.set_pos(random_player_respawn_position(player2, player3));
+				player0.init_invincible_timer();
+				player0.set_direction(neutral);
+				player0.set_next_direction(neutral);
+				player0.set_texture(0, U"pump_left1");
+				player0.set_texture(1, U"pump_left2");
+				player0.set_texture(2, U"pump_up1");
+				player0.set_texture(3, U"pump_up2");
+				player0.set_texture(4, U"pump_right1");
+				player0.set_texture(5, U"pump_right2");
+				player0.set_texture(6, U"pump_down1");
+				player0.set_texture(7, U"pump_down2");
+				getData().send_data[e_communication::player2_status] = e_ghost_type::pumpkin;
 			}
+			else if (is_tagged(player0, player3)) {
+				effect.add<tag_effect>(player0.get_pos(), pumpkin_picture);
+				player3.add_score(tag_score);
+				player0.remove_score(tagged_score);
+				player0.set_pos(random_player_respawn_position(player2, player3));
+				player0.init_invincible_timer();
+				player0.set_direction(neutral);
+				player0.set_next_direction(neutral);
+				player0.set_texture(0, U"pump_left1");
+				player0.set_texture(1, U"pump_left2");
+				player0.set_texture(2, U"pump_up1");
+				player0.set_texture(3, U"pump_up2");
+				player0.set_texture(4, U"pump_right1");
+				player0.set_texture(5, U"pump_right2");
+				player0.set_texture(6, U"pump_down1");
+				player0.set_texture(7, U"pump_down2");
+				getData().send_data[e_communication::player3_status] = e_ghost_type::pumpkin;
+			}
+		}
+		else {
 			player0.count_invincible_timer();
 		}
-		else {
-			if (player2.get_special_item_thunder_timer() == 0 && player3.get_special_item_thunder_timer() == 0) {
-				player0.update_direction(left_joystick_direction(serial_array, getData().serial_available, player0.get_direction()));
-				player0.update();
-			}
-			if (player0.get_invincible_timer() == 0) {
-				if (is_tagged(player0, player2)) {
-					effect.add<tag_effect>(player0.get_pos(), pumpkin_picture);
-					player2.add_score(tag_score);
-					player0.remove_score(tagged_score);
-					player0.set_pos(random_player_respawn_position(player2, player3));
-					player0.set_invincible_timer();
-					player0.set_direction(neutral);
-					player0.set_next_direction(neutral);
-					getData().send_data[e_communication::player2_status] = e_ghost_type::pumpkin;
-				}
-				else if (is_tagged(player0, player3)) {
-					effect.add<tag_effect>(player0.get_pos(), pumpkin_picture);
-					player3.add_score(tag_score);
-					player0.remove_score(tagged_score);
-					player0.set_pos(random_player_respawn_position(player2, player3));
-					player0.set_invincible_timer();
-					player0.set_direction(neutral);
-					player0.set_next_direction(neutral);
-					getData().send_data[e_communication::player3_status] = e_ghost_type::pumpkin;
-				}
-			}
-			else {
-				player0.count_invincible_timer();
-			}
-		}
 
-		if (inv_timer_1 > 60) {
-			if (player2.get_special_item_thunder_timer() == 0 && player3.get_special_item_thunder_timer() == 0) {
-				player1.update();
+		if ((player2.get_special_item_thunder_timer() == 0 && player3.get_special_item_thunder_timer() == 0) || player1.get_invincible_timer() != 0) {
+			player1.update_direction(right_joystick_direction(serial_array, getData().serial_available, player1.get_direction()));
+			player1.update();
+		}
+		if (player1.get_invincible_timer() == 0) {
+			if (is_tagged(player1, player2)) {
+				effect.add<tag_effect>(player1.get_pos(), ghost_picture);
+				player2.add_score(tag_score);
+				player1.remove_score(tagged_score);
+				player1.set_pos(random_player_respawn_position(player2, player3));
+				player1.init_invincible_timer();
+				player1.set_direction(neutral);
+				player1.set_next_direction(neutral);
+				player1.set_texture(0, U"ghost_left1");
+				player1.set_texture(1, U"ghost_left2");
+				player1.set_texture(2, U"ghost_up1");
+				player1.set_texture(3, U"ghost_up2");
+				player1.set_texture(4, U"ghost_right1");
+				player1.set_texture(5, U"ghost_right2");
+				player1.set_texture(6, U"ghost_down1");
+				player1.set_texture(7, U"ghost_down2");
+				getData().send_data[e_communication::player2_status] = e_ghost_type::ghost;
 			}
-			player1.count_invincible_timer();
+			else if (is_tagged(player1, player3)) {
+				effect.add<tag_effect>(player1.get_pos(), ghost_picture);
+				player3.add_score(tag_score);
+				player1.remove_score(tagged_score);
+				player1.set_pos(random_player_respawn_position(player2, player3));
+				player1.init_invincible_timer();
+				player1.set_direction(neutral);
+				player1.set_next_direction(neutral);
+				player1.set_texture(0, U"ghost_left1");
+				player1.set_texture(1, U"ghost_left2");
+				player1.set_texture(2, U"ghost_up1");
+				player1.set_texture(3, U"ghost_up2");
+				player1.set_texture(4, U"ghost_right1");
+				player1.set_texture(5, U"ghost_right2");
+				player1.set_texture(6, U"ghost_down1");
+				player1.set_texture(7, U"ghost_down2");
+				getData().send_data[e_communication::player3_status] = e_ghost_type::ghost;
+			}
 		}
 		else {
-			if (player2.get_special_item_thunder_timer() == 0 && player3.get_special_item_thunder_timer() == 0) {
-				player1.update_direction(right_joystick_direction(serial_array, getData().serial_available, player1.get_direction()));
-				player1.update();
-			}
-			if (player1.get_invincible_timer() == 0) {
-				if (is_tagged(player1, player2)) {
-					effect.add<tag_effect>(player1.get_pos(), ghost_picture);
-					player2.add_score(tag_score);
-					player1.remove_score(tagged_score);
-					player1.set_pos(random_player_respawn_position(player2, player3));
-					player1.set_invincible_timer();
-					player1.set_direction(neutral);
-					player1.set_next_direction(neutral);
-					getData().send_data[e_communication::player2_status] = e_ghost_type::ghost;
-				}
-				else if (is_tagged(player1, player3)) {
-					effect.add<tag_effect>(player1.get_pos(), ghost_picture);
-					player3.add_score(tag_score);
-					player1.remove_score(tagged_score);
-					player1.set_pos(random_player_respawn_position(player2, player3));
-					player1.set_invincible_timer();
-					player1.set_direction(neutral);
-					player1.set_next_direction(neutral);
-					getData().send_data[e_communication::player3_status] = e_ghost_type::ghost;
-				}
-			}
-			else {
-				player1.count_invincible_timer();
-			}
+			player1.count_invincible_timer();
 		}
 
 		//アイテムとの当たり判定
@@ -288,7 +302,7 @@ void server_game::update() {
 			AudioAsset(U"thunder").stop();
 			AudioAsset(U"thunder").play();
 			player0.set_special_item(in_use);
-			player0.set_special_item_thunder_timer(special_thunder_effect_time);
+			player0.set_special_item_thunder_timer(special_thunder_ghost_effect_time);
 			player2.set_texture(0, U"boy_left1_thunder");
 			player2.set_texture(1, U"boy_left2_thunder");
 			player2.set_texture(2, U"boy_up1_thunder");
@@ -325,7 +339,7 @@ void server_game::update() {
 			AudioAsset(U"thunder").stop();
 			AudioAsset(U"thunder").play();
 			player1.set_special_item(in_use);
-			player1.set_special_item_thunder_timer(special_thunder_effect_time);
+			player1.set_special_item_thunder_timer(special_thunder_ghost_effect_time);
 			player2.set_texture(0, U"boy_left1_thunder");
 			player2.set_texture(1, U"boy_left2_thunder");
 			player2.set_texture(2, U"boy_up1_thunder");
@@ -556,8 +570,12 @@ void server_game::update() {
 	getData().send_data[e_communication::player1_speed] = player1.get_frame_per_move();
 	getData().send_data[e_communication::player2_speed] = player2.get_frame_per_move();
 	getData().send_data[e_communication::player3_speed] = player3.get_frame_per_move();
-	getData().send_data[e_communication::player0_button_down] = left_button_down(serial_array,  getData().serial_available);
-	getData().send_data[e_communication::player1_button_down] = right_button_down(serial_array,  getData().serial_available);
+	getData().send_data[e_communication::player0_button_down] = left_button_down(serial_array, getData().serial_available);
+	getData().send_data[e_communication::player1_button_down] = right_button_down(serial_array, getData().serial_available);
+	getData().send_data[e_communication::player0_invincible_timer] = player0.get_invincible_timer();
+	getData().send_data[e_communication::player1_invincible_timer] = player1.get_invincible_timer();
+	getData().send_data[e_communication::player2_invincible_timer] = player2.get_invincible_timer();
+	getData().send_data[e_communication::player3_invincible_timer] = player3.get_invincible_timer();
 
 	for (auto i : step(array_point_items_size)) {
 		getData().send_data[e_communication::point_item_status + i * 3] = array_items[i].get_pos().x;
@@ -578,7 +596,7 @@ void server_game::update() {
 			AudioAsset(U"thunder").stop();
 			AudioAsset(U"thunder").play();
 			player2.set_special_item(in_use);
-			player2.set_special_item_thunder_timer(special_thunder_effect_time);
+			player2.set_special_item_thunder_timer(special_thunder_tagger_effect_time);
 			player0.set_texture(0, U"pump_left1_thunder");
 			player0.set_texture(1, U"pump_left2_thunder");
 			player0.set_texture(2, U"pump_up1_thunder");
@@ -613,7 +631,7 @@ void server_game::update() {
 			AudioAsset(U"thunder").stop();
 			AudioAsset(U"thunder").play();
 			player3.set_special_item(in_use);
-			player3.set_special_item_thunder_timer(special_thunder_effect_time);
+			player3.set_special_item_thunder_timer(special_thunder_tagger_effect_time);
 			player0.set_texture(0, U"pump_left1_thunder");
 			player0.set_texture(1, U"pump_left2_thunder");
 			player0.set_texture(2, U"pump_up1_thunder");
@@ -660,7 +678,7 @@ void server_game::draw_maze() const {
 		for (auto j : step(maze_width)) {
 			if (maze_data[i][j]) {
 				if (maze_data[i][j] == 1) {
-//					Rect(Arg::center(maze_brock_position(i, j)), maze_brock_size).draw(Palette::Black);
+					//					Rect(Arg::center(maze_brock_position(i, j)), maze_brock_size).draw(Palette::Black);
 				}
 				else {
 					maze_walls[maze_data[i][j]].draw(Arg::center(maze_brock_position(i, j)));
@@ -712,7 +730,7 @@ void server_game::draw()const {
 	//	left_item_circle.draw();
 	//	right_item_circle.draw();
 	if (timer > start_time) {
-		countdown_clock_draw(timer-start_time);
+		countdown_clock_draw(timer - start_time);
 		if (timer < start_time + 80) {
 			player0.draw(timer);
 			player1.draw(timer);
@@ -739,9 +757,9 @@ void server_game::draw()const {
 		else if (player1.get_special_item() == special_wing || player1.get_special_item_wing_timer() != 0) {
 			special_wing_picture.scaled(4.0).drawAt(right_item_circle.center);
 		}
-		left_special_item_timer_draw(player0.get_special_item_thunder_timer(), special_thunder_effect_time, Palette::Yellow);
+		left_special_item_timer_draw(player0.get_special_item_thunder_timer(), special_thunder_ghost_effect_time, Palette::Yellow);
 		left_special_item_timer_draw(player0.get_special_item_wing_timer(), special_wing_ghost_effect_time, Palette::Aqua);
-		right_special_item_timer_draw(player1.get_special_item_thunder_timer(), special_thunder_effect_time, Palette::Yellow);
+		right_special_item_timer_draw(player1.get_special_item_thunder_timer(), special_thunder_ghost_effect_time, Palette::Yellow);
 		right_special_item_timer_draw(player1.get_special_item_wing_timer(), special_wing_ghost_effect_time, Palette::Aqua);
 		if (player2.get_special_item_thunder_timer() != 0 || player3.get_special_item_thunder_timer() != 0) {
 			//相手に一時停止を使われたとき

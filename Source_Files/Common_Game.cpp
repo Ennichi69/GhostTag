@@ -23,7 +23,7 @@ player::player(Point p) {
 void player::draw(uint16 timer) const {
 	//sinatori 上下左右静止
 	//時間ごとに絵を変更
-	if (invincible_timer > 60)return;
+	if (invincible_timer > 120)return;
 	if (invincible_timer > 0) {
 		//ここ星が回転とかかっこいいエフェクトつけてみたい
 		Circle(pos, invincible_timer + 20).draw(Color(col, 200));
@@ -37,10 +37,10 @@ void player::draw(uint16 timer) const {
 }
 void player::draw_before_start(uint16 t)const {
 	t -= 60;
-	TextureAsset(player_picture[7]).scaled(double(t) / 20).drawAt(pos, ColorF(1.0, 1.0, 1.0, Max(0.3,1 - t / 300.0)));
+	TextureAsset(player_picture[7]).scaled(double(t) / 20).drawAt(pos, ColorF(1.0, 1.0, 1.0, Max(0.3, 1 - t / 300.0)));
 }
 void player::draw_range(Rect r, uint16 timer)const {
-//	if (r.intersects(pos))draw();
+	//	if (r.intersects(pos))draw();
 	if (direction == neutral) {
 		TextureAsset(player_picture[7]).drawAtClipped(pos, r);
 	}
@@ -228,12 +228,16 @@ void player::count_special_item_wing_timer() {
 	}
 }
 //sinatori
-uint16 player::get_invincible_timer() {
+uint16 player::get_invincible_timer()const {
 	return invincible_timer;
 }
-void player::set_invincible_timer() {
+void player::set_invincible_timer(uint16 t) {
+	invincible_timer = t;
+}
+void player::init_invincible_timer() {
 	invincible_timer = default_invincible;
 }
+
 void player::count_invincible_timer() {
 	invincible_timer--;
 }
@@ -253,7 +257,7 @@ item::item() {
 	picture = NULL;
 	radius = item_radius;
 }
-item::item(Point p, e_item_type t,Texture& te) {
+item::item(Point p, e_item_type t, Texture& te) {
 	pos = p;
 	type = t;
 	picture = &te;
@@ -360,7 +364,7 @@ item random_next_item(Array<item>& ai, Texture* tex, uint16& counter) {
 			if (counter % 20 == 0) {
 				t = e_item_type::special_wing;
 			}
-			else if(counter % 10 == 0) {
+			else if (counter % 10 == 0) {
 				t = e_item_type::special_thunder;
 			}
 			else if (counter % 9 == 0) {
@@ -375,10 +379,21 @@ item random_next_item(Array<item>& ai, Texture* tex, uint16& counter) {
 }
 
 Point random_player_respawn_position(player& player2, player& player3) {
-	while (true) {
-		Point p = random_maze_brock_position();
-		if (player2.get_pos().distanceFrom(p) > maze_brock_size * 10 && player3.get_pos().distanceFrom(p) > maze_brock_size * 10 && !player2.rect_ghost_visible().intersects(p) && !player3.rect_ghost_visible().intersects(p))return p;//敵プレイヤーと10マス以上離して復活かつライトが当たっている位置には復活しない
+	double dist = 0;
+	Point retp;
+	for (auto i : step(10)) {
+		while (true) {
+			Point p = random_maze_brock_position();
+			if (!player2.rect_ghost_visible().intersects(p) && !player3.rect_ghost_visible().intersects(p)) {
+				if (dist < Min(player2.get_pos().distanceFrom(p), player3.get_pos().distanceFrom(p))) {
+					retp = p;
+					dist = Min(player2.get_pos().distanceFrom(p), player3.get_pos().distanceFrom(p));
+				}
+				break;
+			}
+		}
 	}
+	return retp;
 }
 
 void draw_timer(uint16 t) {
@@ -415,12 +430,12 @@ bool is_tagged(player ghost, player tagger) {
 }
 
 void left_special_item_timer_draw(uint16 t, uint16 a, Color col) {
-	for (uint16 i = 0;i < 6;i++) {
+	for (uint16 i = 0; i < 6; i++) {
 		Rect(263 - i * 7, 976 + i * 14, 350 * t / a, 14).draw(col);
 	}
 }
 void right_special_item_timer_draw(uint16 t, uint16 a, Color col) {
-	for (uint16 i = 0;i < 6;i++) {
+	for (uint16 i = 0; i < 6; i++) {
 		Rect(1663 + i * 7 - 350 * t / a, 975 + i * 14, 350 * t / a, 14).draw(col);
 	}
 }

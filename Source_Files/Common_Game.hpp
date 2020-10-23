@@ -58,8 +58,9 @@ public:
 	void count_special_item_thunder_timer();
 	void count_special_item_wing_timer();
 	//sinatori
-	uint16 get_invincible_timer();
-	void set_invincible_timer();
+	uint16 get_invincible_timer()const;
+	void set_invincible_timer(uint16 t);
+	void init_invincible_timer();
 	void count_invincible_timer();
 	void set_texture(uint16 i, String file_name);
 	void set_frame_per_move(uint16 fpm);
@@ -183,7 +184,7 @@ const uint16 tagged_score = 200;//捕まったときの減点
 const Point delta_point[5] = { Point(0,0),Point(-1,0),Point(0,-1),Point(1,0),Point(0,1) };//移動時の差分 neutral left up right down
 
 //sinatori
-const uint16 default_invincible = 90;
+const uint16 default_invincible = 150;
 
 //それぞれのプレイヤーの初期座標
 const uint16 init_player0_x = 16;
@@ -196,15 +197,16 @@ const uint16 init_player3_x = 1;
 const uint16 init_player3_y = 40;
 
 //それぞれのプレイヤーの色(仮)
-const Color init_player0_color = Palette::Red;
-const Color init_player1_color = Palette::Pink;
-const Color init_player2_color = Palette::Skyblue;
+const Color init_player0_color = Palette::Orange;
+const Color init_player1_color = Palette::Skyblue;
+const Color init_player2_color = Palette::Red;
 const Color init_player3_color = Palette::Limegreen;
 
 //スペシャルアイテムの効果時間
-const uint16 special_thunder_effect_time = 60;
-const uint16 special_wing_ghost_effect_time = 300;
-const uint16 special_wing_tagger_effect_time = 180;
+const uint16 special_thunder_ghost_effect_time = 120; 
+const uint16 special_thunder_tagger_effect_time = 60;
+const uint16 special_wing_ghost_effect_time = 270;
+const uint16 special_wing_tagger_effect_time = 120;
 
 
 const uint16 ghost_speed = 3;
