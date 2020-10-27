@@ -13,6 +13,10 @@ server_result::server_result(const InitData& init) :IScene(init) {
 }
 
 void server_result::update() {
+	Array<uint8>serial_array;
+	if (getData().serial_available) {
+		serial_array = getData().serial.readBytes();
+	}
 	if (!getData().tcp_server.hasSession()) {
 		//通信エラー発生時、エラー画面に遷移
 		getData().tcp_server.disconnect();
@@ -20,7 +24,11 @@ void server_result::update() {
 	}
 	getData().tcp_server.send(getData().send_data);
 	while (getData().tcp_server.read(getData().receive_data));
-	if (KeyEnter.down()) {
+	if (KeyA.down()) {
+		changeScene(e_scene::title);
+	}
+	//両側のスティックを内側に倒し、かつ二つのボタンを押すとタイトル画面に戻る
+	if (left_joystick_direction(serial_array, getData().serial_available, e_direction::neutral) == right && right_joystick_direction(serial_array, getData().serial_available, e_direction::neutral) == left && left_button_down(serial_array, getData().serial_available) && right_button_down(serial_array, getData().serial_available)) {
 		changeScene(e_scene::title);
 	}
 }

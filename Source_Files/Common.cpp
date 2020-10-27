@@ -8,7 +8,7 @@ bool left_button_down(Array<uint8>& a, bool b) {
 		}
 	//	return false;
 	}
-	return KeySpace.down();
+	return KeySpace.pressed();
 }
 bool right_button_down(Array<uint8>& a, bool b) {
 	//PC環境だとエンターキー 本番環境では物理ボタン(右)
@@ -18,7 +18,7 @@ bool right_button_down(Array<uint8>& a, bool b) {
 		}
 	//	return false;
 	}
-	return KeyEnter.down();
+	return KeyEnter.pressed();
 }
 e_direction left_joystick_direction(Array<uint8>& a,bool b, e_direction now_direction) {
 	//PC環境だとWASD 本番環境ではジョイスティック(左)
@@ -38,10 +38,10 @@ e_direction left_joystick_direction(Array<uint8>& a,bool b, e_direction now_dire
 		}
 	//	return e_direction::neutral;
 	}
-	if (KeyA.down())return e_direction::left;
-	if (KeyW.down())return e_direction::up;
-	if (KeyD.down())return e_direction::right;
-	if (KeyS.down())return e_direction::down;
+	if (KeyA.pressed())return e_direction::left;
+	if (KeyW.pressed())return e_direction::up;
+	if (KeyD.pressed())return e_direction::right;
+	if (KeyS.pressed())return e_direction::down;
 	return e_direction::neutral;
 }
 e_direction right_joystick_direction(Array<uint8>& a, bool b, e_direction now_direction) {
@@ -62,10 +62,10 @@ e_direction right_joystick_direction(Array<uint8>& a, bool b, e_direction now_di
 		}
 	//	return e_direction::neutral;
 	}
-	if (KeyLeft.down())return e_direction::left;
-	if (KeyUp.down())return e_direction::up;
-	if (KeyRight.down())return e_direction::right;
-	if (KeyDown.down())return e_direction::down;
+	if (KeyLeft.pressed())return e_direction::left;
+	if (KeyUp.pressed())return e_direction::up;
+	if (KeyRight.pressed())return e_direction::right;
+	if (KeyDown.pressed())return e_direction::down;
 	return e_direction::neutral;
 }
 

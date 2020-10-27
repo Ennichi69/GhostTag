@@ -413,7 +413,6 @@ void draw_small_point_box(uint16 t) {
 	FontAsset(U"font40")(U"{:0>4}"_fmt(t)).drawAt(small_point_box.center());
 }
 
-
 bool is_tagged(player ghost, player tagger) {
 	//’¼ÚÚG‚µ‚Ä‚¢‚é‚©‚Ì”»’è‚É•ÏX
 	return Rect(Arg::center(ghost.get_pos()), maze_brock_size).intersects(tagger.get_pos());

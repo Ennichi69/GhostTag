@@ -178,8 +178,8 @@ const uint16 point_item_score = 100;
 const uint16 golden_point_item_score = 200;
 const uint16 additional_item_score = 50;
 const uint16 additional_golden_item_score = 100;
-const uint16 tag_score = 500;//捕まえた時の加点
-const uint16 tagged_score = 200;//捕まったときの減点
+const uint16 tag_score = 700;//捕まえた時の加点
+const uint16 tagged_score = 0;//捕まったときの減点
 
 const Point delta_point[5] = { Point(0,0),Point(-1,0),Point(0,-1),Point(1,0),Point(0,1) };//移動時の差分 neutral left up right down
 
@@ -206,7 +206,7 @@ const Color init_player3_color = Palette::Limegreen;
 const uint16 special_thunder_ghost_effect_time = 120; 
 const uint16 special_thunder_tagger_effect_time = 60;
 const uint16 special_wing_ghost_effect_time = 270;
-const uint16 special_wing_tagger_effect_time = 120;
+const uint16 special_wing_tagger_effect_time = 170;
 
 
 const uint16 ghost_speed = 3;
