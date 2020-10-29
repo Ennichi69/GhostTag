@@ -107,6 +107,8 @@ server_game::server_game(const InitData& init) :IScene(init) {
 
 	pumpkin_picture = Texture(Resource(U"pictures/pump_left1.png"));
 	ghost_picture = Texture(Resource(U"pictures/ghost_left1.png"));
+
+	ghost_characters = Texture(Resource(U"pictures/ghost_characters.png"));
 }
 
 void server_game::update() {
@@ -729,7 +731,10 @@ void server_game::draw()const {
 	draw_small_point_box(player2.get_score() + player3.get_score());
 	//	left_item_circle.draw();
 	//	right_item_circle.draw();
-	if (timer > start_time) {
+	if (timer > start_time + 60 * 6) {
+		ghost_characters.draw();
+	}
+	else if (timer > start_time) {
 		countdown_clock_draw(timer - start_time);
 		if (timer < start_time + 80) {
 			player0.draw(timer);

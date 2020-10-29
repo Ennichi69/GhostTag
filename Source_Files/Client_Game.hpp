@@ -59,5 +59,5 @@ private:
 	Texture pumpkin_picture;
 	Texture ghost_picture;
 
-
+	Texture tagger_characters;
 };

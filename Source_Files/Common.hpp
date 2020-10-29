@@ -48,7 +48,11 @@ typedef enum {
 	player1_invincible_timer,
 	player2_invincible_timer,
 	player3_invincible_timer,
-	point_item_status = 50,//[0]x座標,[0]y座標,[0]type,[1]x座標,[1]y座標,[1]type,[2]x座標...の順
+	player0_isready,
+	player1_isready,
+	player2_isready,
+	player3_isready,
+	point_item_status,//[0]x座標,[0]y座標,[0]type,[1]x座標,[1]y座標,[1]type,[2]x座標...の順
 
 
 } e_communication;

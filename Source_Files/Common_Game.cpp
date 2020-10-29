@@ -367,7 +367,7 @@ item random_next_item(Array<item>& ai, Texture* tex, uint16& counter) {
 			else if (counter % 10 == 0) {
 				t = e_item_type::special_thunder;
 			}
-			else if (counter % 9 == 0) {
+			else if (counter % 21 == 0) {
 				t = Random((uint16)e_item_type::golden_point1, (uint16)e_item_type::golden_point3);
 			}
 			else {

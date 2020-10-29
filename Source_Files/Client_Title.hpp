@@ -8,4 +8,6 @@ public:
 	void draw()const override;
 private:
 	Texture title_picture;
+	bool player2_isready;
+	bool player3_isready;
 };

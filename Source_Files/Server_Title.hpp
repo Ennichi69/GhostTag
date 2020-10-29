@@ -8,4 +8,7 @@ public:
 	void draw()const override;
 private:
 	Texture title_picture;
+	uint16 timer;//timer‚ª0‚Å‚È‚¢ŒÀ‚è‘JˆÚ‚³‚¹‚È‚¢
+	bool player0_isready;
+	bool player1_isready;
 };
