@@ -44,7 +44,15 @@ typedef enum {
 	player1_button_down,
 	player2_button_down,
 	player3_button_down,
-	point_item_status = 50,//[0]x座標,[0]y座標,[0]type,[1]x座標,[1]y座標,[1]type,[2]x座標...の順
+	player0_invincible_timer,
+	player1_invincible_timer,
+	player2_invincible_timer,
+	player3_invincible_timer,
+	player0_isready,
+	player1_isready,
+	player2_isready,
+	player3_isready,
+	point_item_status,//[0]x座標,[0]y座標,[0]type,[1]x座標,[1]y座標,[1]type,[2]x座標...の順
 
 
 } e_communication;
@@ -66,10 +74,10 @@ typedef enum {
 	result,
 }e_scene;
 
-bool left_button_down();
-bool right_button_down();
-e_direction left_joystick_direction();
-e_direction right_joystick_direction();
+bool left_button_down(Array<uint8>& a, bool b);
+bool right_button_down(Array<uint8>& a, bool b);
+e_direction left_joystick_direction(Array<uint8>& a, bool b, e_direction now_direction);
+e_direction right_joystick_direction(Array<uint8>& a, bool b, e_direction now_direction);
 void init();
 
 constexpr uint16 port = 50000;//ポート番号

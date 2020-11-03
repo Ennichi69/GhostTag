@@ -30,6 +30,8 @@ private:
 	Texture street_ud;
 	Texture street_lr;
 
+	Texture cross;
+
 	Texture maze_walls[7];
 
 	
@@ -47,6 +49,15 @@ private:
 	//16 door
 	//maze_walls‚¾‚¯Žg‚¤‚È‚ç-10‚µ‚Ä12~16Žg—p
 
+	Texture item_pictures[8];
+
+	Texture background;
+
 	Texture special_thunder_picture;
 	Texture special_wing_picture;
+
+	Texture pumpkin_picture;
+	Texture ghost_picture;
+
+	Texture tagger_characters;
 };

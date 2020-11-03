@@ -9,6 +9,8 @@ public:
 	void draw()const override;
 	void draw_maze()const;
 private:
+	uint16 item_counter;//何個アイテムが出たか
+
 	player player0;
 	player player1;
 	player player2;
@@ -28,6 +30,8 @@ private:
 	Texture corner_lu;
 	Texture street_ud;
 	Texture street_lr;
+	
+	Texture cross;
 
 	Texture maze_walls[7];
 
@@ -45,6 +49,15 @@ private:
 	//16 door
 	//maze_wallsだけ使うなら-10して12~16使用
 
+	Texture item_pictures[8];
+
+	Texture background;
+
 	Texture special_thunder_picture;
 	Texture special_wing_picture;
+
+	Texture pumpkin_picture;
+	Texture ghost_picture;
+
+	Texture ghost_characters;
 };

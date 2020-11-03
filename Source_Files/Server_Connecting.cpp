@@ -12,5 +12,5 @@ void server_connecting::update() {
 }
 
 void server_connecting::draw() const {
-	FontAsset(U"font200")(U"通信待機中...").drawAt(Scene::Center());
+	FontAsset(U"Mplus_200")(U"通信待機中...").drawAt(Scene::Center());
 }

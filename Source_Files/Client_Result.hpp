@@ -11,9 +11,11 @@ private:
 	uint16 player1_score;
 	uint16 player2_score;
 	uint16 player3_score;
+	Texture result_picture;
+	Texture win_picture;
+	Texture lose_picture;
+	Texture draw_picture;
 };
-
-
 
 
 const Rect player0_result_box = Rect(Arg::center(480, 270), 500, 200);
