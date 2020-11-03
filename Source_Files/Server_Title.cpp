@@ -12,7 +12,7 @@ server_title::server_title(const InitData& init) :IScene(init) {
 
 	//ƒ^ƒCƒgƒ‹‰æ–Ê‚Ì‰æ‘œ‚ğİ’è
 	title_picture = Texture(Resource(U"pictures/title.png"));
-	timer = 300;
+	timer = 180;
 	player0_isready = false;
 	player1_isready = false;
 	Array<uint8>serial_array;
